@@ -1,27 +1,16 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import buhoLogo from "../assets/buho-institucional.png";
+import buhoLogo from "../assets/buho-institucional.png"; // asegúrate que este sea el nombre correcto
 
 export default function Landing() {
   return (
     <div className="min-h-screen bg-white text-gray-800 flex flex-col justify-between">
-      {/* Header institucional */}
-      <header className="p-6 flex justify-between items-center shadow-md">
-        <h1 className="text-3xl font-bold text-blue-800">BúhoLex</h1>
-        <nav className="space-x-4">
-          <Link to="/app" className="text-blue-700 hover:underline">App</Link>
-          <Link to="/biblioteca" className="text-blue-700 hover:underline">Biblioteca</Link>
-          <Link to="/jurisprudencia" className="text-blue-700 hover:underline">Jurisprudencia</Link>
-          <Link to="/ingreso" className="text-white bg-blue-700 hover:bg-blue-800 rounded px-3 py-1">Ingresar</Link>
-        </nav>
-      </header>
-
       {/* Hero principal */}
       <main className="flex-1 flex flex-col items-center justify-center text-center px-6 w-full">
-        {/* Imagen institucional sin slogan */}
+        {/* Logo institucional */}
         <motion.img
           src={buhoLogo}
-          alt="BúhoLex Logo institucional"
+          alt="Logo institucional de BúhoLex"
           className="mx-auto mb-6 w-40 sm:w-48 md:w-56 max-w-xs rounded-2xl shadow-lg"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

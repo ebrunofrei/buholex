@@ -1,11 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
+// Componentes globales
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import InstalarApp from "./components/InstalarApp";
 
-// Páginas del sitio
+// Páginas principales
 import Landing from "./pages/Landing";
 import Bienvenida from "./pages/Bienvenida";
 import Servicios from "./pages/Servicios";
@@ -15,11 +16,12 @@ import LitisBot from "./pages/LitisBot";
 import Blog from "./pages/Blog";
 import Biblioteca from "./pages/Biblioteca";
 import Escritorio from "./pages/Escritorio";
-import Error404 from "./pages/Error404"; // Asegúrate de tener esta página creada
+import Error404 from "./pages/Error404";
 
 function AppContent() {
   const location = useLocation();
-  const hideNavbarOnPaths = ["/"]; // Oculta la navbar solo en el landing si es necesario
+  // Oculta la Navbar solo en el Landing (/)
+  const hideNavbarOnPaths = ["/"];
 
   return (
     <>
