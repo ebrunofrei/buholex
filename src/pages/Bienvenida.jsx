@@ -2,49 +2,53 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import buhoLogo from "../assets/buho-institucional.png";
-import { Newspaper } from "lucide-react"; // Icono profesional, si usas lucide-react (alt: puedes usar un emoji o svg)
+import { Newspaper } from "lucide-react";
 
 const noticiasHoy = [
   { id: 1, titulo: "El Tribunal Constitucional publica nuevo precedente sobre derechos laborales." },
   { id: 2, titulo: "Se modifica el Código Procesal Civil: conoce los cambios más relevantes." },
   { id: 3, titulo: "Jornada de capacitación: ética en la función pública este viernes." },
-  // Puedes agregar más o integrar una API externa luego
+  // Agrega aquí tus noticias diarias, o integra tu propio backend/API más adelante.
 ];
 
 export default function Bienvenida() {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col justify-between">
+      {/* BLOQUE PRINCIPAL */}
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4 w-full">
-        {/* Logo institucional con animación */}
+        {/* LOGO animado */}
         <motion.img
           src={buhoLogo}
           alt="Logo institucional de BúhoLex"
           className="mx-auto mb-4 w-36 md:w-48 rounded-2xl shadow-xl border-4 border-amber-700 bg-white"
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          style={{ background: "linear-gradient(135deg, #fff 80%, #f4bb53 100%)" }}
+          style={{
+            background: "linear-gradient(135deg, #fff 80%, #f4bb53 100%)",
+            boxShadow: "0 6px 24px #bfae7e70",
+          }}
         />
 
-        {/* Mensaje institucional profesional y amigable */}
+        {/* MENSAJE DE BIENVENIDA */}
         <motion.h1
           className="text-3xl md:text-4xl font-bold text-amber-700 drop-shadow-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          ¡Bienvenido a BúhoLex!
+          ¡Bienvenido a <span className="text-blue-900">BúhoLex</span>!
         </motion.h1>
         <motion.p
-          className="mt-2 mb-5 text-lg md:text-xl text-blue-900 font-medium"
+          className="mt-2 mb-5 text-lg md:text-xl text-blue-900 font-medium max-w-2xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          Tu aliado legal, ético y humano, siempre listo para defender tus derechos y mantenerte informado con lo más importante del día.
+          Tu aliado legal, ético y humano. Defendemos tus derechos, compartimos actualidad y te acompañamos en tu desarrollo profesional. 
         </motion.p>
 
-        {/* Bloque de Noticias Importantes del Día */}
+        {/* NOTICIAS MÁS IMPORTANTES DEL DÍA */}
         <motion.section
           className="w-full max-w-2xl mx-auto bg-blue-50 border-l-4 border-blue-600 shadow-md rounded-xl p-4 mb-7"
           initial={{ opacity: 0, y: 20 }}
@@ -52,15 +56,17 @@ export default function Bienvenida() {
           transition={{ delay: 0.4, duration: 0.8 }}
         >
           <div className="flex items-center mb-2">
-            {/* Icono de noticia */}
             <Newspaper className="text-blue-600 mr-2" size={26} />
-            <span className="text-blue-800 font-semibold text-lg tracking-wide">Noticias más importantes del día</span>
+            <span className="text-blue-800 font-semibold text-lg tracking-wide">
+              Noticias más importantes del día
+            </span>
           </div>
           <ul className="space-y-2 text-left">
             {noticiasHoy.map((noticia) => (
               <li
                 key={noticia.id}
                 className="flex items-start gap-2 text-blue-900 hover:text-blue-700 cursor-pointer transition"
+                title={noticia.titulo}
               >
                 <span className="text-amber-600 font-bold">•</span>
                 <span className="truncate">{noticia.titulo}</span>
@@ -69,8 +75,8 @@ export default function Bienvenida() {
           </ul>
         </motion.section>
 
-        {/* Botones de navegación */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* BOTONES DE NAVEGACIÓN */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-2">
           <Link
             to="/servicios"
             className="bg-blue-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-800 transition"
