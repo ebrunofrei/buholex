@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../components/ui/button";
+import Button from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
