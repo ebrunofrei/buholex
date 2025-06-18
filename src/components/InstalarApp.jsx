@@ -1,49 +1,46 @@
-// src/components/InstalarApp.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-function InstalarApp() {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [visible, setVisible] = useState(false);
+// Puedes personalizar este componente o quitar el botón si ya no usas PWA.
+export default function InstalarApp() {
+  // Detecta si la instalación de PWA es soportada
+  React.useEffect(() => {
+    let deferredPrompt;
 
-  useEffect(() => {
-    const handler = (e) => {
+    function beforeInstallPrompt(e) {
+      // Previene que salga el prompt automático
       e.preventDefault();
-      setDeferredPrompt(e);
-      setVisible(true);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
+      deferredPrompt = e;
+      window.deferredPrompt = e; // Guardamos globalmente
+    }
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    window.addEventListener("beforeinstallprompt", beforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", beforeInstallPrompt);
+    };
   }, []);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") setVisible(false);
-      setDeferredPrompt(null);
+    const promptEvent = window.deferredPrompt;
+    if (promptEvent) {
+      promptEvent.prompt();
+      const { outcome } = await promptEvent.userChoice;
+      // Puedes manejar el resultado si deseas
+      if (outcome === "accepted") {
+        window.deferredPrompt = null;
+      }
     }
   };
 
-  if (!visible) return null;
-
+  // Puedes ocultar el botón si no es relevante para tu web.
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center gap-3">
-      <span>¿Quieres instalar BúhoLex en tu dispositivo?</span>
+    <div className="w-full text-center py-2 bg-blue-50">
       <button
         onClick={handleInstallClick}
-        className="bg-white text-blue-700 rounded px-4 py-1 font-semibold hover:bg-blue-100"
+        className="px-4 py-2 rounded-lg bg-blue-700 text-white hover:bg-blue-800 transition"
       >
-        Instalar
-      </button>
-      <button
-        onClick={() => setVisible(false)}
-        className="ml-2 text-white hover:text-gray-200"
-      >
-        ×
+        Instalar BúhoLex en tu dispositivo
       </button>
     </div>
   );
 }
-
-export default InstalarApp;
