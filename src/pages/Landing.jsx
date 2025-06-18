@@ -17,7 +17,7 @@ export default function Landing() {
           transition={{ duration: 0.9 }}
         />
 
-        {/* Slogan institucional */}
+        {/* Slogan institucional Nuevo */}
         <motion.h2
           className="text-3xl md:text-4xl font-bold mb-2 text-blue-900"
           initial={{ opacity: 0, y: -20 }}
