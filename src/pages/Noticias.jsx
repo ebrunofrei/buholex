@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function Noticias() {
-  // Simulación de noticias; cámbialo por fetch a tu backend cuando tengas noticias reales
   const noticias = [
     {
       titulo: "Nuevo servicio de asesoría online",
