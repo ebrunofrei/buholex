@@ -3,8 +3,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 // Componentes globales
 import Navbar from "./components/Navbar";
-import Footer from "./components/ui/Footer";
-import InstalarApp from "./components/ui/InstalarApp";
+import Footer from "./components/Footer";
+import InstalarApp from "./components/InstalarApp";
 
 // Páginas principales
 import Landing from "./pages/Landing";
@@ -20,7 +20,7 @@ import Error404 from "./pages/Error404";
 
 function App() {
   const location = useLocation();
-  // Opcional: oculta la barra de navegación en ciertas rutas
+  // Oculta la Navbar solo en el landing principal
   const hideNavbarOnPaths = ["/"];
 
   return (
