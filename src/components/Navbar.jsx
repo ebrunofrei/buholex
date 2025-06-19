@@ -18,5 +18,6 @@ function Navbar() {
     </header>
   );
 }
+// Cambio mínimo para forzar update
 
 export default Navbar;
