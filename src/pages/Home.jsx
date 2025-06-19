@@ -1,19 +1,13 @@
 import React from "react";
-import CarruselNoticias from "../components/CarruselNoticias";
-// Si quieres el banner solo aquí, importa y úsalo, si no ya está en App.jsx:
-// import BannerEslogan from "../components/BannerEslogan";
-import Noticias from "./Noticias"; // Si tienes un listado de noticias tradicional
+import CarruselNoticias from "../components/CarruselNoticias"; // Asegúrate de la ruta correcta
+// import Noticias from "./Noticias"; // Si tienes otra sección de noticias, puedes dejarla o quitarla
 
 export default function Home() {
   return (
     <div style={{ width: "100%", textAlign: "center", position: "relative" }}>
-      {/* Banner del eslogan SOLO si no lo tienes global en App.jsx */}
-      {/* <BannerEslogan /> */}
-
-      {/* Carrusel de noticias (slide y responsive) */}
+      {/* Carrusel de noticias en Home */}
       <CarruselNoticias />
 
-      {/* Bienvenida principal */}
       <h1 style={{
         fontSize: "2.2rem",
         fontWeight: 800,
@@ -33,9 +27,8 @@ export default function Home() {
       </h2>
       <hr style={{ marginBottom: 32 }} />
 
-      {/* Otras secciones o contenido de la página de inicio */}
-      <Noticias />
-      {/* Puedes seguir agregando más secciones aquí */}
+      {/* Si quieres dejar una lista tradicional de noticias, descomenta: */}
+      {/* <Noticias /> */}
     </div>
   );
 }
