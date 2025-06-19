@@ -1,71 +1,75 @@
 import React from "react";
-import { motion } from "framer-motion";
+import Noticias from "./Noticias"; // Crea este componente abajo
 
 export default function Home() {
   return (
-    <motion.div
-      style={{
-        minHeight: "62vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px 10px"
-      }}
-      initial={{ opacity: 0, y: 60 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-    >
+    <div style={{ width: "100%", textAlign: "center" }}>
       <h1 style={{
-        fontSize: "2.3rem",
+        fontSize: "2.2rem",
         fontWeight: 800,
-        margin: "48px 0 10px",
+        margin: "10px 0 18px 0",
         color: "#1E2940",
-        letterSpacing: 1.2,
-        textAlign: "center"
+        letterSpacing: 1.2
       }}>
-        BúhoLex
+        Bienvenido a <span style={{ color: "#a46a32" }}>BúhoLex</span>
       </h1>
       <h2 style={{
-        fontSize: "1.12rem",
+        fontSize: "1.15rem",
         fontWeight: 500,
-        color: "#CEB067",
-        margin: "12px 0 0",
-        textAlign: "center"
+        color: "#a46a32",
+        margin: "0 0 24px 0"
       }}>
-        Soluciones jurídicas inteligentes y accesibles
+        Soluciones jurídicas inteligentes y accesibles para todos
       </h2>
-      <p style={{
-        maxWidth: 480,
-        fontSize: "1.1rem",
-        margin: "20px 0 0",
-        textAlign: "center",
-        color: "#1E2940"
-      }}>
-        Asesoría legal, defensa penal, redacción de demandas, modelos, biblioteca y más.<br />
-        Atención presencial y digital a nivel nacional.
-      </p>
-      <motion.a
-        href="#contacto"
-        style={{
-          background: "#1E2940",
-          color: "#CEB067",
-          borderRadius: 8,
-          padding: "12px 34px",
-          fontSize: 18,
-          marginTop: 30,
-          textDecoration: "none",
-          fontWeight: 600,
-          border: "2px solid #CEB067",
-          boxShadow: "0 2px 18px #1e294011"
-        }}
-        whileHover={{ scale: 1.08, boxShadow: "0 4px 30px #ceb06730" }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 350, damping: 17 }}
-      >
-        Contáctanos
-      </motion.a>
-    </motion.div>
+      <hr />
+      <Noticias />
+    </div>
+  );
+}
+
+// Componente Noticias.js (puedes ponerlo en src/pages/Noticias.jsx)
+export function Noticias() {
+  // Simulación de noticias; cámbialo por fetch a tu backend cuando tengas noticias reales
+  const noticias = [
+    {
+      titulo: "Nuevo servicio de asesoría online",
+      fecha: "19/06/2025",
+      descripcion: "Ahora puedes acceder a consultoría jurídica totalmente en línea y recibir atención prioritaria."
+    },
+    {
+      titulo: "Publicación: Demandas modelo 2025",
+      fecha: "17/06/2025",
+      descripcion: "Descarga gratis modelos actualizados de demandas civiles y penales desde nuestra biblioteca legal."
+    },
+    {
+      titulo: "BúhoLex en el Congreso Nacional de Derecho",
+      fecha: "15/06/2025",
+      descripcion: "Fuimos invitados como ponentes en el evento más importante del sector jurídico del país."
+    }
+  ];
+  return (
+    <section style={{ margin: "40px auto 0", maxWidth: 680 }}>
+      <h3 style={{ color: "#1E2940", fontSize: "1.22rem", fontWeight: 700, marginBottom: 28 }}>
+        Noticias
+      </h3>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        {noticias.map((n, i) => (
+          <li key={i} style={{
+            background: "#fff",
+            borderRadius: 13,
+            border: "1.5px solid #a46a32",
+            boxShadow: "0 1px 10px #a46a3233",
+            padding: "18px 22px",
+            marginBottom: 24,
+            textAlign: "left"
+          }}>
+            <span style={{ color: "#a46a32", fontWeight: 700, fontSize: 17 }}>{n.titulo}</span>
+            <span style={{ float: "right", color: "#7a5833", fontSize: 14 }}>{n.fecha}</span>
+            <p style={{ color: "#222", fontSize: 16, margin: "10px 0 0 0" }}>{n.descripcion}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
