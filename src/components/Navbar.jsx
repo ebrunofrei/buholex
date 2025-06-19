@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import buhoLogo from "../assets/buho-institucional.png"; // AJUSTA SI NECESARIO
 
 const menuItems = [
   { label: "Sobre mí", path: "/nosotros" },
@@ -7,19 +8,16 @@ const menuItems = [
     label: "Servicios", children: [
       { label: "Asesoría Legal", path: "/servicios/asesoria" },
       { label: "Defensa Penal", path: "/servicios/penal" },
-      { label: "Modelos & Demandas", path: "/servicios/modelos" },
-      { label: "Biblioteca", path: "/biblioteca" },
+      { label: "Oficina Virtual", path: "/oficinas" }
     ]
   },
-  {
-    label: "Recursos", children: [
-      { label: "Libros", path: "/libros" },
-      { label: "Blog", path: "/blog" },
-    ]
-  },
-  { label: "Clientes", path: "/clientes" },
+  { label: "Noticias", path: "/noticias" },
+  { label: "Jurisprudencia", path: "/jurisprudencia" },
+  { label: "Códigos", path: "/codigos" },
+  { label: "Biblioteca", path: "/biblioteca" },
+  { label: "Agenda", path: "/agenda" },
   { label: "Contacto", path: "/contacto" },
-  { label: "LitisBot", path: "/litisbot", highlight: true },
+  { label: "LitisBot", path: "/litisbot", highlight: true }
 ];
 
 export default function Navbar() {
@@ -41,7 +39,7 @@ export default function Navbar() {
     }}>
       {/* Logo e institucional */}
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img src="/src/assets/buho-institucional.png" alt="Logo BúhoLex" style={{ height: 44, marginRight: 12 }} />
+        <img src={buhoLogo} alt="Logo BúhoLex" style={{ height: 44, marginRight: 12, borderRadius: 8, background: "#fff" }} />
         <span style={{ color: "#b88b47", fontWeight: 800, fontSize: 27, letterSpacing: 1 }}>BúhoLex</span>
       </div>
       {/* Menú principal */}
