@@ -4,7 +4,7 @@ import CarruselNoticias from "../components/CarruselNoticias";
 export default function Home() {
   return (
     <div style={{ width: "100%", textAlign: "center", position: "relative" }}>
-      <CarruselNoticias /> {/* <-- Esto debe estar ACTIVO */}
+      <CarruselNoticias />
       <h1 style={{
         fontSize: "2.2rem",
         fontWeight: 800,
@@ -26,4 +26,5 @@ export default function Home() {
     </div>
   );
 }
+
 
