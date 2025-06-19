@@ -1,119 +1,62 @@
-import React from "react";
+import React from "react"; 
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import buhoLogo from "../assets/buho-institucional.png";
-import { Newspaper } from "lucide-react";
-
-// Noticias ejemplo
-const noticiasHoy = [
-  { id: 1, titulo: "El Tribunal Constitucional publica nuevo precedente sobre derechos laborales." },
-  { id: 2, titulo: "Se modifica el Código Procesal Civil: conoce los cambios más relevantes." },
-  { id: 3, titulo: "Jornada de capacitación: ética en la función pública este viernes." },
-];
+import buhoLogo from "../assets/buho-institucional.png"; // Asegúrate que esta sea la ruta real
 
 export default function Bienvenida() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col justify-between">
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 w-full">
-        {/* Logo institucional animado */}
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0, boxShadow: "0 0 0px #f4bb53" }}
-          animate={{
-            scale: [0.8, 1.12, 1],
-            opacity: 1,
-            boxShadow: [
-              "0 0 0px #f4bb53",
-              "0 0 32px 8px #f4bb53AA",
-              "0 0 16px 3px #f4bb5355"
-            ],
-          }}
-          transition={{
-            duration: 1.1,
-            type: "spring",
-            bounce: 0.55,
-          }}
-          className="mx-auto mb-6 p-2 rounded-2xl bg-white"
-          style={{
-            display: "inline-block"
-          }}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4 py-8">
+      {/* LOGO con rebote/glow */}
+      <motion.div
+        initial={{ scale: 0.8, boxShadow: "0 0 0px #FFD700" }}
+        animate={{
+          scale: [1.15, 0.98, 1.05, 1],
+          boxShadow: [
+            "0 0 24px #FFD70055, 0 0 8px #FFECB3",
+            "0 0 16px #FFD70099",
+            "0 0 8px #FFD70033",
+            "0 0 0px #FFD70000",
+          ],
+        }}
+        transition={{ duration: 1.2, type: "spring", bounce: 0.45 }}
+        className="mx-auto mt-8 mb-2 bg-white rounded-3xl border-4 border-amber-600 shadow-xl"
+        style={{
+          maxWidth: 260,
+          width: "90vw",
+          aspectRatio: "1/1",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={buhoLogo}
+          alt="Logo BúhoLex"
+          className="w-full h-full object-contain select-none"
+          draggable={false}
+        />
+      </motion.div>
+      {/* TITULO */}
+      <h1 className="text-3xl font-extrabold text-amber-800 text-center mt-2 tracking-wide drop-shadow">
+        BÚHOLEX
+      </h1>
+      {/* Slogan */}
+      <p className="text-base md:text-lg font-semibold text-gray-700 text-center mb-6">
+        Justicia sin privilegios.
+      </p>
+      {/* Opcional: Links y botones */}
+      <div className="flex flex-col items-center gap-2">
+        <a
+          href="/servicios"
+          className="text-blue-700 font-medium underline hover:text-amber-700 transition"
         >
-          <img
-            src={buhoLogo}
-            alt="Logo institucional de BúhoLex"
-            className="w-32 sm:w-40 md:w-48 max-w-[140px] sm:max-w-[180px] md:max-w-[220px] aspect-square object-contain rounded-2xl border-4 border-amber-700 bg-white"
-            loading="lazy"
-          />
-        </motion.div>
-
-        {/* Mensaje institucional */}
-        <motion.h1
-          className="text-3xl md:text-4xl font-bold text-amber-700 drop-shadow-lg"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          Explorar servicios
+        </a>
+        <a
+          href="/litisbot"
+          className="text-blue-600 hover:text-amber-700 font-semibold"
         >
-          ¡Bienvenido a BúhoLex!
-        </motion.h1>
-        <motion.p
-          className="mt-2 mb-5 text-lg md:text-xl text-blue-900 font-medium"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-        >
-          Tu aliado legal, ético y humano, siempre listo para defender tus derechos y mantenerte informado con lo más importante del día.
-        </motion.p>
-
-        {/* Bloque de Noticias Importantes del Día */}
-        <motion.section
-          className="w-full max-w-2xl mx-auto bg-blue-50 border-l-4 border-blue-600 shadow-md rounded-xl p-4 mb-7"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-        >
-          <div className="flex items-center mb-2">
-            <Newspaper className="text-blue-600 mr-2" size={26} />
-            <span className="text-blue-800 font-semibold text-lg tracking-wide">
-              Noticias más importantes del día
-            </span>
-          </div>
-          <ul className="space-y-2 text-left">
-            {noticiasHoy.map((noticia) => (
-              <li
-                key={noticia.id}
-                className="flex items-start gap-2 text-blue-900 hover:text-blue-700 cursor-pointer transition"
-              >
-                <span className="text-amber-600 font-bold">•</span>
-                <span className="truncate">{noticia.titulo}</span>
-              </li>
-            ))}
-          </ul>
-        </motion.section>
-
-        {/* Botones de navegación */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            to="/servicios"
-            className="bg-blue-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-800 transition"
-          >
-            Ver servicios
-          </Link>
-          <Link
-            to="/litisbot"
-            className="border border-blue-700 text-blue-700 px-6 py-2 rounded-full font-semibold hover:bg-blue-100 transition"
-          >
-            Probar LitisBot
-          </Link>
-          <Link
-            to="/biblioteca"
-            className="bg-amber-100 text-amber-800 px-6 py-2 rounded-full font-semibold hover:bg-amber-200 border border-amber-700 transition"
-          >
-            Biblioteca Jurídica
-          </Link>
-        </div>
-      </main>
-      <footer className="p-4 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} BúhoLex. Todos los derechos reservados.
-      </footer>
+          Probar LitisBot
+        </a>
+      </div>
     </div>
   );
 }
+
