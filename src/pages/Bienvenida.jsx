@@ -1,54 +1,51 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import buhoLogo from "../assets/buho-institucional.png";
 import { Newspaper } from "lucide-react";
+import buhoLogo from "../assets/buho-institucional.png";
 
+// Ejemplo de noticias
 const noticiasHoy = [
   { id: 1, titulo: "El Tribunal Constitucional publica nuevo precedente sobre derechos laborales." },
   { id: 2, titulo: "Se modifica el Código Procesal Civil: conoce los cambios más relevantes." },
   { id: 3, titulo: "Jornada de capacitación: ética en la función pública este viernes." },
-  // Agrega aquí tus noticias diarias, o integra tu propio backend/API más adelante.
 ];
 
 export default function Bienvenida() {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col justify-between">
-      {/* BLOQUE PRINCIPAL */}
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4 w-full">
-        {/* LOGO animado */}
+        {/* Logo institucional animado */}
         <motion.img
           src={buhoLogo}
           alt="Logo institucional de BúhoLex"
           className="mx-auto mb-4 w-36 md:w-48 rounded-2xl shadow-xl border-4 border-amber-700 bg-white"
-          initial={{ opacity: 0, scale: 0.92 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          style={{
-            background: "linear-gradient(135deg, #fff 80%, #f4bb53 100%)",
-            boxShadow: "0 6px 24px #bfae7e70",
-          }}
+          style={{ background: "linear-gradient(135deg, #fff 80%, #f4bb53 100%)" }}
         />
 
-        {/* MENSAJE DE BIENVENIDA */}
+        {/* Mensaje de bienvenida profesional y amigable */}
         <motion.h1
           className="text-3xl md:text-4xl font-bold text-amber-700 drop-shadow-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          ¡Bienvenido a <span className="text-blue-900">BúhoLex</span>!
+          ¡Bienvenido a BúhoLex!
         </motion.h1>
         <motion.p
-          className="mt-2 mb-5 text-lg md:text-xl text-blue-900 font-medium max-w-2xl"
+          className="mt-2 mb-5 text-lg md:text-xl text-blue-900 font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          Tu aliado legal, ético y humano. Defendemos tus derechos, compartimos actualidad y te acompañamos en tu desarrollo profesional. 
+          Tu aliado legal, ético y humano, siempre listo para defender tus derechos<br/>
+          y mantenerte informado con lo más importante del día.
         </motion.p>
 
-        {/* NOTICIAS MÁS IMPORTANTES DEL DÍA */}
+        {/* Bloque de Noticias Importantes del Día */}
         <motion.section
           className="w-full max-w-2xl mx-auto bg-blue-50 border-l-4 border-blue-600 shadow-md rounded-xl p-4 mb-7"
           initial={{ opacity: 0, y: 20 }}
@@ -66,7 +63,6 @@ export default function Bienvenida() {
               <li
                 key={noticia.id}
                 className="flex items-start gap-2 text-blue-900 hover:text-blue-700 cursor-pointer transition"
-                title={noticia.titulo}
               >
                 <span className="text-amber-600 font-bold">•</span>
                 <span className="truncate">{noticia.titulo}</span>
@@ -75,8 +71,8 @@ export default function Bienvenida() {
           </ul>
         </motion.section>
 
-        {/* BOTONES DE NAVEGACIÓN */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-2">
+        {/* Botones principales de navegación */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/servicios"
             className="bg-blue-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-800 transition"
