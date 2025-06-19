@@ -1,5 +1,5 @@
 import React from "react";
-import Noticias from "./Noticias"; // Importa el componente desde el archivo aparte
+import Noticias from "./Noticias"; // Solo importar, NO declarar ni exportar
 
 export default function Home() {
   return (
