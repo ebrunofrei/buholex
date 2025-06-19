@@ -1,4 +1,3 @@
-/* Fuente recomendada */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
 html, body {
@@ -13,35 +12,21 @@ html, body {
 
 #root {
   min-height: 100vh;
-  /* Fondo tipo mármol claro */
-  background: 
-    repeating-linear-gradient(135deg, #fff8 0 12px, #f6f5f3 14px 30px),
-    url("https://www.transparenttextures.com/patterns/marble.png");
+  min-width: 100vw;
+  background:
+    url("https://www.transparenttextures.com/patterns/marble.png") repeat,
+    linear-gradient(135deg, #fff 0 20%, #f7f3eb 100%);
   background-blend-mode: lighten;
-  background-color: #f8f9f7;
-  border: 5px solid #bda99b;  /* Marco marrón suave */
-  border-radius: 24px;
-  box-shadow: 0 6px 32px #baa06e22;
-  max-width: 1240px;
-  margin: 20px auto;
+  background-color: #f9f8f7;
 }
 
 a {
   transition: color 0.15s, background 0.18s, box-shadow 0.14s;
 }
 
-@media (max-width: 1300px) {
-  #root {
-    margin: 0;
-    border-radius: 0;
-    border-width: 0 0 7px 0;
-    max-width: 100vw;
-  }
-}
 @media (max-width: 800px) {
   .menu-desktop { display: none !important; }
   .hamburger { display: block !important; }
-  #root { border-width: 0 0 5px 0; }
 }
 @media (min-width: 801px) {
   .menu-desktop { display: flex !important; }
