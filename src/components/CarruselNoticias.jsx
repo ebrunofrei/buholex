@@ -20,27 +20,27 @@ const noticias = [
     descripcion: "Fuimos invitados como ponentes en el evento más importante del sector jurídico del país.",
     enlace: "https://buholex.com/eventos"
   },
-  // ...hasta 10 noticias
+  // ...puedes agregar más noticias
 ];
 
 export default function CarruselNoticias() {
   const [actual, setActual] = useState(0);
-  const [dir, setDir] = useState(0); // dirección de animación
+  const [dir, setDir] = useState(0);
   const timerRef = useRef(null);
 
-  // Detecta si es móvil para ajustar tamaño
-  const isMobile = window.innerWidth <= 600;
+  // Responsive: detecta si es móvil
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
 
   useEffect(() => {
     timerRef.current = setTimeout(() => {
-      setDir(1); // slide a la derecha
+      setDir(1);
       setActual((prev) => (prev + 1) % noticias.length);
-    }, 10000);
+    }, 10000); // 10 segundos
 
     return () => clearTimeout(timerRef.current);
   }, [actual]);
 
-  // Al hacer click en los indicadores
+  // Cambio manual de noticia con indicadores
   const handleSet = (idx) => {
     setDir(idx > actual ? 1 : -1);
     setActual(idx);
@@ -49,39 +49,47 @@ export default function CarruselNoticias() {
   return (
     <div style={{
       position: "fixed",
-      top: isMobile ? 75 : 110,
+      top: isMobile ? 80 : 110,
       right: isMobile ? 7 : 34,
-      width: isMobile ? "96vw" : 360,
-      minWidth: isMobile ? "88vw" : 0,
-      maxWidth: isMobile ? "98vw" : 360,
+      width: isMobile ? "97vw" : 480,
+      minWidth: isMobile ? "88vw" : 340,
+      maxWidth: "99vw",
+      minHeight: isMobile ? 110 : 180,
       zIndex: 120,
       background: "#fff",
       border: "1.5px solid #a46a32",
       borderRadius: 13,
       boxShadow: "0 4px 24px #a46a3233",
-      padding: isMobile ? "13px 8px 13px 11px" : "19px 20px 17px 20px",
-      transition: "box-shadow 0.18s, width 0.14s",
+      padding: isMobile ? "16px 10px 15px 15px" : "26px 32px 22px 28px",
+      transition: "box-shadow 0.18s, width 0.14s, height 0.14s",
       display: "flex",
       flexDirection: "column",
       alignItems: "flex-start"
     }}>
       <div style={{
-        color: "#1E2940", fontWeight: 700, fontSize: 16, marginBottom: 8, letterSpacing: 0.6
+        color: "#1E2940",
+        fontWeight: 700,
+        fontSize: isMobile ? 15 : 18,
+        marginBottom: 10,
+        letterSpacing: 0.6,
+        display: "flex",
+        alignItems: "center"
       }}>
-        <span role="img" aria-label="noticias">📰</span> Noticias
+        <span role="img" aria-label="noticias" style={{ fontSize: 21, marginRight: 6 }}>📰</span>
+        Noticias
       </div>
-      <div style={{ minHeight: 78, width: "100%", position: "relative", overflow: "hidden" }}>
+      <div style={{ minHeight: isMobile ? 80 : 108, width: "100%", position: "relative", overflow: "hidden" }}>
         <AnimatePresence initial={false} custom={dir}>
           <motion.div
             key={actual}
             custom={dir}
-            initial={{ x: dir > 0 ? 370 : -370, opacity: 0 }}
+            initial={{ x: dir > 0 ? 500 : -500, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: dir > 0 ? -370 : 370, opacity: 0 }}
+            exit={{ x: dir > 0 ? -500 : 500, opacity: 0 }}
             transition={{ type: "spring", stiffness: 350, damping: 33, opacity: { duration: 0.22 } }}
             style={{
               position: "absolute",
-              width: "97%",
+              width: "98%",
               left: 0,
               top: 0
             }}
@@ -89,21 +97,22 @@ export default function CarruselNoticias() {
             <span style={{
               fontWeight: 700,
               color: "#a46a32",
-              fontSize: 17
+              fontSize: isMobile ? 16 : 19,
+              lineHeight: 1.18
             }}>
               {noticias[actual].titulo}
             </span>
             <span style={{
               float: "right",
               color: "#7a5833",
-              fontSize: 13,
+              fontSize: isMobile ? 12 : 14,
               marginLeft: 12
             }}>
               {noticias[actual].fecha}
             </span>
             <p style={{
               color: "#222",
-              fontSize: 15,
+              fontSize: isMobile ? 14 : 16,
               margin: "11px 0 0 0"
             }}>{noticias[actual].descripcion}</p>
             {noticias[actual].enlace && (
@@ -114,9 +123,9 @@ export default function CarruselNoticias() {
                 style={{
                   color: "#a46a32",
                   fontWeight: 600,
-                  fontSize: 15,
+                  fontSize: isMobile ? 14 : 16,
                   textDecoration: "underline",
-                  marginTop: 8,
+                  marginTop: 9,
                   display: "inline-block"
                 }}
               >
@@ -126,9 +135,9 @@ export default function CarruselNoticias() {
           </motion.div>
         </AnimatePresence>
       </div>
-      {/* Indicadores de páginas */}
+      {/* Indicadores */}
       <div style={{
-        marginTop: 16,
+        marginTop: 20,
         alignSelf: "center",
         display: "flex",
         gap: 7
@@ -138,7 +147,7 @@ export default function CarruselNoticias() {
             key={i}
             onClick={() => handleSet(i)}
             style={{
-              width: 11, height: 11, borderRadius: "50%",
+              width: 13, height: 13, borderRadius: "50%",
               background: actual === i ? "#a46a32" : "#e2ceb6",
               border: "1px solid #a46a32",
               cursor: "pointer",
