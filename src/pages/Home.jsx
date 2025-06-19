@@ -1,13 +1,10 @@
 import React from "react";
-import CarruselNoticias from "../components/CarruselNoticias"; // Asegúrate de la ruta correcta
-// import Noticias from "./Noticias"; // Si tienes otra sección de noticias, puedes dejarla o quitarla
+import CarruselNoticias from "../components/CarruselNoticias";
 
 export default function Home() {
   return (
     <div style={{ width: "100%", textAlign: "center", position: "relative" }}>
-      {/* Carrusel de noticias en Home */}
-      <CarruselNoticias />
-
+      <CarruselNoticias /> {/* <-- Esto debe estar ACTIVO */}
       <h1 style={{
         fontSize: "2.2rem",
         fontWeight: 800,
@@ -26,9 +23,6 @@ export default function Home() {
         Soluciones jurídicas inteligentes y accesibles para todos
       </h2>
       <hr style={{ marginBottom: 32 }} />
-
-      {/* Si quieres dejar una lista tradicional de noticias, descomenta: */}
-      {/* <Noticias /> */}
     </div>
   );
 }
