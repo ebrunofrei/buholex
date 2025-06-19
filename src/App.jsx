@@ -1,10 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 // Componentes globales
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import InstalarApp from "./components/InstalarApp";
+import InstalarApp from "./components/ui/InstalarApp";
 
 // Páginas principales
 import Landing from "./pages/Landing";
@@ -20,8 +20,7 @@ import Error404 from "./pages/Error404";
 
 function AppContent() {
   const location = useLocation();
-  // Oculta la Navbar solo en el Landing (/)
-  const hideNavbarOnPaths = ["/"];
+  const hideNavbarOnPaths = ["/"]; // Oculta Navbar solo en Landing
 
   return (
     <>
@@ -44,12 +43,4 @@ function AppContent() {
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <AppContent />
-    </Router>
-  );
-}
-
-export default App;
+export default AppContent;
