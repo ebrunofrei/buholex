@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 // Componentes globales
-import Navbar from "./components/Navbar";
+import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
 import InstalarApp from "./components/ui/InstalarApp";
 
