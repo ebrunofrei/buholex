@@ -5,7 +5,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', Arial, sans-serif;
-  background: #fcfcfb; /* blanco muy claro */
+  background: #fff;        /* Fondo blanco puro */
   color: #1e2940;
   box-sizing: border-box;
 }
@@ -13,7 +13,7 @@ html, body {
 #root {
   min-height: 100vh;
   min-width: 100vw;
-  background: #fcfcfb;
+  background: #fff !important;   /* Fondo blanco puro también aquí */
 }
 
 a {
