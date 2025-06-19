@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Newspaper } from "lucide-react";
 import buhoLogo from "../assets/buho-institucional.png";
+import { Newspaper } from "lucide-react";
 
-// Ejemplo de noticias
+// Noticias ejemplo
 const noticiasHoy = [
   { id: 1, titulo: "El Tribunal Constitucional publica nuevo precedente sobre derechos laborales." },
   { id: 2, titulo: "Se modifica el Código Procesal Civil: conoce los cambios más relevantes." },
@@ -16,17 +16,36 @@ export default function Bienvenida() {
     <div className="min-h-screen bg-white text-gray-900 flex flex-col justify-between">
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4 w-full">
         {/* Logo institucional animado */}
-        <motion.img
-          src={buhoLogo}
-          alt="Logo institucional de BúhoLex"
-          className="mx-auto mb-4 w-36 md:w-48 rounded-2xl shadow-xl border-4 border-amber-700 bg-white"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          style={{ background: "linear-gradient(135deg, #fff 80%, #f4bb53 100%)" }}
-        />
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0, boxShadow: "0 0 0px #f4bb53" }}
+          animate={{
+            scale: [0.8, 1.12, 1],
+            opacity: 1,
+            boxShadow: [
+              "0 0 0px #f4bb53",
+              "0 0 32px 8px #f4bb53AA",
+              "0 0 16px 3px #f4bb5355"
+            ],
+          }}
+          transition={{
+            duration: 1.1,
+            type: "spring",
+            bounce: 0.55,
+          }}
+          className="mx-auto mb-6 p-2 rounded-2xl bg-white"
+          style={{
+            display: "inline-block"
+          }}
+        >
+          <img
+            src={buhoLogo}
+            alt="Logo institucional de BúhoLex"
+            className="w-32 sm:w-40 md:w-48 max-w-[140px] sm:max-w-[180px] md:max-w-[220px] aspect-square object-contain rounded-2xl border-4 border-amber-700 bg-white"
+            loading="lazy"
+          />
+        </motion.div>
 
-        {/* Mensaje de bienvenida profesional y amigable */}
+        {/* Mensaje institucional */}
         <motion.h1
           className="text-3xl md:text-4xl font-bold text-amber-700 drop-shadow-lg"
           initial={{ opacity: 0, y: -20 }}
@@ -41,8 +60,7 @@ export default function Bienvenida() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          Tu aliado legal, ético y humano, siempre listo para defender tus derechos<br/>
-          y mantenerte informado con lo más importante del día.
+          Tu aliado legal, ético y humano, siempre listo para defender tus derechos y mantenerte informado con lo más importante del día.
         </motion.p>
 
         {/* Bloque de Noticias Importantes del Día */}
@@ -71,7 +89,7 @@ export default function Bienvenida() {
           </ul>
         </motion.section>
 
-        {/* Botones principales de navegación */}
+        {/* Botones de navegación */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/servicios"
