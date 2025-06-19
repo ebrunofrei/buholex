@@ -2,8 +2,8 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 // Componentes globales
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./components/ui/Navbar";
+import Footer from "./components/ui/Footer";
 import InstalarApp from "./components/ui/InstalarApp";
 
 // Páginas principales
@@ -18,9 +18,10 @@ import Biblioteca from "./pages/Biblioteca";
 import Escritorio from "./pages/Escritorio";
 import Error404 from "./pages/Error404";
 
-function AppContent() {
+function App() {
   const location = useLocation();
-  const hideNavbarOnPaths = ["/"]; // Oculta Navbar solo en Landing
+  // Opcional: oculta la barra de navegación en ciertas rutas
+  const hideNavbarOnPaths = ["/"];
 
   return (
     <>
@@ -43,4 +44,4 @@ function AppContent() {
   );
 }
 
-export default AppContent;
+export default App;
