@@ -1,64 +1,65 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
+// Componentes
 import Navbar from "./components/Navbar";
-import BannerEslogan from "./components/BannerEslogan";
 import Footer from "./components/Footer";
-import WhatsAppFloat from "./components/WhatsAppFloat";
+import InstalarApp from "./components/InstalarApp";
 
-import Home from "./pages/Home";
-import Nosotros from "./pages/Nosotros";
+// Páginas
+import Landing from "./pages/Landing";
+import Bienvenida from "./pages/Bienvenida";
 import Servicios from "./pages/Servicios";
 import Contacto from "./pages/Contacto";
 import LitisBot from "./pages/LitisBot";
-// Agrega aquí otros imports de páginas si tienes
+import Blog from "./pages/Blog";
+import Biblioteca from "./pages/Biblioteca";
+import Escritorio from "./pages/Escritorio";
+import Jurisprudencia from "./pages/Jurisprudencia";
+import Codigos from "./pages/Codigos";
+import Agenda from "./pages/Agenda";
+import OficinaVirtual from "./pages/OficinaVirtual";
 
-function App() {
+// Blog artículo específico
+import ArticuloTavara from "./pages/ArticuloTavara";
+
+// Página de error
+import Error404 from "./pages/Error404";
+
+function AppContent() {
+  const location = useLocation();
+  const hideNavbarOnPaths = ["/litisbot"];
+
   return (
-    <Router>
-      <div
-        style={{
-          background: "#faf9f7",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column"
-        }}
-      >
-        {/* NAVBAR con LOGO */}
-        <Navbar />
-
-        {/* BANNER INSTITUCIONAL */}
-        <BannerEslogan />
-
-        {/* CONTENIDO PRINCIPAL */}
-        <main
-          style={{
-            minHeight: "70vh",
-            padding: "32px 12px 12px 12px",
-            maxWidth: 980,
-            margin: "0 auto",
-            flex: 1,
-            position: "relative"
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/nosotros" element={<Nosotros />} />
-            <Route path="/servicios" element={<Servicios />} />
-            <Route path="/contacto" element={<Contacto />} />
-            <Route path="/litisbot" element={<LitisBot />} />
-            {/* Agrega más rutas aquí */}
-          </Routes>
-        </main>
-
-        {/* FOOTER */}
-        <Footer />
-
-        {/* BOTÓN FLOTANTE WHATSAPP */}
-        <WhatsAppFloat />
-      </div>
-    </Router>
+    <>
+      {!hideNavbarOnPaths.includes(location.pathname) && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/inicio" element={<Landing />} />
+        <Route path="/bienvenida" element={<Bienvenida />} />
+        <Route path="/servicios" element={<Servicios />} />
+        <Route path="/contacto" element={<Contacto />} />
+        <Route path="/litisbot" element={<LitisBot />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/articulo-tavara" element={<ArticuloTavara />} />
+        <Route path="/biblioteca" element={<Biblioteca />} />
+        <Route path="/escritorio" element={<Escritorio />} />
+        <Route path="/jurisprudencia" element={<Jurisprudencia />} />
+        <Route path="/codigos" element={<Codigos />} />
+        <Route path="/agenda" element={<Agenda />} />
+        <Route path="/oficina-virtual" element={<OficinaVirtual />} />
+        <Route path="*" element={<Error404 />} />
+      </Routes>
+      <Footer />
+      <InstalarApp />
+    </>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+}
