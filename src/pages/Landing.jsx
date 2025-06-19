@@ -1,108 +1,88 @@
+import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import buhoLogo from "../assets/buho-institucional.png"; // asegúrate que este sea el nombre correcto
+import buhoLogo from "../assets/buho-institucional.png";
 
-export default function Landing() {
+// Banner institucional superior
+const Banner = () => (
+  <div className="w-full bg-amber-700 py-1 text-white text-center text-xs tracking-wider">
+    Sitio oficial: <span className="font-bold">www.buholex.com</span>
+  </div>
+);
+
+// Barra de navegación institucional
+const Navbar = () => (
+  <nav className="w-full flex justify-between items-center py-3 px-6 bg-white shadow-sm border-b">
+    <div className="text-amber-700 font-bold text-lg tracking-widest">BúhoLex</div>
+    <div className="space-x-6 text-gray-700 text-base">
+      <a href="/" className="hover:text-amber-600 font-medium">Inicio</a>
+      <a href="/servicios" className="hover:text-amber-600 font-medium">Servicios</a>
+      <a href="/nosotros" className="hover:text-amber-600 font-medium">Nosotros</a>
+      <a href="/contacto" className="hover:text-amber-600 font-medium">Contacto</a>
+      <a href="https://www.buholex.com" className="font-bold text-blue-700 hover:text-amber-600 ml-8" target="_blank" rel="noopener noreferrer">www.buholex.com</a>
+    </div>
+  </nav>
+);
+
+// Footer institucional
+const Footer = () => (
+  <footer className="mt-10 py-4 border-t text-center text-sm text-gray-500 bg-gray-50">
+    © {new Date().getFullYear()} BúhoLex · 
+    <a href="https://www.buholex.com" className="text-blue-700 hover:underline mx-1" target="_blank" rel="noopener noreferrer">www.buholex.com</a>
+    · Todos los derechos reservados.<br />
+    <span className="text-xs">Desarrollado en Perú · contacto@buholex.com</span>
+  </footer>
+);
+
+export default function Bienvenida() {
   return (
-    <div className="min-h-screen bg-white text-gray-800 flex flex-col justify-between">
-      {/* Hero principal */}
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-6 w-full">
-        {/* Logo institucional */}
-        <motion.img
-          src={buhoLogo}
-          alt="Logo institucional de BúhoLex"
-          className="mx-auto mb-6 w-40 sm:w-48 md:w-56 max-w-xs rounded-2xl shadow-lg"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9 }}
-        />
-
-        {/* Slogan institucional Nuevo */}
-        <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-2 text-blue-900"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+    <div className="min-h-screen bg-white flex flex-col">
+      <Banner />
+      <Navbar />
+      <main className="flex flex-col items-center justify-center flex-1 px-4 py-8">
+        {/* LOGO con animación */}
+        <motion.div
+          initial={{ scale: 0.8, boxShadow: "0 0 0px #FFD700" }}
+          animate={{
+            scale: [1.15, 0.98, 1.02, 1],
+            boxShadow: [
+              "0 0 24px #FFD70055, 0 0 8px #FFECB3",
+              "0 0 16px #FFD70099",
+              "0 0 12px #FFD70033",
+              "0 0 0px #FFD70000",
+            ],
+          }}
+          transition={{ duration: 1.2, type: "spring", bounce: 0.45 }}
+          className="mx-auto mt-10 mb-2 bg-white rounded-2xl border-4 border-amber-600 shadow-lg"
+          style={{
+            maxWidth: 200,
+            width: "85vw",
+            aspectRatio: "1/1",
+            overflow: "hidden",
+          }}
         >
-          BúhoLex: justicia sin privilegios.
-        </motion.h2>
-        <motion.p
-          className="text-lg md:text-2xl text-blue-800 mb-6 font-semibold"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
-        >
-          LitisBot te acompaña y te defiende.
-        </motion.p>
-
-        {/* Botones de acción */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-10 justify-center">
-          <Link
-            to="/servicios"
-            className="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition duration-300 font-semibold"
-          >
-            Explorar servicios
-          </Link>
-          <Link
-            to="/litisbot"
-            className="border border-blue-700 text-blue-700 px-6 py-3 rounded-full hover:bg-blue-100 transition duration-300 font-semibold"
-          >
-            Probar LitisBot
-          </Link>
-          <Link
-            to="/ingreso"
-            className="bg-blue-100 text-blue-700 px-6 py-3 rounded-full hover:bg-blue-200 transition duration-300 font-semibold"
-          >
-            Registrarse / Ingresar
-          </Link>
+          <img
+            src={buhoLogo}
+            alt="Logo BúhoLex"
+            className="w-full h-full object-contain"
+            draggable={false}
+          />
+        </motion.div>
+        <h1 className="text-3xl font-extrabold text-amber-800 text-center mt-4 tracking-wide drop-shadow">
+          BÚHOLEX
+        </h1>
+        <p className="text-lg font-semibold text-blue-700 text-center mt-1 select-all">
+          www.buholex.com
+        </p>
+        <p className="text-base font-semibold text-gray-700 text-center mb-6 mt-1">
+          Justicia sin privilegios.
+        </p>
+        {/* Enlaces rápidos */}
+        <div className="flex flex-col items-center gap-2">
+          <a href="/servicios" className="text-blue-700 font-medium underline hover:text-amber-700 transition">Explorar servicios</a>
+          <a href="/litisbot" className="text-blue-600 hover:text-amber-700 font-semibold">Probar LitisBot</a>
         </div>
-
-        {/* Secciones por tipo de usuario */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 1 }}
-          className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full"
-        >
-          {[
-            {
-              rol: "Docentes universitarios",
-              texto:
-                "Crea, comparte y adapta modelos de clase, jurisprudencia y casos prácticos en tiempo real.",
-            },
-            {
-              rol: "Jueces y Fiscales",
-              texto:
-                "Consulta precedentes vinculantes, doctrina relevante y resuelve dudas legales de inmediato.",
-            },
-            {
-              rol: "Abogados y Litigantes",
-              texto:
-                "Accede a modelos de demandas, biblioteca virtual y agenda legal desde un solo lugar.",
-            },
-            {
-              rol: "Estudiantes de Derecho",
-              texto:
-                "Aprende con LitisBot, explora casos reales, modelos de escritos y prepara tus propios documentos.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-white shadow-lg p-6 rounded-xl border hover:shadow-xl transition"
-            >
-              <h3 className="text-xl font-bold text-blue-700 mb-2">
-                {item.rol}
-              </h3>
-              <p className="text-gray-600">{item.texto}</p>
-            </div>
-          ))}
-        </motion.section>
       </main>
-
-      {/* Footer institucional */}
-      <footer className="p-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} BúhoLex. Todos los derechos reservados.
-      </footer>
+      <Footer />
     </div>
   );
 }
