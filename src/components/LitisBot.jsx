@@ -1,7 +1,6 @@
-// src/components/LitisBot.jsx
-
 import React, { useState } from "react";
-import guardarConsulta from "../services/firebaseConsultasService"; // Cambia la ruta si es necesario
+import guardarConsulta from "../services/firebaseConsultasService";
+import litisbotLogo from "../assets/litisbot-logo.png"; // ¡Asegúrate que el archivo exista en assets!
 
 export default function LitisBot() {
   const [abierto, setAbierto] = useState(false);
@@ -41,7 +40,7 @@ export default function LitisBot() {
           title="LitisBot: Consultas legales"
         >
           <img
-            src="/litisbot-logo.png"
+            src={litisbotLogo}
             alt="LitisBot"
             className="w-12 h-12 object-cover rounded-full drop-shadow-lg"
           />
@@ -52,7 +51,7 @@ export default function LitisBot() {
       {abierto && (
         <div className="fixed bottom-28 right-6 w-80 max-w-[95vw] bg-white border border-blue-200 rounded-2xl shadow-2xl p-4 z-50 animate-fade-in flex flex-col gap-2">
           <div className="flex items-center gap-3 mb-2">
-            <img src="/litisbot-logo.png" alt="LitisBot" className="w-10 h-10 rounded-full" />
+            <img src={litisbotLogo} alt="LitisBot" className="w-10 h-10 rounded-full" />
             <span className="font-bold text-blue-700 text-lg">LitisBot</span>
             <span className="ml-auto text-xs text-gray-400">AI Legal</span>
           </div>
