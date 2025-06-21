@@ -19,6 +19,7 @@ import Jurisprudencia from "./pages/Jurisprudencia";
 import Codigos from "./pages/Codigos";
 import Noticias from "./pages/Noticias";
 import ArticuloBlog from "./pages/ArticuloBlog";
+import Nosotros from "./pages/Nosotros";
 
 // Admin
 import LoginAdmin from "./pages/admin/LoginAdmin";
@@ -52,6 +53,7 @@ function AppContent() {
         <Route path="/codigos" element={<Codigos />} />
         <Route path="/noticias" element={<Noticias />} />
         <Route path="/litisbot" element={<LitisBotPagina />} />
+        <Route path="/nosotros" element={<Nosotros />} />
 
         {/* Admin protegidas */}
         <Route path="/admin/login" element={<LoginAdmin />} />

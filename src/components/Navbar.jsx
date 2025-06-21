@@ -10,6 +10,7 @@ const menu = [
   { to: "/biblioteca-drive", label: "Biblioteca (beta)" },
   { to: "/agenda", label: "Agenda" },
   { to: "/contacto", label: "Contacto" },
+  { to: "/nosotros", label: "Nosotros" }
 ];
 
 export default function Navbar() {
