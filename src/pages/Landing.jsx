@@ -5,14 +5,24 @@ import { motion } from 'framer-motion';
 export default function Landing() {
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center bg-cover bg-center text-white"
-      style={{
-        backgroundImage: "url('/paisaje-buholex.jpg')",
-      }}
+      className="relative min-h-screen flex items-center justify-center text-white overflow-hidden"
     >
-      <div className="absolute inset-0 bg-black/60 z-0"></div>
+      {/* Fondo gradiente rojo-blanco puro, sin imagen */}
+      <div
+        className="absolute inset-0 w-full h-full z-0"
+        style={{
+          background: 'radial-gradient(circle at 60% 40%, #ff3232 0%, #b60000 40%, #111 100%)',
+        }}
+      />
+      {/* Overlay blanco translúcido como efecto de brillo */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <svg width="100%" height="100%" className="absolute opacity-30" style={{mixBlendMode:'screen'}}>
+          <ellipse cx="60%" cy="40%" rx="380" ry="160" fill="white"/>
+          <ellipse cx="80%" cy="70%" rx="200" ry="70" fill="white"/>
+        </svg>
+      </div>
 
-      <div className="relative z-10 max-w-6xl w-full px-6 md:px-12 text-center">
+      <div className="relative z-20 max-w-6xl w-full px-6 md:px-12 text-center">
         <motion.h1
           className="text-4xl md:text-6xl font-bold leading-tight mb-6"
           initial={{ opacity: 0, y: -50 }}
@@ -37,6 +47,12 @@ export default function Landing() {
             className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
           >
             Ver Servicios
+          </Link>
+          <Link
+            to="/blog?categoria=Actualidad Legal"
+            className="bg-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          >
+            Actualidad Legal
           </Link>
           <Link
             to="/oficina-virtual"

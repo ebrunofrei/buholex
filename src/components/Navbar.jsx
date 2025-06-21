@@ -1,109 +1,74 @@
+// components/Navbar.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import buhoLogo from "../assets/buho-institucional.png"; // AJUSTA SI NECESARIO
+import { Link, useLocation } from "react-router-dom";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
-const menuItems = [
-  { label: "Sobre mí", path: "/nosotros" },
-  {
-    label: "Servicios", children: [
-      { label: "Asesoría Legal", path: "/servicios/asesoria" },
-      { label: "Defensa Penal", path: "/servicios/penal" },
-      { label: "Oficina Virtual", path: "/oficinas" }
-    ]
-  },
-  { label: "Noticias", path: "/noticias" },
-  { label: "Jurisprudencia", path: "/jurisprudencia" },
-  { label: "Códigos", path: "/codigos" },
-  { label: "Biblioteca", path: "/biblioteca" },
-  { label: "Agenda", path: "/agenda" },
-  { label: "Contacto", path: "/contacto" },
-  { label: "LitisBot", path: "/litisbot", highlight: true }
+const menu = [
+  { to: "/", label: "Inicio" },
+  { to: "/servicios", label: "Servicios" },
+  { to: "/biblioteca", label: "Biblioteca" },
+  { to: "/biblioteca-drive", label: "Biblioteca (beta)" },
+  { to: "/agenda", label: "Agenda" },
+  { to: "/contacto", label: "Contacto" },
 ];
 
 export default function Navbar() {
-  const [openMenu, setOpenMenu] = useState(null);
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // Cierra menú al navegar
+  const handleLinkClick = () => setOpen(false);
 
   return (
-    <nav style={{
-      background: "#1E2940",
-      color: "#fff",
-      padding: "0 0 0 22px",
-      height: 68,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      fontWeight: 600,
-      fontSize: 19,
-      boxShadow: "0 2px 12px #0002",
-      zIndex: 300
-    }}>
-      {/* Logo e institucional */}
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <img src={buhoLogo} alt="Logo BúhoLex" style={{ height: 44, marginRight: 12, borderRadius: 8, background: "#fff" }} />
-        <span style={{ color: "#b88b47", fontWeight: 800, fontSize: 27, letterSpacing: 1 }}>BúhoLex</span>
+    <nav className="bg-blue-900 text-white shadow-lg px-6 py-3 flex items-center justify-between relative">
+      <Link to="/" className="font-bold text-xl tracking-wide flex items-center gap-2">
+        <img src="/logo-buholex.png" alt="BúhoLex" className="h-8 w-8" />
+        BúhoLex
+      </Link>
+
+      {/* Menú principal - escritorio */}
+      <div className="hidden md:flex gap-6">
+        {menu.map(({ to, label }) => (
+          <Link
+            key={to}
+            to={to}
+            className={`hover:text-yellow-300 font-semibold transition ${
+              location.pathname === to ? "underline underline-offset-4 text-yellow-300" : ""
+            }`}
+          >
+            {label}
+          </Link>
+        ))}
       </div>
-      {/* Menú principal */}
-      <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-        {menuItems.map((item, idx) =>
-          item.children ? (
-            <div
-              key={item.label}
-              style={{ position: "relative" }}
-              onMouseEnter={() => setOpenMenu(idx)}
-              onMouseLeave={() => setOpenMenu(null)}
-            >
-              <span style={{ cursor: "pointer", color: "#fff" }}>
-                {item.label} <span style={{ fontSize: 13 }}>▼</span>
-              </span>
-              {openMenu === idx &&
-                <div style={{
-                  position: "absolute",
-                  top: "110%",
-                  left: 0,
-                  background: "#fff",
-                  color: "#222",
-                  boxShadow: "0 4px 24px #0003",
-                  minWidth: 170,
-                  borderRadius: 7,
-                  zIndex: 800
-                }}>
-                  {item.children.map((child, i) => (
-                    <Link
-                      to={child.path}
-                      key={i}
-                      style={{
-                        display: "block",
-                        padding: "10px 20px",
-                        color: "#1E2940",
-                        fontWeight: 500,
-                        textDecoration: "none",
-                        borderBottom: i !== item.children.length - 1 ? "1px solid #f4eee8" : "none"
-                      }}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              }
-            </div>
-          ) : (
-            <Link
-              to={item.path}
-              key={item.label}
-              style={{
-                color: item.highlight ? "#b88b47" : "#fff",
-                background: item.highlight ? "#fff2" : "none",
-                borderRadius: 5,
-                padding: item.highlight ? "3px 16px" : "0",
-                textDecoration: "none",
-                fontWeight: item.highlight ? 800 : 600
-              }}
-            >
-              {item.label}
-            </Link>
-          )
-        )}
-      </div>
+
+      {/* Botón hamburguesa - móvil */}
+      <button
+        className="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300"
+        onClick={() => setOpen(!open)}
+        aria-label="Abrir menú"
+      >
+        {open ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
+      </button>
+
+      {/* Menú móvil desplegable */}
+      {open && (
+        <div className="md:hidden absolute top-16 left-0 w-full bg-blue-900 z-50 shadow-lg animate-fade-down">
+          <div className="flex flex-col items-start px-6 py-4 gap-4">
+            {menu.map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={handleLinkClick}
+                className={`block w-full text-lg hover:text-yellow-300 font-semibold py-1 ${
+                  location.pathname === to ? "underline underline-offset-4 text-yellow-300" : ""
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
