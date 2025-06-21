@@ -1,37 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+/* index.css (colócalo en src/) */
 
-html, body {
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', Arial, sans-serif;
-  background: #fff;        /* Fondo blanco puro */
-  color: #1e2940;
-  box-sizing: border-box;
+/* Tailwind base (NO quitar si usas Tailwind) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Animación personalizada (puedes agregar más aquí) */
+@layer utilities {
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
-#root {
-  min-height: 100vh;
-  min-width: 100vw;
-  background: #fff !important;   /* Fondo blanco puro también aquí */
+/* Estilos globales sugeridos */
+body {
+  @apply bg-gray-50 text-gray-800 font-sans;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #f3f4f6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a7f3d0;
+  border-radius: 4px;
 }
 
 a {
-  transition: color 0.16s, background 0.18s, box-shadow 0.15s;
+  @apply text-blue-600 hover:underline;
 }
 
-hr {
-  border: none;
-  border-top: 2px solid #a46a32;
-  margin: 30px auto;
-  max-width: 680px;
-}
-
-@media (max-width: 800px) {
-  .menu-desktop { display: none !important; }
-  .hamburger { display: block !important; }
-}
-@media (min-width: 801px) {
-  .menu-desktop { display: flex !important; }
-  .hamburger { display: none !important; }
+button {
+  @apply transition active:scale-95;
 }
