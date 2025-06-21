@@ -1,92 +1,81 @@
-// src/pages/SubirLibro.jsx
 import React, { useState } from "react";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { app } from "../../services/firebaseConfig";
-
-const db = getFirestore(app);
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
 
 export default function SubirLibro() {
-  const [libro, setLibro] = useState({
-    titulo: "",
-    autor: "",
-    descripcion: "",
-    enlaceLectura: "",
-    disponibleParaCompra: false
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setLibro({
-      ...libro,
-      [name]: type === "checkbox" ? checked : value
-    });
-  };
+  const [titulo, setTitulo] = useState("");
+  const [autor, setAutor] = useState("");
+  const [enlace, setEnlace] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  const [cargando, setCargando] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setCargando(true);
+    setMensaje("");
     try {
-      await addDoc(collection(db, "biblioteca"), libro);
-      alert("Libro subido correctamente.");
-      setLibro({ titulo: "", autor: "", descripcion: "", enlaceLectura: "", disponibleParaCompra: false });
+      await addDoc(collection(db, "biblioteca"), {
+        titulo,
+        autor,
+        enlace,
+        fechaSubida: new Date(),
+      });
+      setMensaje("✅ Libro subido correctamente.");
+      setTitulo("");
+      setAutor("");
+      setEnlace("");
     } catch (error) {
-      alert("Error al subir libro: " + error.message);
+      setMensaje("❌ Error al subir el libro. Intenta nuevamente.");
     }
+    setCargando(false);
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-12 p-6 border border-gray-300 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">Subir nuevo libro a la Biblioteca</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-md mx-auto bg-white shadow-xl p-6 rounded-xl mt-8">
+      <h2 className="text-xl font-bold mb-4">Subir nuevo libro</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
+          className="border p-2 rounded"
           type="text"
-          name="titulo"
-          value={libro.titulo}
-          onChange={handleChange}
           placeholder="Título del libro"
-          className="w-full border p-2 rounded"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
           required
         />
         <input
+          className="border p-2 rounded"
           type="text"
-          name="autor"
-          value={libro.autor}
-          onChange={handleChange}
           placeholder="Autor"
-          className="w-full border p-2 rounded"
-          required
-        />
-        <textarea
-          name="descripcion"
-          value={libro.descripcion}
-          onChange={handleChange}
-          placeholder="Descripción breve"
-          className="w-full border p-2 rounded"
+          value={autor}
+          onChange={(e) => setAutor(e.target.value)}
           required
         />
         <input
+          className="border p-2 rounded"
           type="url"
-          name="enlaceLectura"
-          value={libro.enlaceLectura}
-          onChange={handleChange}
-          placeholder="Enlace de Google Drive para visualización"
-          className="w-full border p-2 rounded"
+          placeholder="Enlace de Google Drive o URL PDF"
+          value={enlace}
+          onChange={(e) => setEnlace(e.target.value)}
           required
         />
-        <label className="inline-flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="disponibleParaCompra"
-            checked={libro.disponibleParaCompra}
-            onChange={handleChange}
-          />
-          Disponible para compra
-        </label>
         <button
+          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded font-bold"
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          disabled={cargando}
         >
-          Subir libro
+          {cargando ? "Subiendo..." : "Subir libro"}
         </button>
+        {mensaje && (
+          <div
+            className={
+              mensaje.includes("Error")
+                ? "text-red-600 mt-2"
+                : "text-green-600 mt-2"
+            }
+          >
+            {mensaje}
+          </div>
+        )}
       </form>
     </div>
   );

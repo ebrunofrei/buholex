@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import litisbotIcon from "/litisbot-logo.png";
+<img src="/litisbot-logo.png" alt="LitisBot" style={{ width: 100, height: 100 }} />
 import { guardarConsulta } from "../services/firebaseConsultasService";
 
 export default function LitisBot() {
