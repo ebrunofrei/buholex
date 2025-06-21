@@ -1,29 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import logoBuhoLex from "../assets/buho-institucional.png";
 
 export default function Navbar() {
-  const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const menu = [
+    { label: "Inicio", to: "/" },
+    { label: "Servicios", to: "/servicios" },
+    { label: "Noticias", to: "/noticias" },
+    { label: "Jurisprudencia", to: "/jurisprudencia" },
+    { label: "Códigos", to: "/codigos" },
+    { label: "Biblioteca", to: "/biblioteca" },
+    { label: "Agenda", to: "/agenda" },
+    { label: "Contacto", to: "/contacto" },
+  ];
 
   return (
-    <nav className="bg-white/95 shadow-lg py-3 px-8 flex items-center justify-between sticky top-0 z-30 border-b border-[#e53935]">
-      <div className="flex items-center gap-3">
-        <img src="/src/assets/buho-institucional.png" alt="Logo" className="w-12 h-12" />
-        <span className="text-[#4b2e19] font-black text-2xl tracking-tight drop-shadow">BúhoLex</span>
+    <nav className="bg-blue-900 text-white shadow-lg px-6 py-3 flex items-center justify-between">
+      <Link to="/" className="font-bold text-xl tracking-wide flex items-center gap-2">
+        <img src={logoBuhoLex} alt="BúhoLex" className="h-8 w-8" />
+        BúhoLex
+      </Link>
+      <div className="hidden md:flex gap-6">
+        {menu.map(({ label, to }) => (
+          <Link
+            key={to}
+            to={to}
+            className={
+              "hover:text-yellow-300 font-semibold transition" +
+              (location.pathname === to ? " underline underline-offset-4 text-yellow-300" : "")
+            }
+          >
+            {label}
+          </Link>
+        ))}
       </div>
-      <div className="flex gap-8 items-center">
-        <Link to="/" className={`text-lg font-bold hover:text-[#e53935] transition ${pathname === "/" ? "underline text-[#b03a1a]" : "text-[#4b2e19]"}`}>
-          Inicio
-        </Link>
-        <Link to="/oficina" className={`text-lg font-bold hover:text-[#e53935] transition ${pathname === "/oficina" ? "underline text-[#b03a1a]" : "text-[#4b2e19]"}`}>
-          Oficina Virtual
-        </Link>
-        <Link to="/proyectos" className="text-lg font-bold text-[#4b2e19] hover:text-[#e53935] transition">
-          Proyectos de Investigación
-        </Link>
-        <Link to="/contacto" className="text-lg font-bold text-[#4b2e19] hover:text-[#e53935] transition">
-          Contacto
-        </Link>
-      </div>
+      {/* Menú móvil */}
+      <button className="md:hidden" onClick={() => setOpen(!open)}>
+        <span className="material-icons">menu</span>
+      </button>
+      {open && (
+        <div className="md:hidden absolute top-16 right-6 bg-white text-blue-900 rounded-lg shadow-lg p-4 flex flex-col gap-4 z-50">
+          {menu.map(({ label, to }) => (
+            <Link
+              key={to}
+              to={to}
+              className={
+                "hover:text-blue-600 font-semibold transition" +
+                (location.pathname === to ? " underline underline-offset-4 text-yellow-800" : "")
+              }
+              onClick={() => setOpen(false)}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

@@ -1,35 +1,57 @@
-// src/pages/Home.jsx
 import React from "react";
-import logoBuho from '../assets/buho-institucional.png';
+import CarruselNoticias from "../components/CarruselNoticias";
 
 export default function Home() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
-      {/* Fondo gradiente institucional */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: "linear-gradient(120deg, #980808 0%, #ff0033 70%, #fff 140%)",
-          opacity: 0.93,
-        }}
-      />
-      {/* Contenido centrado */}
-      <div className="relative z-10 flex flex-col items-center px-8 py-20 gap-8 max-w-xl w-full">
-        {/* Logo institucional */}
-        <img
-          src={logoBuho}
-          alt="Logo BúhoLex"
-          className="w-40 md:w-60 rounded-2xl shadow-2xl bg-white/80 border-4 border-[#4b2e19]"
-        />
-        {/* Título gigante con color institucional */}
-        <h1 className="text-5xl md:text-6xl font-black text-[#4b2e19] text-center drop-shadow-lg">
-          BÚHOLEX
+    <div style={{
+      width: "100%",
+      minHeight: "78vh",
+      position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      background: "#faf9f7"
+    }}>
+      {/* Bienvenida y slogan */}
+      <div style={{
+        marginTop: 44,
+        marginBottom: 18,
+        textAlign: "center",
+        maxWidth: 700
+      }}>
+        <h1 style={{
+          fontSize: 42,
+          color: "#1E2940",
+          fontWeight: 800,
+          marginBottom: 5,
+          letterSpacing: 1
+        }}>
+          Bienvenido a <span style={{ color: "#b88b47" }}>BúhoLex</span>
         </h1>
-        {/* Frase de prueba visible */}
-        <p className="text-2xl font-bold text-white text-center drop-shadow">
-          Esto es una prueba visual de gradiente y estilos Tailwind.
-        </p>
+        <div style={{
+          color: "#b88b47",
+          fontWeight: 600,
+          fontSize: 23,
+          marginBottom: 22
+        }}>
+          Soluciones jurídicas inteligentes y accesibles para todos
+        </div>
+        <div style={{
+          height: 3, width: 250,
+          background: "#b88b47", borderRadius: 2,
+          margin: "0 auto 25px auto"
+        }} />
       </div>
-    </section>
+      {/* Carrusel de Noticias */}
+      <div style={{
+        position: "absolute",
+        top: 56, right: 30,
+        maxWidth: 500, minWidth: 320,
+        zIndex: 100
+      }}>
+        <CarruselNoticias />
+      </div>
+    </div>
   );
 }
+
