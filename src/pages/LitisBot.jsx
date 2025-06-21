@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import buhoLogo from "../assets/buho-institucional.png";
+import guardarConsulta from "../services/firebaseConsultasService";
 
 export default function LitisBot() {
   return (

@@ -1,20 +1,23 @@
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+// src/services/firebaseConsultasService.js
+
+import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { app } from "./firebaseConfig"; // asegúrate que la ruta es correcta
+
+const db = getFirestore(app);
 
 /**
- * Guarda una consulta realizada en el chat de LitisBot.
- * @param {string} pregunta - Texto ingresado por el usuario.
- * @param {string} respuesta - Respuesta generada por LitisBot.
+ * Guarda una consulta legal en la colección "consultas".
+ * @param {Object} datos - Objeto con los datos de la consulta.
+ * @returns {Promise<string>} - El ID del documento creado.
  */
-export const guardarConsulta = async (pregunta, respuesta) => {
+export async function guardarConsulta(datos) {
   try {
-    const ref = collection(db, "consultas");
-    await addDoc(ref, {
-      pregunta,
-      respuesta,
-      fecha: serverTimestamp()
-    });
+    const docRef = await addDoc(collection(db, "consultas"), datos);
+    return docRef.id;
   } catch (error) {
     console.error("Error al guardar la consulta:", error);
+    throw error;
   }
-};
+}
+
+export default guardarConsulta;
