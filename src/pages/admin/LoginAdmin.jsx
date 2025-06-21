@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../services/firebaseConfig"; // <--- RUTA CORREGIDA
-import { getAuth } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "../../services/firebaseConfig"; // Ajusta la ruta si tu archivo está en otro lugar
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+
+const auth = getAuth(app);
 
 export default function LoginAdmin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  const auth = getAuth(app);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,32 +22,24 @@ export default function LoginAdmin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form
-        className="bg-white shadow-md rounded-lg p-8 w-full max-w-md"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-900">
-          Acceso Administrativo
-        </h2>
-        {error && (
-          <div className="mb-4 text-red-600 text-center font-semibold">{error}</div>
-        )}
+    <div className="max-w-sm mx-auto mt-20 p-6 bg-white rounded-xl shadow-lg">
+      <h1 className="text-2xl font-bold mb-4 text-center">Login Administrador</h1>
+      {error && <div className="text-red-600 text-center mb-2">{error}</div>}
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Correo electrónico</label>
           <input
             type="email"
+            placeholder="Correo"
             className="w-full px-3 py-2 border rounded focus:outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            autoFocus
           />
         </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 mb-1">Contraseña</label>
+        <div className="mb-4">
           <input
             type="password"
+            placeholder="Contraseña"
             className="w-full px-3 py-2 border rounded focus:outline-none"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
