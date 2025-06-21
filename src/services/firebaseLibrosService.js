@@ -1,6 +1,6 @@
 // src/services/firebaseLibrosService.js
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { db } from "./firebaseConfig.js";
 
 // Obtiene todos los libros de la colección "biblioteca"
 export async function obtenerLibros() {
@@ -12,4 +12,4 @@ export async function obtenerLibros() {
     console.error("Error al obtener libros:", error);
     return [];
   }
-} 
+}
