@@ -1,7 +1,7 @@
 // src/pages/SubirLibro.jsx
 import React, { useState } from "react";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { app } from "../services/firebaseConfig";
+import { app } from "../../services/firebaseConfig";
 
 const db = getFirestore(app);
 
