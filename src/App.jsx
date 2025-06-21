@@ -5,53 +5,68 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import InstalarApp from "./components/InstalarApp";
+import RutaPrivada from "./components/RutaPrivada";
+import LitisBot from "./components/LitisBot";
+import BibliotecaDrive from "./components/BibliotecaDrive"; // << NUEVO
 
-// Páginas
+// Páginas públicas
 import Landing from "./pages/Landing";
-import Bienvenida from "./pages/Bienvenida";
 import Servicios from "./pages/Servicios";
 import Contacto from "./pages/Contacto";
-import LitisBot from "./pages/LitisBot";
-import Blog from "./pages/Blog";
 import Biblioteca from "./pages/Biblioteca";
-import Escritorio from "./pages/Escritorio";
+import Blog from "./pages/Blog";
 import Jurisprudencia from "./pages/Jurisprudencia";
 import Codigos from "./pages/Codigos";
-import Agenda from "./pages/Agenda";
-import OficinaVirtual from "./pages/OficinaVirtual";
+import Noticias from "./pages/Noticias";
+import ArticuloBlog from "./pages/ArticuloBlog";
 
-// Blog artículo específico
-import ArticuloTavara from "./pages/ArticuloTavara";
+// Admin
+import LoginAdmin from "./pages/admin/LoginAdmin";
+import DashboardAdmin from "./pages/admin/DashboardAdmin";
+import SubirLibro from "./pages/admin/SubirLibro";
+import ConsultasAdmin from "./pages/admin/ConsultasAdmin";
+import PublicarArticulo from "./pages/admin/PublicarArticulo";
 
-// Página de error
+// Otros
+import LitisBotPagina from "./pages/LitisBot";
 import Error404 from "./pages/Error404";
 
 function AppContent() {
   const location = useLocation();
-  const hideNavbarOnPaths = ["/litisbot"];
+  const hideNavbar = location.pathname === "/litisbot";
 
   return (
     <>
-      {!hideNavbarOnPaths.includes(location.pathname) && <Navbar />}
+      {!hideNavbar && <Navbar />}
+
       <Routes>
+        {/* Públicas */}
         <Route path="/" element={<Landing />} />
-        <Route path="/inicio" element={<Landing />} />
-        <Route path="/bienvenida" element={<Bienvenida />} />
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/litisbot" element={<LitisBot />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/articulo-tavara" element={<ArticuloTavara />} />
         <Route path="/biblioteca" element={<Biblioteca />} />
-        <Route path="/escritorio" element={<Escritorio />} />
+        <Route path="/biblioteca-drive" element={<BibliotecaDrive />} /> {/* NUEVA BIBLIOTECA DRIVE */}
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<ArticuloBlog />} />
         <Route path="/jurisprudencia" element={<Jurisprudencia />} />
         <Route path="/codigos" element={<Codigos />} />
-        <Route path="/agenda" element={<Agenda />} />
-        <Route path="/oficina-virtual" element={<OficinaVirtual />} />
+        <Route path="/noticias" element={<Noticias />} />
+        <Route path="/litisbot" element={<LitisBotPagina />} />
+
+        {/* Admin protegidas */}
+        <Route path="/admin/login" element={<LoginAdmin />} />
+        <Route path="/admin" element={<RutaPrivada><DashboardAdmin /></RutaPrivada>} />
+        <Route path="/admin/libros" element={<RutaPrivada><SubirLibro /></RutaPrivada>} />
+        <Route path="/admin/consultas" element={<RutaPrivada><ConsultasAdmin /></RutaPrivada>} />
+        <Route path="/admin/publicar-articulo" element={<RutaPrivada><PublicarArticulo /></RutaPrivada>} />
+
+        {/* Error */}
         <Route path="*" element={<Error404 />} />
       </Routes>
-      <Footer />
-      <InstalarApp />
+
+      {!hideNavbar && <Footer />}
+      {!hideNavbar && <InstalarApp />}
+      {!hideNavbar && <LitisBot />}
     </>
   );
 }

@@ -1,64 +1,49 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { BookOpen } from "lucide-react"; // Puedes usar otro icono o un SVG propio
-import buhoLogo from "../assets/buho-institucional.png";
-import { Link } from "react-router-dom";
+// src/pages/Biblioteca.jsx
+import React, { useEffect, useState } from "react";
+import { obtenerLibros } from "../services/firebaseLibrosService";
 
 export default function Biblioteca() {
+  const [libros, setLibros] = useState([]);
+
+  useEffect(() => {
+    async function fetchLibros() {
+      const datos = await obtenerLibros();
+      setLibros(datos);
+    }
+    fetchLibros();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
-      <motion.div
-        className="flex flex-col items-center max-w-2xl w-full py-8"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <img
-          src={buhoLogo}
-          alt="Logo BúhoLex"
-          className="w-20 md:w-28 mb-4 rounded-2xl border-4 border-amber-700 shadow bg-white"
-        />
-        <BookOpen className="text-blue-700 mb-2" size={36} />
-        <motion.h1
-          className="text-2xl md:text-3xl font-extrabold text-blue-900 mb-3"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-        >
-          Biblioteca Jurídica BúhoLex
-        </motion.h1>
-        <p className="text-blue-900 text-base md:text-lg mb-6 font-medium">
-          Accede a modelos de demandas, libros digitales, jurisprudencia y doctrina especializada.<br />
-          Pronto podrás buscar, visualizar y descargar documentos de manera segura.
-        </p>
+    <div className="min-h-screen bg-white px-6 py-12 md:px-24 lg:px-48">
+      <h1 className="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-800">
+        Biblioteca Jurídica
+      </h1>
 
-        <div className="w-full bg-blue-50 border border-blue-200 rounded-lg shadow p-4 mb-6 text-center">
-          <p className="text-gray-700 font-semibold mb-1">
-            <span className="text-amber-700">Próximamente:</span> Descarga directa de modelos y libros jurídicos.
-          </p>
-          <span className="text-gray-500 text-sm">
-            Solicita acceso especial o envía tu colaboración para ampliar la biblioteca.
-          </span>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-          <Link
-            to="/"
-            className="bg-blue-100 text-blue-700 px-6 py-2 rounded-full font-semibold border border-blue-700 hover:bg-blue-200 transition"
-          >
-            Volver al inicio
-          </Link>
-          <Link
-            to="/litisbot"
-            className="bg-blue-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-800 transition"
-          >
-            Consultar con LitisBot
-          </Link>
-        </div>
-      </motion.div>
-      <footer className="w-full mt-10 p-4 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} BúhoLex. Todos los derechos reservados.
-      </footer>
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {libros.map((libro, index) => (
+          <div key={index} className="border border-gray-300 rounded-lg p-4 shadow-sm bg-gray-50">
+            <h2 className="text-lg font-semibold text-gray-800">{libro.titulo}</h2>
+            <p className="text-sm text-gray-500 mb-1">{libro.autor}</p>
+            <p className="text-sm text-gray-600 mb-2">{libro.descripcion}</p>
+            <a
+              href={libro.enlaceLectura}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-blue-600 font-medium hover:underline"
+            >
+              Visualizar
+            </a>
+            {libro.disponibleParaCompra && (
+              <button
+                className="mt-2 block w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-4 py-2 rounded"
+                onClick={() => alert('Funcionalidad de compra aún en desarrollo.')}
+              >
+                Comprar PDF
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,45 +1,41 @@
-import React from "react";
+// src/pages/Noticias.jsx
+import React, { useEffect, useState } from "react";
+import { obtenerNoticias } from "../services/firebaseNoticiasService";
 
 export default function Noticias() {
-  const noticias = [
-    {
-      titulo: "Nuevo servicio de asesoría online",
-      fecha: "19/06/2025",
-      descripcion: "Ahora puedes acceder a consultoría jurídica totalmente en línea y recibir atención prioritaria."
-    },
-    {
-      titulo: "Publicación: Demandas modelo 2025",
-      fecha: "17/06/2025",
-      descripcion: "Descarga gratis modelos actualizados de demandas civiles y penales desde nuestra biblioteca legal."
-    },
-    {
-      titulo: "BúhoLex en el Congreso Nacional de Derecho",
-      fecha: "15/06/2025",
-      descripcion: "Fuimos invitados como ponentes en el evento más importante del sector jurídico del país."
+  const [noticias, setNoticias] = useState([]);
+
+  useEffect(() => {
+    async function fetchNoticias() {
+      const datos = await obtenerNoticias();
+      setNoticias(datos);
     }
-  ];
+    fetchNoticias();
+  }, []);
+
   return (
-    <section style={{ margin: "40px auto 0", maxWidth: 680 }}>
-      <h3 style={{ color: "#1E2940", fontSize: "1.22rem", fontWeight: 700, marginBottom: 28 }}>
-        Noticias
-      </h3>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+    <div className="min-h-screen bg-white px-6 py-12 md:px-24 lg:px-48">
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
+        Noticias Jurídicas
+      </h1>
+
+      <div className="space-y-8">
         {noticias.map((n, i) => (
-          <li key={i} style={{
-            background: "#fff",
-            borderRadius: 13,
-            border: "1.5px solid #a46a32",
-            boxShadow: "0 1px 10px #a46a3233",
-            padding: "18px 22px",
-            marginBottom: 24,
-            textAlign: "left"
-          }}>
-            <span style={{ color: "#a46a32", fontWeight: 700, fontSize: 17 }}>{n.titulo}</span>
-            <span style={{ float: "right", color: "#7a5833", fontSize: 14 }}>{n.fecha}</span>
-            <p style={{ color: "#222", fontSize: 16, margin: "10px 0 0 0" }}>{n.descripcion}</p>
-          </li>
+          <div key={i} className="border-b pb-6 mb-6">
+            <h2 className="text-xl font-semibold text-blue-700 mb-2">{n.titulo}</h2>
+            <p className="text-sm text-gray-600 mb-2">{n.resumen}</p>
+            <p className="text-xs text-gray-400 mb-1 italic">{new Date(n.fecha?.toDate()).toLocaleDateString()}</p>
+            <a
+              href={n.enlace}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline text-sm"
+            >
+              Leer más
+            </a>
+          </div>
         ))}
-      </ul>
-    </section>
+      </div>
+    </div>
   );
 }
