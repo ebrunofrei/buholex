@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fondo blanco al centro y laterales rojos (efecto clásico web legal) */
 body {
-  @apply bg-white text-[#4b2e19] font-sans;
+  min-height: 100vh;
+  background: 
+    linear-gradient(90deg, #b30000 0%, #fff 15%, #fff 85%, #b30000 100%);
+  color: #4b2e19;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
+
+/* Elimina gradientes/colores personalizados en el Hero/Home si los tienes en CSS o estilos en línea */
+
+/* Scrollbar personalizado */
 ::-webkit-scrollbar {
   width: 8px;
   background: #fff4f4;
