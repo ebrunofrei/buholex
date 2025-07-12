@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "r
 import { LitisBotChatProvider } from "./context/LitisBotChatContext";
 import { NoticiasProvider } from "./context/NoticiasContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { LitisBotProvider } from "./context/LitisBotContext";
 
 // COMPONENTES GENERALES
 import Navbar from "./components/Navbar";
@@ -17,8 +18,6 @@ import ModalLogin from "./components/ModalLogin";
 import RecuperarPassword from "./components/RecuperarPassword";
 
 // LITISBOT
-import LitisBotAudiencia from "./components/litisbotAudiencia/LitisBotAudiencia";
-import LitisBotFlotante from "./components/LitisBotFlotante";
 import LitisBotPagina from "./pages/LitisBot";
 
 // OFICINA VIRTUAL MODULAR
@@ -26,14 +25,20 @@ import Sidebar from "./components/Sidebar";
 import Oficina from "./oficinaVirtual/pages/Oficina";
 import ListaExpedientes from "./oficinaVirtual/components/ListaExpedientes";
 import Expedientes from "./oficinaVirtual/pages/Expedientes";
+import CasillaExpedientes from "./oficinaVirtual/pages/CasillaExpedientes";
 import ExpedienteDetalle from "./oficinaVirtual/pages/ExpedienteDetalle";
+import ExpedienteJudicialDetalle from "./oficinaVirtual/pages/ExpedienteJudicialDetalle";
+import ExpedienteAdministrativoDetalle from "./oficinaVirtual/pages/ExpedienteAdministrativoDetalle";
 import Biblioteca from "./oficinaVirtual/pages/Biblioteca";
 import Agenda from "./oficinaVirtual/pages/Agenda";
 import LitisBotAudienciaPage from "./oficinaVirtual/pages/LitisBotAudiencia";
 import Notificaciones from "./oficinaVirtual/pages/Notificaciones";
 import Perfil from "./oficinaVirtual/pages/Perfil";
+import HazteConocido from "./oficinaVirtual/pages/HazteConocido";
+import FirmarEscrito from "./oficinaVirtual/pages/escritorio/FirmarEscrito"; // <- ASEGÚRATE QUE ESTE ARCHIVO Y EXPORT EXISTEN
+import ChatLitisBotExpediente from "./oficinaVirtual/components/ChatLitisBotExpediente";
 
-// PÁGINAS PÚBLICAS Y ADMIN (mantén tus rutas y componentes previos)
+// PÁGINAS PÚBLICAS Y ADMIN
 import Blog from "./pages/Blog";
 import Home from "./pages/Home";
 import Servicios from "./pages/Servicios";
@@ -61,12 +66,10 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { app } from "./services/firebaseConfig";
 const VAPID_KEY = "BK_FdBKoZZeavWPaEvAjEY5GZDI7gs-Kpt05ctgk4aUfp_mdT-aqDdnaefwu8pMAUvNDTaghKrhDnpI0Ej9PgUU";
 
-// --- Hook de Firebase Auth + FCM ---
 function useFirebaseAuthAndFcm() {
   React.useEffect(() => {
     const auth = getAuth(app);
     const messaging = getMessaging(app);
-
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         await signInAnonymously(auth);
@@ -88,7 +91,6 @@ function useFirebaseAuthAndFcm() {
   }, []);
 }
 
-// Layout privado de oficina virtual (sidebar moderno)
 function OficinaVirtualLayout({ children }) {
   return (
     <div className="min-h-screen flex">
@@ -98,15 +100,13 @@ function OficinaVirtualLayout({ children }) {
   );
 }
 
-// --- APP CONTENT ---
 function AppContent() {
   useFirebaseAuthAndFcm();
   const { usuario, loading, abrirLogin } = useAuth?.() || {};
   const location = useLocation();
-  const enOficinaVirtual = /^\/oficina(\/|$)/.test(location.pathname);
+  const enOficinaVirtual = /^\/oficinaVirtual(\/|$)/.test(location.pathname);
   const hideNavbar = location.pathname === "/litisbot";
 
-  // Protege acceso a la biblioteca pública
   function BibliotecaProtegida() {
     if (loading) return <div className="text-center mt-16">Verificando acceso...</div>;
     if (!usuario) {
@@ -129,7 +129,6 @@ function AppContent() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Layout público para todo lo que no es oficina virtual */}
       {!enOficinaVirtual && (
         <>
           {!hideNavbar && <Navbar />}
@@ -137,6 +136,7 @@ function AppContent() {
             <main className={`flex-1 max-w-4xl mx-auto px-4 w-full ${!hideNavbar ? "lg:pr-80" : ""}`}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/oficina" element={<Navigate to="/oficinaVirtual" replace />} />
                 <Route path="/servicios" element={<Servicios />} />
                 <Route path="/contacto" element={<Contacto />} />
                 <Route path="/biblioteca" element={<BibliotecaProtegida />} />
@@ -153,13 +153,11 @@ function AppContent() {
                 <Route path="/historial-archivos" element={<HistorialArchivos />} />
                 <Route path="/perfil" element={<RutaPrivada><Perfil /></RutaPrivada>} />
                 <Route path="/mi-cuenta" element={<RutaPrivada><MiCuenta /></RutaPrivada>} />
-                {/* Admin protegida */}
                 <Route path="/admin/login" element={<LoginAdmin />} />
                 <Route path="/admin" element={<RutaPrivada redir="/admin/login">{<DashboardAdmin />}</RutaPrivada>} />
                 <Route path="/admin/libros" element={<RutaPrivada>{<SubirLibro />}</RutaPrivada>} />
                 <Route path="/admin/consultas" element={<RutaPrivada>{<ConsultasAdmin />}</RutaPrivada>} />
                 <Route path="/admin/publicar-articulo" element={<RutaPrivada>{<PublicarArticulo />}</RutaPrivada>} />
-                {/* Error */}
                 <Route path="*" element={<Error404 />} />
               </Routes>
             </main>
@@ -176,35 +174,42 @@ function AppContent() {
         </>
       )}
 
-      {/* Layout privado para Oficina Virtual */}
       {enOficinaVirtual && (
         <OficinaVirtualLayout>
           <Routes>
-            <Route path="/oficina" element={<Oficina />} />
-            <Route path="/oficina/expedientes" element={<Expedientes />} />
-            <Route path="/oficina/expedientes/:expedienteId" element={<ExpedienteDetalle />} />
-            <Route path="/oficina/biblioteca" element={<Biblioteca />} />
-            <Route path="/oficina/agenda" element={<Agenda />} />
-            <Route path="/oficina/litisbot" element={<LitisBotAudienciaPage />} />
-            <Route path="/oficina/notificaciones" element={<Notificaciones />} />
-            <Route path="/oficina/perfil" element={<Perfil />} />
+            <Route path="/oficinaVirtual" element={<Oficina />} />
+            <Route path="/oficinaVirtual/casilla-expedientes" element={<CasillaExpedientes />} />
+            <Route path="/oficinaVirtual/expediente-jud/:id" element={<ExpedienteJudicialDetalle />} />
+            <Route path="/oficinaVirtual/expediente-adm/:id" element={<ExpedienteAdministrativoDetalle />} />
+            <Route path="/oficinaVirtual/expedientes/:expedienteId" element={<ExpedienteDetalle />} />
+            <Route path="/oficinaVirtual/biblioteca" element={<Biblioteca />} />
+            <Route path="/oficinaVirtual/agenda" element={<Agenda />} />
+            <Route path="/oficinaVirtual/litisbot" element={<LitisBotAudienciaPage />} />
+            <Route path="/oficinaVirtual/firmar-escrito" element={<FirmarEscrito />} /> {/* ✅ CORRECTO */}
+            <Route path="/oficinaVirtual/notificaciones" element={<Notificaciones />} />
+            <Route path="/oficinaVirtual/noticias" element={<Noticias />} />
+            <Route path="/oficinaVirtual/perfil" element={<Perfil />} />
+            <Route path="/oficinaVirtual/hazte-conocido" element={<HazteConocido />} />
             <Route path="*" element={<Oficina />} />
           </Routes>
         </OficinaVirtualLayout>
       )}
+
+      <ChatLitisBotExpediente />
     </div>
   );
 }
 
-// --- ROOT APP ---
 export default function App() {
   return (
     <LitisBotChatProvider>
       <NoticiasProvider>
         <AuthProvider>
-          <Router>
-            <AppContent />
-          </Router>
+          <LitisBotProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </LitisBotProvider>
         </AuthProvider>
       </NoticiasProvider>
     </LitisBotChatProvider>
