@@ -1,24 +1,81 @@
-# Logs
+# LOGS
 logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# NODE MODULES Y DIST
+node_modules/
+dist/
+dist-ssr/
+build/
+out/
+coverage/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# ARCHIVOS DE SISTEMA Y BACKUPS
 .DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.bak
+*.tmp
+
+# CONFIGURACIONES DE EDITOR
+.vscode/
+.idea/
+.vscode/*
+*.code-workspace
+
+# ARCHIVOS DE ENTORNO Y CLAVES SENSIBLES
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.crt
+*.p12
+*.secret
+
+# CONFIGURACIÓN SENSIBLE DE FIREBASE/OTROS
+firebaseConfig.js
+src/firebase.js
+src/firebaseConfig.js
+src/config/*.js
+src/config/**/firebase*.js
+
+# CONFIGURACIONES PERSONALES DE USUARIO
+*.local
+*.history
+
+# OUTPUTS DE TEST/TOOLS
+*.test.*
+*.spec.*
+*.coverage.*
+*.log
+
+# ARTIFACTOS DE BUNDLERS Y BUILDS
+.eslintcache
+.cache/
+.yarn/
+.pnpm-debug.log
+
+# ARCHIVOS TEMPORALES
+tmp/
+temp/
+*.tmp
+
+# ARCHIVOS GENERADOS POR EL PROYECTO O IDE
+*.tsbuildinfo
+
+# SI USAS DOCKER
+docker-compose.override.yml
+
+# SI USAS STORYBOOK
+.storybook-out/
+
+# SI USAS CYPRESS
+cypress/videos/
+cypress/screenshots/
