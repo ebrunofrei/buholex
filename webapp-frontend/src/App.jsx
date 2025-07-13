@@ -8,7 +8,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LitisBotProvider } from "./context/LitisBotContext";
 
 // COMPONENTES GENERALES
-import Navbar from "./components/Navbar";
+import Navbar from "./components/ui/Navbar";
 import Footer from "./components/Footer";
 import InstalarApp from "./components/InstalarApp";
 import RutaPrivada from "./components/RutaPrivada";
@@ -16,6 +16,7 @@ import NoticiasSlider from "./components/NoticiasSlider";
 import NoticiasBotonFlotante from "./components/ui/NoticiasBotonFlotante";
 import ModalLogin from "./components/ModalLogin";
 import RecuperarPassword from "./components/RecuperarPassword";
+import Toast from "./components/ui/Toast"; // 👈 Nuevo import
 
 // LITISBOT
 import LitisBotPagina from "./pages/LitisBot";
@@ -35,7 +36,7 @@ import LitisBotAudienciaPage from "./oficinaVirtual/pages/LitisBotAudiencia";
 import Notificaciones from "./oficinaVirtual/pages/Notificaciones";
 import Perfil from "./oficinaVirtual/pages/Perfil";
 import HazteConocido from "./oficinaVirtual/pages/HazteConocido";
-import FirmarEscrito from "./oficinaVirtual/pages/escritorio/FirmarEscrito"; // <- ASEGÚRATE QUE ESTE ARCHIVO Y EXPORT EXISTEN
+import FirmarEscrito from "./oficinaVirtual/pages/escritorio/FirmarEscrito";
 import ChatLitisBotExpediente from "./oficinaVirtual/components/ChatLitisBotExpediente";
 
 // PÁGINAS PÚBLICAS Y ADMIN
@@ -71,9 +72,7 @@ function useFirebaseAuthAndFcm() {
     const auth = getAuth(app);
     const messaging = getMessaging(app);
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        await signInAnonymously(auth);
-      } else if (!user.isAnonymous) {
+      if (user && !user.isAnonymous) {
         try {
           if (window.Notification && Notification.permission !== "granted") {
             await Notification.requestPermission();
@@ -102,7 +101,7 @@ function OficinaVirtualLayout({ children }) {
 
 function AppContent() {
   useFirebaseAuthAndFcm();
-  const { usuario, loading, abrirLogin } = useAuth?.() || {};
+  const { usuario, loading, abrirLogin, toast, setToast } = useAuth?.() || {};
   const location = useLocation();
   const enOficinaVirtual = /^\/oficinaVirtual(\/|$)/.test(location.pathname);
   const hideNavbar = location.pathname === "/litisbot";
@@ -129,6 +128,9 @@ function AppContent() {
 
   return (
     <div className="relative min-h-screen">
+      {/* Toast institucional para toda la app */}
+      <Toast toast={toast} setToast={setToast} />
+      {/* Fin toast */}
       {!enOficinaVirtual && (
         <>
           {!hideNavbar && <Navbar />}
@@ -185,7 +187,7 @@ function AppContent() {
             <Route path="/oficinaVirtual/biblioteca" element={<Biblioteca />} />
             <Route path="/oficinaVirtual/agenda" element={<Agenda />} />
             <Route path="/oficinaVirtual/litisbot" element={<LitisBotAudienciaPage />} />
-            <Route path="/oficinaVirtual/firmar-escrito" element={<FirmarEscrito />} /> {/* ✅ CORRECTO */}
+            <Route path="/oficinaVirtual/firmar-escrito" element={<FirmarEscrito />} />
             <Route path="/oficinaVirtual/notificaciones" element={<Notificaciones />} />
             <Route path="/oficinaVirtual/noticias" element={<Noticias />} />
             <Route path="/oficinaVirtual/perfil" element={<Perfil />} />

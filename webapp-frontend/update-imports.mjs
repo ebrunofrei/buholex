@@ -1,56 +1,50 @@
+// update-imports.mjs
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
-// ----- CONFIGURA AQUÍ TUS RUTAS DE REEMPLAZO -----
-const REEMPLAZOS = [
-  // { old: "ruta/antigua", new: "ruta/nueva" },
-  { old: "../hooks/usePerfilOficina", new: "../../hooks/usePerfilOficina" },
-  { old: "../context/OficinaProvider", new: "../../context/OficinaProvider" },
-  { old: "../pages/FirmarEscrito", new: "../pages/escritorio/FirmarEscrito" },
-  // Agrega más pares según lo que muevas
-];
+const SRC = "./src";
 
-// Carpeta raíz donde buscar archivos
-const ROOT_DIR = "./src";
-
-// Node ESM dirname fix
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-function updateImportsInFile(filePath) {
-  let content = fs.readFileSync(filePath, "utf8");
-  let updated = content;
-  let changed = false;
-  REEMPLAZOS.forEach(({ old, new: newPath }) => {
-    if (updated.includes(old)) {
-      updated = updated.split(old).join(newPath);
-      changed = true;
+// Busca recursivamente todos los archivos .js y .jsx
+function getAllJSFiles(dir, filesArr = []) {
+  const files = fs.readdirSync(dir);
+  files.forEach(file => {
+    const fullPath = path.join(dir, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      getAllJSFiles(fullPath, filesArr);
+    } else if (fullPath.endsWith(".js") || fullPath.endsWith(".jsx")) {
+      filesArr.push(fullPath);
     }
   });
-  if (changed) {
-    fs.writeFileSync(filePath, updated, "utf8");
-    console.log(`✔ Import actualizado en: ${filePath}`);
+  return filesArr;
+}
+
+// Reemplaza los imports antiguos por el nuevo import limpio
+function updateImports(filePath) {
+  let content = fs.readFileSync(filePath, "utf8");
+  const original = content;
+
+  // Regex para cubrir los posibles paths viejos
+  content = content.replace(
+    /from\s+["'`](?:\.\.\/)?components\/AuthContext(?:\.js|\.jsx)?["'`]/g,
+    'from "../context/AuthContext"'
+  );
+  content = content.replace(
+    /from\s+["'`](?:\.\.\/)?context\/AuthContext\.js["'`]/g,
+    'from "../context/AuthContext"'
+  );
+  content = content.replace(
+    /from\s+["'`](?:\.\.\/)?context\/AuthContext["'`]/g,
+    'from "../context/AuthContext"'
+  );
+
+  if (content !== original) {
+    fs.writeFileSync(filePath, content, "utf8");
+    console.log("✔ Actualizado:", filePath);
   }
 }
 
-function walkDir(dir) {
-  fs.readdirSync(dir).forEach((file) => {
-    const absolute = path.join(dir, file);
-    if (fs.statSync(absolute).isDirectory()) {
-      walkDir(absolute);
-    } else if (
-      absolute.endsWith(".js") ||
-      absolute.endsWith(".jsx") ||
-      absolute.endsWith(".ts") ||
-      absolute.endsWith(".tsx") ||
-      absolute.endsWith(".mjs")
-    ) {
-      updateImportsInFile(absolute);
-    }
-  });
-}
+// Main
+const files = getAllJSFiles(SRC);
+files.forEach(updateImports);
 
-console.log("🔎 Buscando y actualizando imports...");
-walkDir(path.join(__dirname, ROOT_DIR));
-console.log("✅ Actualización completa.");
+console.log("\n✅ Todos los imports de AuthContext han sido actualizados a '../context/AuthContext'.");

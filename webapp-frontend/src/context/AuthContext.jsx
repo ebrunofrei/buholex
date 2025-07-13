@@ -8,7 +8,6 @@ import {
   onAuthStateChanged,
   sendEmailVerification,
   updateProfile,
-  signInAnonymously,
 } from "firebase/auth";
 import { app } from "../services/firebaseConfig";
 
@@ -76,11 +75,11 @@ export function AuthProvider({ children }) {
 
       if (user) {
         setEmailVerificado(user.emailVerified || user.isAnonymous);
-        // Cambia a tu lógica premium
-        setIsPremium(false);
+        setIsPremium(false); // Ajusta lógica premium si usas
       } else {
-        // Login anónimo si no hay usuario
-        await signInAnonymously(auth);
+        setUsuario(null);
+        setEmailVerificado(false);
+        setIsPremium(false);
       }
     });
     return () => unsub();

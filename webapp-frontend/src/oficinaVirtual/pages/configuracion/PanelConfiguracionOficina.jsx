@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PieDocumentoPreview from "../../components/PieDocumentoPreview";
-import { usePerfilOficina } from "../../../hooks/usePerfilOficina";
+import { usePerfilOficina } from "../../../../hooks/usePerfilOficina";
 
 const defaultLogo = "/logo-buholex.png"; // Usa tu logo base, preferible local (en public/)
 

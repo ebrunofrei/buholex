@@ -8,14 +8,14 @@ export default function BotonLogout() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/admin/login");
+    setShowDropdown(false);
+    await cerrarSesion();
   };
 
   return (
     <button
+      className="w-full px-4 py-2 text-[#b03a1a] hover:bg-[#ffe6e6] text-left font-semibold"
       onClick={handleLogout}
-      className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
     >
       Cerrar sesión
     </button>
