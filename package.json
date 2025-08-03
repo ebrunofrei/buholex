@@ -1,0 +1,24 @@
+{
+  "name": "buholex-backend-nuevo",
+  "version": "1.0.0",
+  "description": "Backend renovado para BúhoLex",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^13.4.0",
+    "axios": "^1.6.7",
+    "puppeteer": "^22.0.0",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
