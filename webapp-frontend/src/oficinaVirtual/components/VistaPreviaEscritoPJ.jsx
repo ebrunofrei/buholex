@@ -32,7 +32,7 @@ export default function VistaPreviaEscritoPJ({ contenido, firmaUrl, abogado }) {
 
       {/* Advertencia legal */}
       <div className="mt-4 text-xs text-yellow-700 border-l-4 border-yellow-500 pl-2">
-        <b>Advertencia:</b> La firma aquí insertada corresponde a la firma escaneada declarada por el usuario, válida para escritos electrónicos en plataformas administrativas/judiciales, pero no reemplaza la firma digital con certificado electrónico.
+        <b>Advertencia:</b> La firma aquí insertada corresponde a la firma escaneada declarada por el user, válida para escritos electrónicos en plataformas administrativas/judiciales, pero no reemplaza la firma digital con certificado electrónico.
       </div>
     </div>
   );

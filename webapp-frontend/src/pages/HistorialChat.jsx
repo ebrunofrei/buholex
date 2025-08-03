@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { obtenerHistorialLitisBot } from "../services/firebaseLitisBotService"; // ajusta según tu estructura
 
 export default function HistorialChat() {
-  const { usuario } = useAuth();
+  const { user } = useAuth();
   const [historial, setHistorial] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,14 +11,14 @@ export default function HistorialChat() {
   useEffect(() => {
     const cargar = async () => {
       setLoading(true);
-      if (usuario && usuario.uid) {
-        const datos = await obtenerHistorialLitisBot(usuario.uid);
+      if (user && user.uid) {
+        const datos = await obtenerHistorialLitisBot(user.uid);
         setHistorial(datos || []);
       }
       setLoading(false);
     };
     cargar();
-  }, [usuario]);
+  }, [user]);
 
   const filtrados = historial.filter(
     m =>

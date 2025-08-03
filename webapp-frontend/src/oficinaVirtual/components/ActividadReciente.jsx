@@ -13,7 +13,7 @@ export default function ActividadReciente({ actividad }) {
             key={i}
             className="rounded-xl border border-[#b03a1a]/30 bg-[#faf8f6] p-3 flex flex-col md:flex-row md:items-center gap-2"
           >
-            <div className="font-bold text-[#b03a1a]">{a.usuario}</div>
+            <div className="font-bold text-[#b03a1a]">{a.user}</div>
             <div className="flex-1 text-gray-700 text-sm">{a.accion}</div>
             <div className="text-xs text-gray-500">{a.fecha}</div>
           </div>

@@ -1,16 +1,19 @@
 // src/services/agendaService.js
-import { db } from "./firebaseConfig";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-export async function crearEventoAgenda({ usuarioId, descripcion, fecha }) {
-  try {
-    await addDoc(collection(db, "agenda_eventos"), {
-      usuarioId,
-      descripcion,
-      fecha,
-      creadoEn: serverTimestamp()
-    });
-  } catch (e) {
-    console.error("Error creando evento agenda:", e);
-  }
+// Si usas Firestore:
+import { db } from "./firebaseConfig"; // o tu archivo de firebase
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+// Corrige el nombre de la colección, campos y usuarioId según tu modelo
+
+export async function obtenerAgendaHoy(usuarioId) {
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+  const q = query(
+    collection(db, "agenda"),
+    where("usuarioId", "==", usuarioId),
+    where("fecha", ">=", hoy)
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }

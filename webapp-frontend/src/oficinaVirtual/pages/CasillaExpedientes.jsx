@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  Plus, FolderOpen, Bot, Eye, MessageCircle, X, ArrowDownToLine, FileImage, FileText, Printer
+  Plus, FolderOpen, Bot, Eye, X, ArrowDownToLine, FileImage, FileText, Printer
 } from "lucide-react";
-import litisbotLogo from "../../assets/litisbot-logo.png";
 import PerfilFirmaEscaneada from "../components/PerfilFirmaEscaneada";
 import ToggleNotificaciones from "../components/ToggleNotificaciones";
 import * as XLSX from "xlsx";
@@ -37,10 +36,6 @@ export default function CasillaExpedientes() {
 
   const [nuevoDemandante, setNuevoDemandante] = useState({});
   const [nuevoDemandado, setNuevoDemandado] = useState({});
-
-  const [chatVisible, setChatVisible] = useState(false);
-  const [chatHistorial, setChatHistorial] = useState([]);
-  const [chatMensaje, setChatMensaje] = useState("");
 
   const [eventos, setEventos] = useState([]);
   const [progreso, setProgreso] = useState(0);
@@ -167,7 +162,7 @@ export default function CasillaExpedientes() {
           nombre: file.name,
           url,
           fecha: Date.now(),
-          usuario: USUARIO_ACTUAL,
+          user: USUARIO_ACTUAL,
         };
         const evento = `${formatoFecha(archivo.fecha)} - Subido: ${file.name} por ${USUARIO_ACTUAL}`;
         setEventos(prev => [evento, ...prev]);
@@ -212,29 +207,12 @@ export default function CasillaExpedientes() {
 
   const expedientesFiltrados = expedientes.filter(e => e.tipo === tipoActivo);
 
-  const abrirChat = () => setChatVisible(true);
-  const cerrarChat = () => setChatVisible(false);
-  const enviarChat = e => {
-    e.preventDefault();
-    if (!chatMensaje.trim()) return;
-    setChatHistorial(hist => [...hist, { remitente: "user", mensaje: chatMensaje }]);
-    setChatMensaje("");
-    setTimeout(
-      () =>
-        setChatHistorial(hist => [
-          ...hist,
-          { remitente: "bot", mensaje: "LitisBot analiza tu expediente y envía sugerencias..." }
-        ]),
-      1000
-    );
-  };
-
   // --- EXPORTACIONES PRO ---
   function filtrarArchivos(lista) {
     if (!filtro.trim()) return lista;
     return lista.filter(a =>
       (a.nombre?.toLowerCase() || "").includes(filtro.toLowerCase())
-      || (a.usuario?.toLowerCase() || "").includes(filtro.toLowerCase())
+      || (a.user?.toLowerCase() || "").includes(filtro.toLowerCase())
       || (a.nombre?.split(".").pop().toLowerCase() || "").includes(filtro.toLowerCase())
     );
   }
@@ -244,7 +222,7 @@ export default function CasillaExpedientes() {
     const data = archivos.map(a => ({
       Nombre: a.nombre,
       Fecha: formatoFecha(a.fecha),
-      Usuario: a.usuario,
+      Usuario: a.user,
     }));
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -264,7 +242,7 @@ export default function CasillaExpedientes() {
       body: archivos.map(a => [
         a.nombre,
         formatoFecha(a.fecha),
-        a.usuario,
+        a.user,
       ]),
       styles: { fontSize: 10, cellPadding: 2 },
       headStyles: { fillColor: [176, 58, 26] },
@@ -319,7 +297,7 @@ export default function CasillaExpedientes() {
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center text-xs text-gray-500 pl-2 gap-1">
                     <span>{formatoFecha(file.fecha)}</span>
-                    <span className="italic">{file.usuario}</span>
+                    <span className="italic">{file.user}</span>
                   </div>
                   <div className="flex items-center gap-2 pl-2">
                     <button
@@ -615,7 +593,7 @@ export default function CasillaExpedientes() {
                 <div className="text-xs">{new Date().toLocaleDateString()}</div>
               </div>
             </div>
-            <div className="px-4 md:px-8 pb-1">
+            <div className="px-4 md:px-8 pt-1 pb-1">
               <b>Historial de archivos:</b>
               <div className="max-h-20 overflow-y-auto mt-1 text-xs md:text-sm text-gray-700 px-1">
                 {eventos.length ? (
@@ -631,7 +609,7 @@ export default function CasillaExpedientes() {
             <div className="flex flex-col md:flex-row gap-2 items-center px-4 md:px-8 pb-2">
               <input
                 type="text"
-                placeholder="Buscar archivo por nombre, usuario o tipo..."
+                placeholder="Buscar archivo por nombre, user o tipo..."
                 className="border rounded px-2 py-1 w-full md:w-72 text-sm"
                 value={filtro}
                 onChange={e => setFiltro(e.target.value)}
@@ -689,7 +667,7 @@ export default function CasillaExpedientes() {
                           <span className="file-name truncate font-medium">{file.nombre}</span>
                         </div>
                         <span className="file-date">{formatoFecha(file.fecha)}</span>
-                        <span className="file-user italic">{file.usuario}</span>
+                        <span className="file-user italic">{file.user}</span>
                         <div className="flex items-center gap-2 pl-2 no-print">
                           <button
                             onClick={() => window.open(file.url, "_blank", "noopener,noreferrer")}
@@ -745,54 +723,6 @@ export default function CasillaExpedientes() {
             </div>
             {modalHistorial && modalHistorialArchivos}
           </div>
-        </div>
-      )}
-      {/* Chat LitisBot */}
-      <button
-        onClick={abrirChat}
-        className="fixed bottom-7 right-6 z-[200] bg-blue-600 text-white rounded-full p-3 shadow-lg hover:bg-blue-700 flex items-center"
-      >
-        <MessageCircle size={28} />
-      </button>
-      {chatVisible && (
-        <div className="fixed bottom-20 right-4 z-[200] w-full max-w-xs md:max-w-sm bg-white rounded-lg shadow-xl border flex flex-col">
-          <div className="flex justify-between items-center p-3 bg-blue-600 text-white rounded-t-lg">
-            <span className="font-bold flex items-center">
-              <img src={litisbotLogo} alt="LitisBot" className="h-6 w-6 mr-2" /> LitisBot
-            </span>
-            <button onClick={cerrarChat} className="text-lg">
-              ×
-            </button>
-          </div>
-          <div className="flex-1 p-3 overflow-y-auto max-h-72">
-            {chatHistorial.length === 0 ? (
-              <div className="text-gray-400 text-xs">Inicia el chat…</div>
-            ) : (
-              chatHistorial.map((msg, i) => (
-                <div key={i} className={msg.remitente === "user" ? "text-right" : "text-left"}>
-                  <span
-                    className={`inline-block px-2 py-1 rounded ${
-                      msg.remitente === "user" ? "bg-blue-100" : "bg-gray-200"
-                    }`}
-                  >
-                    {msg.mensaje}
-                  </span>
-                </div>
-              ))
-            )}
-          </div>
-          <form onSubmit={enviarChat} className="flex border-t">
-            <input
-              className="flex-1 p-2 text-sm outline-none"
-              placeholder="Pregunta…"
-              value={chatMensaje}
-              onChange={e => setChatMensaje(e.target.value)}
-              autoFocus
-            />
-            <button type="submit" className="bg-blue-600 text-white px-3 font-semibold rounded-r">
-              Enviar
-            </button>
-          </form>
         </div>
       )}
     </div>

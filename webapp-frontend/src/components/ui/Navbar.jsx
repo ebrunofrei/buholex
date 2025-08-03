@@ -12,7 +12,7 @@ export default function Navbar() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const dropdownRef = useRef(null);
 
-  const { usuario, loading, cerrarSesion } = useAuth();
+  const { user, loading, cerrarSesion } = useAuth();
 
   // Logout + cerrar menú
   const handleLogout = async () => {
@@ -21,7 +21,7 @@ export default function Navbar() {
     await cerrarSesion();
   };
 
-  // Cierra dropdown usuario en desktop
+  // Cierra dropdown user en desktop
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -45,7 +45,6 @@ export default function Navbar() {
     { label: "Jurisprudencia", to: "/jurisprudencia" },
     { label: "Códigos", to: "/codigos" },
     { label: "Biblioteca", to: "/biblioteca" },
-    { label: "Agenda", to: "/agenda" },
     { label: "Contacto", to: "/contacto" },
     { label: "Blog", to: "/blog" }
   ];
@@ -91,21 +90,21 @@ export default function Navbar() {
         <div className="relative hidden md:block" ref={dropdownRef}>
           {loading ? (
             <span className="w-10 h-10 flex items-center justify-center animate-spin text-yellow-400">⏳</span>
-          ) : usuario ? (
+          ) : user ? (
             <>
               <button
                 className="flex items-center gap-2 px-2 py-1 rounded-full bg-yellow-400 font-bold shadow hover:bg-yellow-300 transition"
                 onClick={() => setShowDropdown((v) => !v)}
                 aria-label="Mi cuenta"
               >
-                {usuario.photoURL ? (
-                  <img src={usuario.photoURL} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
                 ) : (
                   <span className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-300 text-[#b03a1a] text-lg uppercase">
-                    {(usuario.displayName?.charAt(0) || usuario.email?.charAt(0) || "U")}
+                    {(user.displayName?.charAt(0) || user.email?.charAt(0) || "U")}
                   </span>
                 )}
-                <span className="hidden md:block max-w-[120px] truncate">{usuario.displayName || usuario.email}</span>
+                <span className="hidden md:block max-w-[120px] truncate">{user.displayName || user.email}</span>
               </button>
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
@@ -184,15 +183,15 @@ export default function Navbar() {
             <div className="mt-10 border-t border-[#fff7e6] pt-6">
               {loading ? (
                 <span className="w-8 h-8 flex items-center justify-center animate-spin text-yellow-300">⏳</span>
-              ) : usuario ? (
+              ) : user ? (
                 <button
                   className="w-full flex items-center gap-3 px-4 py-2 bg-yellow-400 rounded-full shadow text-[#b03a1a] font-bold text-base hover:bg-yellow-300 transition mb-2"
                   onClick={handleLogout}
                 >
                   <span>
-                    {usuario.displayName?.charAt(0) || usuario.email?.charAt(0) || "U"}
+                    {user.displayName?.charAt(0) || user.email?.charAt(0) || "U"}
                   </span>
-                  <span className="truncate">{usuario.displayName || usuario.email}</span>
+                  <span className="truncate">{user.displayName || user.email}</span>
                   <span className="ml-auto text-sm text-[#a52e00]">Cerrar sesión</span>
                 </button>
               ) : (

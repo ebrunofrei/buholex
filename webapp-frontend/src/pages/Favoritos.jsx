@@ -5,20 +5,20 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 
 export default function Favoritos() {
-  const { usuario } = useAuth();
+  const { user } = useAuth();
   const [favoritosChat, setFavoritosChat] = useState([]);
   const [favoritosArchivos, setFavoritosArchivos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [filtro, setFiltro] = useState("todos");
 
   useEffect(() => {
-    if (usuario && usuario.uid) {
-      obtenerFavoritosLitisBot(usuario.uid).then(setFavoritosChat);
-      obtenerHistorialArchivos(usuario.uid).then(archs => {
+    if (user && user.uid) {
+      obtenerFavoritosLitisBot(user.uid).then(setFavoritosChat);
+      obtenerHistorialArchivos(user.uid).then(archs => {
         setFavoritosArchivos((archs || []).filter(a => a.favorito));
       });
     }
-  }, [usuario]);
+  }, [user]);
 
   const favoritosUnificados = [
     ...(filtro === "archivos" || filtro === "todos"

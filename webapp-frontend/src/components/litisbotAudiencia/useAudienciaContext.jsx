@@ -9,29 +9,29 @@ export function useAudiencia() {
 }
 
 export function AudienciaProvider({ children }) {
-  const { usuario } = useAuth();
+  const { user } = useAuth();
   const [mensajes, setMensajes] = useState([]);
   const [sugerencias, setSugerencias] = useState([]);
   const [micActivo, setMicActivo] = useState(false);
 
   // Cargar sugerencias personalizadas al iniciar sesión
   useEffect(() => {
-    if (usuario) {
-      sugerenciasParaUsuario(usuario.uid).then(setSugerencias);
+    if (user) {
+      sugerenciasParaUsuario(user.uid).then(setSugerencias);
       // Aquí podrías cargar historial si quieres mostrarlo también
     }
-  }, [usuario]);
+  }, [user]);
 
   // Guardar mensaje y feedback en Firestore
   async function guardarMensaje({ textoUsuario, respuestaBot, expedienteID, materia, tipo }) {
     await guardarInteraccionAudiencia({
-      usuarioID: usuario.uid, expedienteID, textoUsuario, respuestaBot, materia, tipo
+      usuarioID: user.uid, expedienteID, textoUsuario, respuestaBot, materia, tipo
     });
   }
 
   // Guardar feedback útil/no útil
   async function feedbackMensaje(msgId, utilFeedback) {
-    await guardarFeedbackAudiencia({ usuarioID: usuario.uid, msgId, utilFeedback });
+    await guardarFeedbackAudiencia({ usuarioID: user.uid, msgId, utilFeedback });
   }
 
   return (

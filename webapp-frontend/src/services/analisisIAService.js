@@ -1,24 +1,22 @@
-export async function analizarTextoConIA(texto, modo = "resumir") {
-  const prompt =
-    modo === "resumir"
-      ? `Resume de forma profesional y clara este texto jurídico:\n\n${texto}`
-      : texto;
-  const resp = await fetch("/api/analizar-texto", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ texto: prompt })
-  });
-  const data = await resp.json();
-  return { resumen: data.resultado };
-}
-
-export async function traducirTextoConIA(texto, idioma = "español") {
-  const prompt = `Traduce el siguiente texto al idioma ${idioma}:\n\n${texto}`;
-  const resp = await fetch("/api/analizar-texto", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ texto: prompt })
-  });
-  const data = await resp.json();
-  return { traduccion: data.resultado };
+// src/services/analisisIAService.js
+export async function consultaIALegal(mensaje, historial = []) {
+  // Ejemplo de fetch a tu backend/IA:
+  try {
+    const context = historial.map(m =>
+      `${m.remitente === "user" ? "Usuario" : "LitisBot"}: ${m.texto}`
+    ).join('\n');
+    const response = await fetch("https://tu-backend.com/consulta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: mensaje,
+        historial: context,
+      }),
+    });
+    if (!response.ok) throw new Error("Servidor IA no disponible");
+    const data = await response.json();
+    return data.respuesta || "No se pudo procesar su consulta legal en este momento.";
+  } catch (err) {
+    return "Ha ocurrido un error al consultar la IA legal. Inténtelo nuevamente más tarde.";
+  }
 }

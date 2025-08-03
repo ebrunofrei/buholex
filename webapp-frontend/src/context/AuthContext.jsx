@@ -14,15 +14,17 @@ import { app } from "../services/firebaseConfig";
 // --- CONTEXTO ---
 const AuthContext = createContext();
 
+// HOOK: para usar el contexto de auth en cualquier parte de la app
 export function useAuth() {
   return useContext(AuthContext);
 }
 
+// PROVIDER
 export function AuthProvider({ children }) {
   const auth = getAuth(app);
 
   // Estados principales
-  const [usuario, setUsuario] = useState(null);
+  const [user, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
   const [emailVerificado, setEmailVerificado] = useState(false);
@@ -31,7 +33,7 @@ export function AuthProvider({ children }) {
   const [modalLoginOpen, setModalLoginOpen] = useState(false);
   const [modalLoginTab, setModalLoginTab] = useState("login");
 
-  // Toast global (puedes ajustar este sistema de feedback a tu gusto)
+  // Toast global (opcional, para feedbacks visuales)
   const [toast, setToast] = useState({ show: false, message: "", type: "info" });
 
   // --- Funciones de modal ---
@@ -67,15 +69,16 @@ export function AuthProvider({ children }) {
     setToast({ show: true, message: "Sesión cerrada.", type: "info" });
   };
 
-  // --- Listener usuario ---
+  // --- Listener user ---
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       setUsuario(user);
       setLoading(false);
+      console.log("onAuthStateChanged:", user);
 
       if (user) {
         setEmailVerificado(user.emailVerified || user.isAnonymous);
-        setIsPremium(false); // Ajusta lógica premium si usas
+        setIsPremium(false); // Puedes cambiar la lógica premium aquí
       } else {
         setUsuario(null);
         setEmailVerificado(false);
@@ -86,7 +89,7 @@ export function AuthProvider({ children }) {
     // eslint-disable-next-line
   }, []);
 
-  // --- Re-verificar usuario (útil tras registro/verificación) ---
+  // --- Re-verificar user (útil tras registro/verificación) ---
   const refrescarUsuario = useCallback(async () => {
     if (auth.currentUser) {
       await auth.currentUser.reload();
@@ -97,7 +100,7 @@ export function AuthProvider({ children }) {
 
   // --- Proveer contexto ---
   const value = {
-    usuario,
+    user,
     loading,
     isPremium,
     emailVerificado,

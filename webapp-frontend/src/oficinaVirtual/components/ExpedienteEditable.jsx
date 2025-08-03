@@ -195,7 +195,7 @@ export default function ExpedienteEditable({ expedienteId, googleToken }) {
           }
           const refArch = await addDoc(collection(db, "expedientes", expedienteId, "archivos"), {
             nombre: archivo.name, url, tipo: archivo.type, tamaño: archivo.size, fecha: serverTimestamp(),
-            usuario: exp?.responsable || "Desconocido", expedienteId, textoOCR,
+            user: exp?.responsable || "Desconocido", expedienteId, textoOCR,
           });
           // ---- ANÁLISIS AVANZADO + GOOGLE CALENDAR
           const eventosDetectados = detectarFechasYPlazos(textoOCR);
@@ -208,7 +208,7 @@ export default function ExpedienteEditable({ expedienteId, googleToken }) {
               creadoEn: serverTimestamp(),
               fuente: "bot"
             });
-            // Google Calendar automático si usuario lo permite y hay fecha
+            // Google Calendar automático si user lo permite y hay fecha
             if (googleToken && ev.fecha) {
               await agregarEventoGoogleCalendar(googleToken, {
                 titulo: ev.texto || "Evento automático (BúhoLex)",

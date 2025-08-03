@@ -15,6 +15,7 @@ import {
   Home,
 } from "lucide-react";
 import buhoLogo from "@/assets/buho-institucional.png";
+import { Calculator } from "lucide-react";
 
 export default function SidebarUnificado() {
   const location = useLocation();
@@ -28,6 +29,7 @@ export default function SidebarUnificado() {
         { label: "LitisBot", icon: <Bot size={18} />, to: "/oficinaVirtual/litisbot" },
         { label: "Noticias", icon: <Newspaper size={18} />, to: "/oficinaVirtual/noticias" },
         { label: "Hazte conocido", icon: <Star size={18} />, to: "/oficinaVirtual/hazte-conocido" },
+        { label: "Calculadora Laboral", icon: <Calculator size={18} />, to: "/oficinaVirtual/calculadora-laboral" }, // <-- AGREGA AQUÍ
         { label: "Mi Perfil", icon: <User size={18} />, to: "/oficinaVirtual/perfil" },
       ]
     : [

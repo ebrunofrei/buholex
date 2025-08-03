@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { sendEmailVerification } from "firebase/auth";
 
 export default function EmailVerificationModal({ open }) {
-  const { usuario, refrescarUsuario, cerrarSesion } = useAuth();
+  const { user, refrescarUsuario, cerrarSesion } = useAuth();
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -12,7 +12,7 @@ export default function EmailVerificationModal({ open }) {
   const handleResend = async () => {
     setLoading(true); setMsg("");
     try {
-      await sendEmailVerification(usuario);
+      await sendEmailVerification(user);
       setMsg("Correo reenviado. Revisa tu inbox y spam.");
     } catch (err) {
       setMsg("Error: " + err.message);
@@ -24,7 +24,7 @@ export default function EmailVerificationModal({ open }) {
     <div className="fixed inset-0 z-[200] bg-black/40 flex items-center justify-center">
       <div className="bg-white max-w-sm w-full p-6 rounded-xl shadow-xl border-2 border-yellow-400 text-center relative">
         <h2 className="text-2xl font-bold text-[#b03a1a] mb-2">Verifica tu correo</h2>
-        <p className="mb-2">Enviamos un enlace de verificación a:<br /><b>{usuario?.email}</b></p>
+        <p className="mb-2">Enviamos un enlace de verificación a:<br /><b>{user?.email}</b></p>
         <p className="text-yellow-700 text-sm mb-4">
           Debes verificar tu correo electrónico en los próximos <b>15 minutos</b> para continuar.<br />
           Si no lo haces, tu sesión será cerrada automáticamente.
@@ -32,7 +32,7 @@ export default function EmailVerificationModal({ open }) {
         <button
           className="bg-[#b03a1a] text-white rounded px-4 py-2 font-bold mt-2 hover:bg-yellow-500"
           onClick={async () => {
-            await usuario.reload();
+            await user.reload();
             refrescarUsuario();
           }}
         >

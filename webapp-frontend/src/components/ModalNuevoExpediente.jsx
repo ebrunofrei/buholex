@@ -136,7 +136,7 @@ export default function ModalNuevoExpediente({ onClose, onCreated }) {
               className="border px-3 py-2 rounded w-full"
               value={form.responsable}
               onChange={handleChange}
-              placeholder="Abogado o usuario responsable"
+              placeholder="Abogado o user responsable"
               required
             />
           </div>

@@ -1,4 +1,4 @@
-# LOGS
+# LOGS 
 logs
 *.log
 
@@ -45,6 +45,8 @@ src/firebase.js
 src/firebaseConfig.js
 src/config/*.js
 src/config/**/firebase*.js
+firebase-service-account.json
+importar_normas/firebase-service-account.json
 
 # CONFIGURACIONES PERSONALES DE USUARIO
 *.local

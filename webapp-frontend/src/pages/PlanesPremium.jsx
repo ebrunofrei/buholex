@@ -3,13 +3,13 @@ import buholexLogo from "../assets/buho-institucional.png"; // o tu logo preferi
 import { useAuth } from "../context/AuthContext";
 
 export default function PlanesPremium() {
-  const { usuario, setUsuario } = useAuth();
+  const { user, setUsuario } = useAuth();
 
   // Simula upgrade premium:
   const handleUpgrade = () => {
     // Aquí actualizarías en Firebase y el contexto global
-    alert("¡Felicitaciones! Ahora eres usuario Premium.");
-    // setUsuario({ ...usuario, isPremium: true }); // si usas contexto real
+    alert("¡Felicitaciones! Ahora eres user Premium.");
+    // setUsuario({ ...user, isPremium: true }); // si usas contexto real
   };
 
   return (

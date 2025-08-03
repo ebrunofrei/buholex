@@ -119,7 +119,7 @@ export default function TabDocumentos({ expedienteId }) {
         ...archivo,
         expedienteId,
         eliminadoEn: new Date().toISOString(),
-        motivo: "Eliminado por usuario",
+        motivo: "Eliminado por user",
       }
     );
 

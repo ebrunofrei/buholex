@@ -13,7 +13,7 @@ export default function BarraSuperior() {
         <a href="/oficina/agenda" className="text-white hover:underline">Agenda</a>
       </nav>
       <div className="ml-auto flex items-center gap-3">
-        {/* Notificaciones, avatar, menú usuario */}
+        {/* Notificaciones, avatar, menú user */}
         <span className="bg-white text-[#b03a1a] px-3 py-1 rounded-full font-semibold mr-2">Eduardo</span>
         <span className="bg-[#a52e00] text-white px-2 py-1 rounded text-xs">Premium</span>
       </div>

@@ -16,9 +16,10 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+//
 // --------- HISTORIAL Y MENSAJES ---------
+//
 
-// Guarda un mensaje en el historial de LitisBot de un usuario
 export async function guardarMensajeLitisBot({ uid, role, content }) {
   try {
     await addDoc(collection(db, "litisbot_chats"), {
@@ -33,7 +34,6 @@ export async function guardarMensajeLitisBot({ uid, role, content }) {
   }
 }
 
-// Obtiene el historial completo (puedes limitar últimos N si quieres)
 export async function obtenerHistorialLitisBot(uid, limit = 30) {
   try {
     const chatsRef = collection(db, "litisbot_chats");
@@ -50,7 +50,6 @@ export async function obtenerHistorialLitisBot(uid, limit = 30) {
   }
 }
 
-// Elimina un mensaje individual (por id, para borrar uno a uno o varios seleccionados)
 export async function borrarMensajeIndividualLitisBot(msgId) {
   try {
     await deleteDoc(doc(db, "litisbot_chats", msgId));
@@ -59,9 +58,10 @@ export async function borrarMensajeIndividualLitisBot(msgId) {
   }
 }
 
+//
 // --------- FAVORITOS ---------
+//
 
-// Marcar/desmarcar mensaje como favorito
 export async function marcarFavoritoLitisBot(msgId, favorito = true) {
   try {
     const msgRef = doc(db, "litisbot_chats", msgId);
@@ -71,7 +71,6 @@ export async function marcarFavoritoLitisBot(msgId, favorito = true) {
   }
 }
 
-// Obtener solo favoritos
 export async function obtenerFavoritosLitisBot(uid) {
   try {
     const chatsRef = collection(db, "litisbot_chats");
@@ -89,7 +88,9 @@ export async function obtenerFavoritosLitisBot(uid) {
   }
 }
 
+//
 // --------- EXPORTAR ---------
+//
 
 export async function exportarHistorialLitisBot(uid) {
   const historial = await obtenerHistorialLitisBot(uid, 1000);
@@ -99,9 +100,10 @@ export async function exportarHistorialLitisBot(uid) {
   });
 }
 
+//
 // --------- FREEMIUM / PREMIUM ---------
+//
 
-// Incrementa el contador de mensajes diarios
 export async function incrementarContadorMensajes(uid) {
   const today = new Date().toISOString().slice(0, 10);
   const docRef = doc(db, "litisbot_usuarios", uid);
@@ -117,7 +119,6 @@ export async function incrementarContadorMensajes(uid) {
   return data.mensajes[today];
 }
 
-// Lee el contador de mensajes de hoy
 export async function obtenerContadorMensajes(uid) {
   const today = new Date().toISOString().slice(0, 10);
   const docRef = doc(db, "litisbot_usuarios", uid);
@@ -128,7 +129,9 @@ export async function obtenerContadorMensajes(uid) {
   return (data.mensajes && data.mensajes[today]) || 0;
 }
 
-// --------- (OPCIONAL) BORRAR TODO EL HISTORIAL DE UN USUARIO ---------
+//
+// --------- BORRAR TODO EL HISTORIAL DE UN USUARIO ---------
+//
 
 export async function borrarHistorialLitisBot(uid) {
   try {
@@ -144,9 +147,10 @@ export async function borrarHistorialLitisBot(uid) {
   }
 }
 
+//
 // --------- HISTORIAL DE ARCHIVOS ---------
+//
 
-// Obtiene el historial de archivos subidos/analizados por el usuario
 export async function obtenerHistorialArchivos(uid) {
   try {
     const archivosRef = collection(db, "litisbot_archivos");
@@ -166,7 +170,6 @@ export async function obtenerHistorialArchivos(uid) {
   }
 }
 
-// SUBIR ARCHIVO y guardar registro en Firestore
 export async function subirArchivoLitisBot(uid, archivo) {
   try {
     const fecha = Date.now();
@@ -196,3 +199,45 @@ export async function subirArchivoLitisBot(uid, archivo) {
   }
 }
 
+//
+// --------- NOTIFICACIONES ---------
+//
+
+export async function obtenerNotificaciones(usuarioId) {
+  try {
+    const notifsRef = collection(db, "notificaciones");
+    const q = query(
+      notifsRef,
+      where("usuarioId", "==", usuarioId),
+      orderBy("fecha", "desc")
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error("Error obteniendo notificaciones:", error);
+    return [];
+  }
+}
+// --------- GUARDAR MODO/CONTEXTO POR USUARIO ---------
+/**
+ * Guarda el último modo/contexto de uso del chat LitisBot por usuario.
+ * @param {string} uid - ID del usuario.
+ * @param {string} modo - "oficina", "audiencia", etc.
+ */
+export async function guardarHistorialModoLitisBot(uid, modo) {
+  try {
+    await setDoc(
+      doc(db, "litisbot_historial_modos", uid),
+      {
+        ultimoModo: modo,
+        actualizado: serverTimestamp()
+      },
+      { merge: true }
+    );
+  } catch (e) {
+    console.error("Error guardando modo LitisBot:", e);
+  }
+}

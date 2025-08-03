@@ -1,21 +1,19 @@
-// src/services/litisbotService.js
-
-// Para análisis de texto normal (no archivo):
-export async function analizarTextoIA(consulta) {
-  const url = "/api/analizar-texto";
-  const res = await fetch(url, {
+// Para analizar imágenes/PDF (OCR)
+export async function analizarOCRPorLitisBot(url, nombre, tipo = "") {
+  const endpoint = "/api/analizar-ocr"; // Ajusta el endpoint si tu backend usa otra ruta
+  const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ consulta }),
+    body: JSON.stringify({ url, nombre, tipo }),
   });
-  if (!res.ok) throw new Error("Error en análisis IA");
+  if (!res.ok) throw new Error("Error analizando OCR");
   const data = await res.json();
-  return data.respuesta || "No se obtuvo respuesta";
+  return data;
 }
 
-// **Agrega la función para analizar archivo**
+// Para analizar archivos de audio/video/documento
 export async function analizarArchivoPorLitisBot(url, nombre, tipo = "") {
-  const endpoint = "/api/analizar-archivo"; // O tu endpoint real
+  const endpoint = "/api/analizar-archivo"; // Ajusta si tu backend usa otra ruta
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -23,5 +21,24 @@ export async function analizarArchivoPorLitisBot(url, nombre, tipo = "") {
   });
   if (!res.ok) throw new Error("Error analizando archivo");
   const data = await res.json();
-  return data.resumen || "No se pudo obtener resumen del archivo.";
+  return data;
+}
+
+// Para obtener respuesta IA (chat legal, contexto, etc.)
+export async function obtenerRespuestaLitisBot(
+  texto,
+  area,
+  expedienteId = null,
+  contexto = null,
+  historial = []
+) {
+  const endpoint = "/api/litisbot"; // Ajusta si tu backend usa otra ruta
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ texto, area, expedienteId, contexto, historial }),
+  });
+  if (!res.ok) throw new Error("Error obteniendo respuesta IA");
+  const data = await res.json();
+  return data.respuesta || "No se obtuvo respuesta.";
 }

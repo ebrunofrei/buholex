@@ -3,8 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import Biblioteca from "./Biblioteca";
 
 export default function BibliotecaConLoginModal() {
-  const { usuario, abrirLogin } = useAuth();
-  if (!usuario) {
+  const { user, abrirLogin } = useAuth();
+  if (!user) {
     return (
       <div className="text-center p-10">
         <p>Inicia sesión para acceder a la Biblioteca Jurídica.</p>

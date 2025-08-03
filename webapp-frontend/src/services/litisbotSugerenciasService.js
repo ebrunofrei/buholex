@@ -1,7 +1,7 @@
 import { db } from "../services/firebaseConfig";
 import { collection, addDoc, getDocs, updateDoc, doc, where, query, orderBy } from "firebase/firestore";
 
-// Guardar interacción del usuario con el bot
+// Guardar interacción del user con el bot
 export async function guardarInteraccionAudiencia({ usuarioID, expedienteID, textoUsuario, respuestaBot, materia, tipo }) {
   return addDoc(collection(db, "audiencia_interacciones", usuarioID, "interacciones"), {
     textoUsuario, respuestaBot, expedienteID, materia, tipo, fecha: new Date(), utilFeedback: null, favorito: false,
@@ -14,7 +14,7 @@ export async function guardarFeedbackAudiencia({ usuarioID, msgId, utilFeedback 
   await updateDoc(msgRef, { utilFeedback });
 }
 
-// Sugerencias inteligentes para el usuario
+// Sugerencias inteligentes para el user
 export async function sugerenciasParaUsuario(usuarioID) {
   // Traer últimas 50 interacciones (o más)
   const q = query(collection(db, "audiencia_interacciones", usuarioID, "interacciones"), orderBy("fecha", "desc"));

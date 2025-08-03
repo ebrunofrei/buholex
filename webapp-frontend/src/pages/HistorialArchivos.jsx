@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { obtenerHistorialArchivos } from "../services/firebaseLitisBotService"; // Ajusta import
 
 export default function HistorialArchivos() {
-  const { usuario } = useAuth();
+  const { user } = useAuth();
   const [archivos, setArchivos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,14 +11,14 @@ export default function HistorialArchivos() {
   useEffect(() => {
     const cargar = async () => {
       setLoading(true);
-      if (usuario && usuario.uid) {
-        const datos = await obtenerHistorialArchivos(usuario.uid);
+      if (user && user.uid) {
+        const datos = await obtenerHistorialArchivos(user.uid);
         setArchivos(datos || []);
       }
       setLoading(false);
     };
     cargar();
-  }, [usuario]);
+  }, [user]);
 
   const filtrados = archivos.filter(
     f =>

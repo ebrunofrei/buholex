@@ -4,28 +4,28 @@ import { useAuth } from "../../context/AuthContext";
 import TarjetaPresentacionPro from "./TarjetaPresentacionPro";
 
 export default function PanelMisTarjetas() {
-  const { usuario } = useAuth?.() || {};
+  const { user } = useAuth?.() || {};
   const [tarjetas, setTarjetas] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Carga todas las tarjetas al cargar el panel
   useEffect(() => {
-    if (usuario?.uid) {
+    if (user?.uid) {
       setLoading(true);
-      getTarjetasUsuario(usuario).then(arr => {
+      getTarjetasUsuario(user).then(arr => {
         setTarjetas(arr);
         setLoading(false);
       });
     }
-  }, [usuario]);
+  }, [user]);
 
   const handleEliminar = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar esta tarjeta?")) return;
-    await eliminarTarjeta(usuario, id);
+    await eliminarTarjeta(user, id);
     setTarjetas(tarjetas.filter(t => t.id !== id));
   };
 
-  if (!usuario) return <div className="text-center py-10">Inicia sesión para ver tus tarjetas.</div>;
+  if (!user) return <div className="text-center py-10">Inicia sesión para ver tus tarjetas.</div>;
 
   if (loading) return <div className="py-10 text-center">Cargando tarjetas...</div>;
 

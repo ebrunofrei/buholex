@@ -15,7 +15,7 @@ export default function LoginAdmin() {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/admin/libros");
     } catch (err) {
-      setError("Credenciales inválidas o usuario no autorizado.");
+      setError("Credenciales inválidas o user no autorizado.");
     }
   };
 

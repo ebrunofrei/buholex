@@ -19,7 +19,7 @@ const getInitials = (name, email) =>
 export default function SidebarLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-  const { usuario } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className="flex min-h-screen">
@@ -56,10 +56,10 @@ export default function SidebarLayout({ children }) {
         </nav>
         {/* Avatar al final */}
         <div className="mt-auto mb-2">
-          {usuario && !usuario.isAnonymous ? (
+          {user && !user.isAnonymous ? (
             <span className="flex items-center gap-2">
               <span className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#b03a1a] font-extrabold text-xl">
-                {getInitials(usuario.displayName, usuario.email)}
+                {getInitials(user.displayName, user.email)}
               </span>
             </span>
           ) : (

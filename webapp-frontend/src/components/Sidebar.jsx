@@ -1,15 +1,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import buhoLogo from "../assets/buho-institucional.png"; 
+import buhoLogo from "../assets/buho-institucional.png";
 
+// Menú de la Oficina Virtual
 const menu = [
   { label: "Oficina", icon: "🏛️", to: "/oficinaVirtual" },
   { label: "Biblioteca", icon: "📚", to: "/oficinaVirtual/biblioteca" },
   { label: "Agenda", icon: "🗓️", to: "/oficinaVirtual/agenda" },
-  { label: "LitisBot", icon: "🤖", to: "/oficinaVirtual/litisbot" },
-  { label: "Firmar Escrito PDF", icon: "✍️", to: "/oficinaVirtual/firmar-escrito" },  // Nuevo acceso destacado
+  { label: "Firmar Escrito PDF", icon: "✍️", to: "/oficinaVirtual/firmar-escrito" }, // Nuevo acceso destacado
   { label: "Noticias", icon: "📢", to: "/oficinaVirtual/noticias" },
   { label: "Hazte conocido", icon: "🌟", to: "/oficinaVirtual/hazte-conocido" },
+  // Calculadora Laboral - nuevo ítem destacado
+  { label: "Calculadora Laboral", icon: "🧮", to: "/oficinaVirtual/calculadora-laboral" },
   { label: "Mi Perfil", icon: "👤", to: "/oficinaVirtual/perfil" },
 ];
 

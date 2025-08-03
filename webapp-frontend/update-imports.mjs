@@ -1,50 +1,39 @@
 // update-imports.mjs
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const SRC = "./src";
+const SRC_DIR = path.join(__dirname, 'src');
 
-// Busca recursivamente todos los archivos .js y .jsx
-function getAllJSFiles(dir, filesArr = []) {
-  const files = fs.readdirSync(dir);
-  files.forEach(file => {
-    const fullPath = path.join(dir, file);
-    if (fs.statSync(fullPath).isDirectory()) {
-      getAllJSFiles(fullPath, filesArr);
-    } else if (fullPath.endsWith(".js") || fullPath.endsWith(".jsx")) {
-      filesArr.push(fullPath);
-    }
+// Regex para reemplazar imports relativos a /store/ y /utils/ por alias @
+const importRegex = /(from\s+['"])(\.\.\/)+(store|utils)\/([^'"]+)(['"])/g;
+
+function getAllFiles(dir, exts, files = []) {
+  fs.readdirSync(dir).forEach((file) => {
+    const abs = path.join(dir, file);
+    if (fs.statSync(abs).isDirectory()) return getAllFiles(abs, exts, files);
+    if (exts.some(ext => file.endsWith(ext))) files.push(abs);
   });
-  return filesArr;
+  return files;
 }
 
-// Reemplaza los imports antiguos por el nuevo import limpio
-function updateImports(filePath) {
-  let content = fs.readFileSync(filePath, "utf8");
-  const original = content;
-
-  // Regex para cubrir los posibles paths viejos
-  content = content.replace(
-    /from\s+["'`](?:\.\.\/)?components\/AuthContext(?:\.js|\.jsx)?["'`]/g,
-    'from "../context/AuthContext"'
-  );
-  content = content.replace(
-    /from\s+["'`](?:\.\.\/)?context\/AuthContext\.js["'`]/g,
-    'from "../context/AuthContext"'
-  );
-  content = content.replace(
-    /from\s+["'`](?:\.\.\/)?context\/AuthContext["'`]/g,
-    'from "../context/AuthContext"'
-  );
-
-  if (content !== original) {
-    fs.writeFileSync(filePath, content, "utf8");
-    console.log("✔ Actualizado:", filePath);
+function replaceImportsInFile(file) {
+  let content = fs.readFileSync(file, 'utf-8');
+  let newContent = content.replace(importRegex, (match, pre, dots, folder, rest, post) => {
+    return `${pre}@/${folder}/${rest}${post}`;
+  });
+  if (content !== newContent) {
+    fs.writeFileSync(file, newContent, 'utf-8');
+    console.log(`✅ Reemplazado: ${file}`);
   }
 }
 
-// Main
-const files = getAllJSFiles(SRC);
-files.forEach(updateImports);
+function main() {
+  const files = getAllFiles(SRC_DIR, ['.js', '.jsx', '.ts', '.tsx']);
+  files.forEach(f => replaceImportsInFile(f));
+  console.log('\n✨ Todos los imports relativos a /store y /utils han sido reemplazados por alias @.\n');
+}
 
-console.log("\n✅ Todos los imports de AuthContext han sido actualizados a '../context/AuthContext'.");
+main();

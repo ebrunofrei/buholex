@@ -3,21 +3,23 @@ import { useAuth } from "../context/AuthContext";
 import { updateEmail, updatePassword } from "firebase/auth";
 import Toast from "../components/ui/Toast";
 import buholexLogo from "../assets/buho-institucional.png";
+import PagoStripeButton from "../components/PagoStripeButton";
 
 export default function MiCuenta() {
-  const { usuario, isPremium } = useAuth();
-  const [email, setEmail] = useState(usuario?.email || "");
+  const { user, isPremium, reloadUsuario } = useAuth();
+  const [email, setEmail] = useState(user?.email || "");
   const [password, setPassword] = useState("");
   const [toast, setToast] = useState({ show: false, type: "success", message: "" });
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [loadingPassword, setLoadingPassword] = useState(false);
+  const [loadingUpgrade, setLoadingUpgrade] = useState(false);
 
   // Actualizar email
   const handleEmailChange = async (e) => {
     e.preventDefault();
     setLoadingEmail(true);
     try {
-      await updateEmail(usuario, email);
+      await updateEmail(user, email);
       setToast({ show: true, type: "success", message: "¡Correo actualizado correctamente!" });
     } catch (err) {
       let msg = err.code === "auth/requires-recent-login"
@@ -33,7 +35,7 @@ export default function MiCuenta() {
     e.preventDefault();
     setLoadingPassword(true);
     try {
-      await updatePassword(usuario, password);
+      await updatePassword(user, password);
       setToast({ show: true, type: "success", message: "¡Contraseña actualizada correctamente!" });
       setPassword("");
     } catch (err) {
@@ -45,10 +47,10 @@ export default function MiCuenta() {
     setLoadingPassword(false);
   };
 
-  // Simulación de upgrade premium
-  const handleUpgrade = () => {
-    setToast({ show: true, type: "success", message: "¡Ya eres Premium! (Simulación)" });
-    // Aquí va la lógica real para upgrade/pago
+  // Callback después de pago Stripe exitoso (puedes mejorar con webhook o reload automático)
+  const handlePagoExitoso = async () => {
+    setToast({ show: true, type: "success", message: "¡Felicitaciones! Ahora eres user Premium." });
+    await reloadUsuario?.();
   };
 
   return (
@@ -56,23 +58,21 @@ export default function MiCuenta() {
       {/* DASHBOARD HEADER */}
       <div className="flex flex-col items-center mb-6">
         <img
-          src={usuario?.photoURL || buholexLogo}
+          src={user?.photoURL || buholexLogo}
           alt="Avatar"
           className="w-20 h-20 rounded-full border-4 border-[#b03a1a] mb-2 bg-white object-cover"
         />
-        <div className="font-bold text-2xl text-[#4b2e19]">{usuario?.displayName || "Usuario anónimo"}</div>
-        <div className="text-[#b03a1a] font-semibold">{usuario?.email || "Sin email"}</div>
+        <div className="font-bold text-2xl text-[#4b2e19]">{user?.displayName || "Usuario anónimo"}</div>
+        <div className="text-[#b03a1a] font-semibold">{user?.email || "Sin email"}</div>
         <div className={`font-bold mt-2 px-5 py-1 rounded-xl text-sm 
           ${isPremium ? "bg-[#e9dcc3] text-[#4b2e19]" : "bg-[#fde7e7] text-[#b03a1a]"}`}>
           {isPremium ? "USUARIO PREMIUM" : "PLAN GRATIS"}
         </div>
+        {/* BOTÓN STRIPE */}
         {!isPremium && (
-          <button
-            className="bg-[#b03a1a] text-white rounded-xl py-2 px-8 font-bold mt-3 hover:bg-[#a52e00] transition"
-            onClick={handleUpgrade}
-          >
-            ¡Hazte Premium!
-          </button>
+          <div className="mt-3">
+            <PagoStripeButton usuarioId={user?.uid} onSuccess={handlePagoExitoso} />
+          </div>
         )}
       </div>
 

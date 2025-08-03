@@ -10,7 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
  * RutaPrivada
  * @param {ReactNode} children - El contenido protegido.
  * @param {string} [redirectTo] - Ruta donde redirigir si no está autenticado (default: "/login")
- * @param {boolean} [permitirAnonimo] - Permite usuario anónimo (default: false)
+ * @param {boolean} [permitirAnonimo] - Permite user anónimo (default: false)
  * @param {boolean} [mostrarModal] - Muestra modal en vez de redirigir (default: false)
  */
 export default function RutaPrivada({
@@ -19,7 +19,7 @@ export default function RutaPrivada({
   permitirAnonimo = false,
   mostrarModal = false,
 }) {
-  const [usuario, loading, error] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   const location = useLocation();
 
   // Loader elegante mientras verifica sesión
@@ -45,8 +45,8 @@ export default function RutaPrivada({
     );
   }
 
-  // Si no hay usuario o es anónimo (según configuración)
-  if (!usuario || (!permitirAnonimo && usuario.isAnonymous)) {
+  // Si no hay user o es anónimo (según configuración)
+  if (!user || (!permitirAnonimo && user.isAnonymous)) {
     // Mostrar modal de login en vez de redirigir (si está implementado)
     // if (mostrarModal) return <ModalLogin mensaje="Inicia sesión para acceder a esta sección." />;
 

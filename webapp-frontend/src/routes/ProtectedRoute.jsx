@@ -7,15 +7,15 @@ import EmailVerificationModal from "../components/ui/EmailVerificationModal";
 const MINUTES_TO_VERIFY = 15;
 
 export default function ProtectedRoute({ children }) {
-  const { usuario, loading, emailVerificado, cerrarSesion } = useAuth();
+  const { user, loading, emailVerificado, cerrarSesion } = useAuth();
   const location = useLocation();
 
   // Timer autocierre si no verifica
   useEffect(() => {
     let timer = null;
     if (
-      usuario &&
-      !usuario.isAnonymous &&
+      user &&
+      !user.isAnonymous &&
       !emailVerificado
     ) {
       timer = setTimeout(async () => {
@@ -27,13 +27,13 @@ export default function ProtectedRoute({ children }) {
       if (timer) clearTimeout(timer);
     };
     // eslint-disable-next-line
-  }, [usuario?.emailVerified, usuario, emailVerificado]);
+  }, [user?.emailVerified, user, emailVerificado]);
 
   // Mientras carga
   if (loading) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
 
   // No logueado
-  if (!usuario || usuario.isAnonymous) {
+  if (!user || user.isAnonymous) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

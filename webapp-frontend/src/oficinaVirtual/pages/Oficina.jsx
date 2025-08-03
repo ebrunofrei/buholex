@@ -1,58 +1,57 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Folder, FileText, CalendarDays, Bell } from "lucide-react";
+// Si usas íconos externos, importa aquí, si no, deja los emojis actuales
 
-const accesos = [
+const CARDS = [
   {
     nombre: "Casilla de Expedientes",
+    icono: "📂",
     descripcion: "Accede a todos tus expedientes judiciales y administrativos.",
-    icono: <Folder size={40} className="text-[#7b1e1e]" />,
-    ruta: "/oficinaVirtual/casilla-expedientes" // ← CORREGIDO AQUÍ
+    route: "/oficinaVirtual/casilla-expedientes",
+    novedades: 2, // Ejemplo de archivos pendientes
   },
   {
     nombre: "Casilla de Resoluciones",
-    descripcion: "Revisa autos, decretos y sentencias judiciales, así como resoluciones administrativas.",
-    icono: <FileText size={40} className="text-[#7b1e1e]" />,
-    ruta: "/oficinaVirtual/buzon"
+    icono: "📝",
+    descripcion: "Revisa autos, decretos, sentencias y resoluciones administrativas.",
+    route: "/oficinaVirtual/casilla-resoluciones",
+    novedades: 0,
   },
-
   {
     nombre: "Agenda de Audiencias",
-    descripcion: "Consulta tus próximas audiencias programadas.",
-    icono: <CalendarDays size={40} className="text-[#7b1e1e]" />,
-    ruta: "/oficinaVirtual/agenda"
+    icono: "🗓️",
+    descripcion: "Consulta y administra tus próximas audiencias.",
+    route: "/oficinaVirtual/agenda",
+    novedades: 1,
   },
   {
     nombre: "Notificaciones",
+    icono: "🔔",
     descripcion: "Revisa tus notificaciones electrónicas recibidas.",
-    icono: <Bell size={40} className="text-[#7b1e1e]" />,
-    ruta: "/oficinaVirtual/notificaciones"
+    route: "/oficinaVirtual/notificaciones",
+    novedades: 3,
   }
 ];
 
 export default function Oficina() {
-  const navigate = useNavigate();
-
   return (
-    <section className="min-h-screen bg-gray-100 py-10 px-4 md:px-20">
-      <h1 className="text-2xl md:text-3xl font-semibold text-[#7b1e1e] mb-10">
-        Bienvenido a tu Oficina Virtual
-      </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {accesos.map((item, index) => (
-          <div
-            key={index}
-            onClick={() => navigate(item.ruta)}
-            className="cursor-pointer rounded-xl bg-white shadow-md hover:shadow-lg transition duration-200 p-6 border border-gray-200"
+    <section className="w-full min-h-screen p-8">
+      <h1 className="text-3xl font-bold mb-8 text-[#b03a1a]">Oficina Virtual</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        {CARDS.map((card) => (
+          <a
+            key={card.nombre}
+            href={card.route}
+            className="relative bg-white rounded-xl shadow p-8 hover:shadow-lg transition flex flex-col items-center"
           >
-            <div className="flex justify-center mb-4">{item.icono}</div>
-            <h3 className="text-center text-lg font-semibold text-[#333]">
-              {item.nombre}
-            </h3>
-            <p className="text-sm text-gray-600 text-center mt-2">
-              {item.descripcion}
-            </p>
-          </div>
+            <span className="text-5xl mb-4">{card.icono}</span>
+            <div className="text-lg font-bold mb-1 text-center">{card.nombre}</div>
+            <div className="text-gray-600 text-sm text-center">{card.descripcion}</div>
+            {card.novedades > 0 && (
+              <span className="absolute top-4 right-4 bg-red-600 text-white text-xs rounded-full px-2 py-0.5">
+                {card.novedades}
+              </span>
+            )}
+          </a>
         ))}
       </div>
     </section>

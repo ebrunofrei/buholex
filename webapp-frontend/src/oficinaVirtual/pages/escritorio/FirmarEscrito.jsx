@@ -104,7 +104,7 @@ const FirmarEscritoPDF = ({
       const arrayBuffer = await pdfFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
 
-      const qrString = `https://buholex.com/verificar/${Date.now()} - Firmado electrónicamente por ${signers[0]?.name || "usuario"} | ${new Date().toLocaleString("es-PE")}`;
+      const qrString = `https://buholex.com/verificar/${Date.now()} - Firmado electrónicamente por ${signers[0]?.name || "user"} | ${new Date().toLocaleString("es-PE")}`;
       const qrDataUrl = await QRCode.toDataURL(qrString);
 
       // Inserta firmas con proporciones
@@ -210,7 +210,7 @@ const FirmarEscritoPDF = ({
         }
 
         const fecha = new Date().toLocaleString("es-PE");
-        const nombre = signers[0]?.name || "usuario";
+        const nombre = signers[0]?.name || "user";
         lastPage.drawText(
           `FIRMADO ELECTRÓNICAMENTE por ${nombre.toUpperCase()} • ${sloganOficina}`,
           {

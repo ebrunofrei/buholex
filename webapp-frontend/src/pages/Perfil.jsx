@@ -4,9 +4,9 @@ import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function Perfil() {
-  const { usuario, setUsuario } = useAuth();
-  const [nombre, setNombre] = useState(usuario?.displayName || "");
-  const [foto, setFoto] = useState(usuario?.photoURL || "");
+  const { user, setUsuario } = useAuth();
+  const [nombre, setNombre] = useState(user?.displayName || "");
+  const [foto, setFoto] = useState(user?.photoURL || "");
   const [preview, setPreview] = useState(null);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
@@ -32,19 +32,19 @@ export default function Perfil() {
         const archivo = fileInputRef.current.files[0];
         if (!archivo.type.startsWith("image/")) throw new Error("Solo imágenes válidas");
         const storage = getStorage();
-        const ruta = `avatars/${usuario.uid}/${archivo.name}`;
+        const ruta = `avatars/${user.uid}/${archivo.name}`;
         const storageRef = ref(storage, ruta);
         await uploadBytes(storageRef, archivo);
         photoURL = await getDownloadURL(storageRef);
       }
       // Actualizar Firebase Auth
-      await updateProfile(usuario, {
+      await updateProfile(user, {
         displayName: nombre,
         photoURL,
       });
       // Actualizar estado global (AuthContext debe escuchar cambios)
       setUsuario({
-        ...usuario,
+        ...user,
         displayName: nombre,
         photoURL,
       });
@@ -108,7 +108,7 @@ export default function Perfil() {
           <label className="block mb-1 font-medium text-[#b03a1a]">Correo</label>
           <input
             type="email"
-            value={usuario.email}
+            value={user.email}
             disabled
             className="w-full border px-3 py-2 rounded bg-gray-100 text-gray-400"
           />
