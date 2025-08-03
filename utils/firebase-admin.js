@@ -1,7 +1,12 @@
-import { createRequire } from "module";
 import admin from "firebase-admin";
-const require = createRequire(import.meta.url);
-import serviceAccount from "../firebase-service-account.json";
+import fs from "fs/promises";
+
+// Lee el JSON de credenciales usando fs/promises y JSON.parse
+const serviceAccount = JSON.parse(
+  await fs.readFile(
+    new URL("../firebase-service-account.json", import.meta.url)
+  )
+);
 
 if (!admin.apps.length) {
   admin.initializeApp({

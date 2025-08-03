@@ -1,5 +1,5 @@
 // utils/translateHelper.js
-const { Translate } = require('@google-cloud/translate').v2;
+import {  Translate  } from "@google-cloud/translate";.v2;
 
 const translate = new Translate({ key: process.env.GOOGLE_TRANSLATE_API_KEY });
 
@@ -35,4 +35,4 @@ function getCodigoGoogleIdioma(idiomaApp) {
   }
 }
 
-module.exports = { traducirTextoGoogle, getCodigoGoogleIdioma };
+export default { traducirTextoGoogle, getCodigoGoogleIdioma };

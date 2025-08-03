@@ -9,4 +9,4 @@ async function enviarTelegram(chatId, mensaje) {
     parse_mode: "HTML"
   });
 }
-module.exports = { enviarTelegram };
+export { enviarTelegram };

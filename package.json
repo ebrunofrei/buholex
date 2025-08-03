@@ -1,22 +1,35 @@
 {
   "name": "buholex-backend-nuevo",
   "version": "1.0.0",
-  "description": "Backend renovado para BúhoLex",
-  "main": "index.js",
+  "description": "Backend renovado para BúhoLex (Node.js + ESM)",
   "type": "module",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js"
   },
+  "keywords": [
+    "backend",
+    "buholex",
+    "legaltech",
+    "ESM",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "body-parser": "^1.20.2",
-    "dotenv": "^16.4.5",
-    "firebase-admin": "^13.4.0",
     "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^13.4.0",
+    "mongodb": "^6.5.0",
+    "nodemailer": "^7.0.5",
     "puppeteer": "^22.0.0",
-    "cheerio": "^1.0.0-rc.12"
+    "stripe": "^14.25.0",
+    "twilio": "^5.8.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

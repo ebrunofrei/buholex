@@ -1,6 +1,6 @@
 // /api/stripe-webhook.js
 import { buffer } from "micro";
-import { db } from "../../firebase";
+import { db } from "../../firebase.js";
 import { doc, setDoc } from "firebase/firestore";
 import Stripe from "stripe";
 

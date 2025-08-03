@@ -1,9 +1,9 @@
 import express from "express";
 const router = express.Router();
 import axios from "axios";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
-const { MongoClient } = require("mongodb");
+import {  MongoClient  } from "mongodb";
 
 // ============ MongoDB CACHE =============
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";

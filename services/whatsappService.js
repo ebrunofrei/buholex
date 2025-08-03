@@ -9,4 +9,4 @@ async function enviarWhatsApp(to, mensaje) {
   });
 }
 
-module.exports = { enviarWhatsApp };
+export { enviarWhatsApp };

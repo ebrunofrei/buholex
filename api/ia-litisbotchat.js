@@ -1,11 +1,11 @@
 // buholex-backend/api/ia-litisbotchat.js
-const { Configuration, OpenAIApi } = require("openai");
+import {  Configuration, OpenAIApi  } from "openai";
 import admin from "firebase-admin";
 
 // Configura tu API Key de OpenAI en el entorno (.env o dashboard de tu host)
 const openai = new OpenAIApi(new Configuration({ apiKey: process.env.OPENAI_KEY }));
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Solo se permite POST" });
   }

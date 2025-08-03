@@ -1,7 +1,7 @@
 // buholex-backend/routes/notificaciones.js
 import express from "express";
 const router = express.Router();
-const { enviarEmail, enviarWhatsApp, enviarTelegram } = require("../services/emailService"); // O el que corresponda
+import {  enviarEmail, enviarWhatsApp, enviarTelegram  } from '../services/emailService.js'; // O el que corresponda
 
 // Endpoint para recibir notificaciones de entidades externas
 router.post("/", async (req, res) => {
