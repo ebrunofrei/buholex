@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import buholexLogo from "../assets/buho-institucional.png";
 
 export default function LandingMinimalista() {
@@ -18,18 +17,18 @@ export default function LandingMinimalista() {
         <p className="text-[#4b2e19] text-base font-medium mb-4">
           Tu asistente legal con IA, buscador multifuente y generación automática de modelos. Gratis o PRO.
         </p>
-        <Link
-          to="/registro"
+        <a
+          href="/registro"
           className="bg-[#b03a1a] text-white font-bold rounded-full px-8 py-3 shadow hover:bg-[#a52e00] mb-2 w-full max-w-xs"
         >
           Probar gratis
-        </Link>
-        <Link
-          to="/upgrade"
+        </a>
+        <a
+          href="/upgrade"
           className="text-[#b03a1a] font-semibold underline text-sm"
         >
           Ver beneficios PRO
-        </Link>
+        </a>
       </header>
 
       {/* CARDS DE BENEFICIO */}
@@ -53,7 +52,9 @@ export default function LandingMinimalista() {
       {/* TESTIMONIO MINI */}
       <section className="my-8 px-4">
         <div className="bg-[#fff7ee] rounded-xl shadow p-4 text-center">
-          <span className="text-[#b03a1a] font-bold">"Consulto y redacto en minutos. Mi estudio ahorra horas cada semana."</span>
+          <span className="text-[#b03a1a] font-bold">
+            "Consulto y redacto en minutos. Mi estudio ahorra horas cada semana."
+          </span>
           <div className="text-[#4b2e19] text-xs mt-2">– Abg. Valeria Muñoz</div>
         </div>
       </section>
@@ -62,12 +63,12 @@ export default function LandingMinimalista() {
       <footer className="mt-auto py-5 px-4 bg-white text-center text-xs text-[#75412e] rounded-t-xl shadow-inner">
         <span>
           ¿Listo para probar?{" "}
-          <Link
-            to="/registro"
+          <a
+            href="/registro"
             className="font-bold underline text-[#b03a1a]"
           >
             Regístrate gratis
-          </Link>
+          </a>
         </span>
         <div className="mt-2 text-gray-400">
           © {new Date().getFullYear()} BúhoLex · LitisBot

@@ -1,34 +1,12 @@
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import SeedBrandingPage from "@/pages/SeedBrandingPage";
 
-// CONTEXTOS
-import { LitisBotChatProvider } from "./context/LitisBotChatContext";
-import { NoticiasProvider } from "./context/NoticiasContext";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { LitisBotProvider } from "./context/LitisBotContext";
+// LAYOUT
+import OficinaVirtualLayout from "@/layouts/OficinaVirtualLayout";
 
-// COMPONENTES GENERALES
-import Navbar from "./components/ui/Navbar";
-import Footer from "./components/Footer";
-// import InstalarApp from "./components/InstalarApp";
-import RutaPrivada from "./components/RutaPrivada";
-import NoticiasSlider from "./components/NoticiasSlider";
-import NoticiasBotonFlotante from "./components/ui/NoticiasBotonFlotante";
-import ModalLogin from "./components/ModalLogin";
-import RecuperarPassword from "./components/RecuperarPassword";
-import Toast from "./components/ui/Toast";
-import PersonalizacionView from "./views/PersonalizacionView";
-
-// LITISBOT
-import SidebarChats from "@/components/SidebarChats";
-import LitisBotChatBase from "@/components/LitisBotChatBase";
-
-// OFICINA VIRTUAL MODULAR
-import Sidebar from "./components/Sidebar";
+// Páginas de Oficina Virtual
 import Oficina from "@/oficinaVirtual/pages/Oficina";
-import ListaExpedientes from "./oficinaVirtual/components/ListaExpedientes";
-import Expedientes from "./oficinaVirtual/pages/Expedientes";
 import CasillaExpedientes from "./oficinaVirtual/pages/CasillaExpedientes";
 import ExpedienteDetalle from "./oficinaVirtual/pages/ExpedienteDetalle";
 import ExpedienteJudicialDetalle from "./oficinaVirtual/pages/ExpedienteJudicialDetalle";
@@ -38,12 +16,14 @@ import Agenda from "./oficinaVirtual/pages/Agenda";
 import LitisBotAudienciaPage from "./oficinaVirtual/pages/LitisBotAudiencia";
 import Notificaciones from "./oficinaVirtual/pages/Notificaciones";
 import Perfil from "./oficinaVirtual/pages/Perfil";
+import OficinaVirtualRoutes from "./oficinaVirtual/routes/OficinaVirtualRoutes";
+import NoticiasOficina from "./oficinaVirtual/pages/Noticias";
 import HazteConocido from "./oficinaVirtual/pages/HazteConocido";
 import FirmarEscrito from "./oficinaVirtual/pages/escritorio/FirmarEscrito";
-import ConfigurarAlertas from "@/oficinaVirtual/components/ConfigurarAlertas";
 import CalculadoraLaboral from "@/oficinaVirtual/pages/CalculadoraLaboral";
+import ConfigurarAlertas from "@/oficinaVirtual/components/ConfigurarAlertas"; // (si lo usas en alguna ruta)
 
-// PÁGINAS PÚBLICAS Y ADMIN
+// Páginas públicas / Admin
 import Blog from "./pages/Blog";
 import Home from "./pages/Home";
 import Servicios from "./pages/Servicios";
@@ -53,7 +33,7 @@ import Jurisprudencia from "@/pages/Jurisprudencia";
 import JurisprudenciaVisorModal from "@/components/jurisprudencia/JurisprudenciaVisorModal";
 import Codigos from "./pages/Codigos";
 import CodigoDetalle from "./pages/CodigoDetalle";
-import Noticias from "./pages/Noticias";
+import NoticiasHome from "./pages/Noticias";
 import ArticuloBlog from "./pages/ArticuloBlog";
 import Nosotros from "./pages/Nosotros";
 import LoginAdmin from "./pages/admin/LoginAdmin";
@@ -66,15 +46,45 @@ import Login from "./pages/Login";
 import MiCuenta from "./pages/MiCuenta";
 import HistorialArchivos from "./pages/HistorialArchivos";
 import BibliotecaDrive from "./components/BibliotecaDrive";
+import SeedBrandingPage from "@/pages/SeedBrandingPage";
+import PoliticaPrivacidad from "@/pages/legal/politica-de-privacidad";
+import TerminosCondiciones from "@/pages/legal/terminos-y-condiciones";
+import AvisoCookies from "@/pages/legal/aviso-cookies";
+import CookiesBanner from "@/components/CookiesBanner";
+import PricingPage from "./pages/PricingPage";
+import LandingSaaS from "./pages/LandingSaaS";
+import PersonalizacionView from "@/views/PersonalizacionView";
+
+// LitisBot integrado
+import SidebarChats from "@/components/SidebarChats";
+import LitisBotChatBase from "@/components/LitisBotChatBase";
 import LitisBotBubbleChat from "@/components/ui/LitisBotBubbleChat";
 
-// FIREBASE AUTH + FCM
+// Contextos
+import { LitisBotChatProvider } from "./context/LitisBotChatContext";
+import { NoticiasProvider } from "./context/NoticiasContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { LitisBotProvider } from "./context/LitisBotContext";
+import { GoogleAuthRootProvider } from "@/context/GoogleAuthContext";
+
+// Componentes generales
+import Navbar from "./components/ui/Navbar";
+import Footer from "./components/Footer";
+// import InstalarApp from "./components/InstalarApp";
+import RutaPrivada from "./components/RutaPrivada";
+import NoticiasSlider from "./components/NoticiasSlider";
+import NoticiasBotonFlotante from "./components/ui/NoticiasBotonFlotante";
+import ModalLogin from "./components/ModalLogin";
+import RecuperarPassword from "./components/RecuperarPassword";
+import Toast from "./components/ui/Toast";
+
+// Firebase Auth + FCM
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getMessaging, getToken } from "firebase/messaging";
 import { app } from "./services/firebaseConfig";
 const VAPID_KEY = "BK_FdBKoZZeavWPaEvAjEY5GZDI7gs-Kpt05ctgk4aUfp_mdT-aqDdnaefwu8pMAUvNDTaghKrhDnpI0Ej9PgUU";
 
-// Lógica FCM
+// ---------- FCM + Auth listener ----------
 function useFirebaseAuthAndFcm() {
   React.useEffect(() => {
     const auth = getAuth(app);
@@ -88,6 +98,7 @@ function useFirebaseAuthAndFcm() {
           const token = await getToken(messaging, { vapidKey: VAPID_KEY });
           if (token) {
             console.log("FCM Token:", token);
+            // TODO: enviar token al backend para notificaciones dirigidas
           }
         } catch (err) {
           console.warn("No se pudo obtener el token FCM: " + err.message);
@@ -98,16 +109,7 @@ function useFirebaseAuthAndFcm() {
   }, []);
 }
 
-function OficinaVirtualLayout({ children }) {
-  return (
-    <div className="min-h-screen flex">
-      <Sidebar />
-      <main className="flex-1 bg-gray-50 p-4">{children}</main>
-    </div>
-  );
-}
-
-// ---------- LitisBot con Sidebar+Chat ----------
+// ---------- LitisBot con Sidebar+Chat (ruta /litisbot) ----------
 function LitisBotPageIntegrada() {
   const [casos, setCasos] = React.useState([]);
   const [casoActivo, setCasoActivo] = React.useState(null);
@@ -119,12 +121,8 @@ function LitisBotPageIntegrada() {
   return (
     <div
       className="flex w-full min-h-screen bg-white"
-      style={{
-        height: "100vh",
-        overflow: "hidden",
-      }}
+      style={{ height: "100vh", overflow: "hidden" }}
     >
-      {/* Sidebar ocupa 320px máximo, pero nunca más del 22% */}
       <div
         className="h-full"
         style={{
@@ -146,14 +144,10 @@ function LitisBotPageIntegrada() {
           onOpenHerramientas={() => setShowModalHerramientas(true)}
         />
       </div>
-      {/* Chat ocupa el resto */}
+
       <div
         className="flex-1 flex flex-col items-stretch bg-white"
-        style={{
-          minWidth: 0,
-          height: "100vh",
-          overflowY: "auto",
-        }}
+        style={{ minWidth: 0, height: "100vh", overflowY: "auto" }}
       >
         <LitisBotChatBase
           user={userInfo}
@@ -166,15 +160,19 @@ function LitisBotPageIntegrada() {
     </div>
   );
 }
-// -----------------------------------------------
 
 function AppContent() {
   useFirebaseAuthAndFcm();
-  const { user, loading, abrirLogin, toast, setToast } = useAuth?.() || {};
+
+  // ✅ OJO: no usar useAuth?.() — llama directo y maneja fallback
+  const { user, loading, abrirLogin, toast, setToast } = useAuth() || {};
+
   const location = useLocation();
-  const esLitisBot = location.pathname === "/litisbot";
   const enOficinaVirtual = /^\/oficinaVirtual(\/|$)/.test(location.pathname);
   const hideNavbar = location.pathname === "/litisbot";
+
+  // Solo mostrar botón flotante de noticias en Home
+  const mostrarBotonNoticias = location.pathname === "/";
 
   function BibliotecaProtegida() {
     if (loading) return <div className="text-center mt-16">Verificando acceso...</div>;
@@ -197,16 +195,14 @@ function AppContent() {
   }
 
   return (
-    <div
-      className="relative min-h-screen w-full"
-      style={{
-        background: "#fff" // <-- SOLO BLANCO, sin gradiente
-      }}
-    >
+    <div className="relative min-h-screen w-full" style={{ background: "#fff" }}>
       <Toast toast={toast} setToast={setToast} />
+
+      {/* ——— Parte pública ——— */}
       {!enOficinaVirtual && (
         <>
           {!hideNavbar && <Navbar />}
+
           <div className="flex pt-20">
             <main className={`flex-1 w-full ${!hideNavbar ? "lg:pr-80" : ""}`}>
               <Routes>
@@ -223,8 +219,7 @@ function AppContent() {
                 <Route path="/jurisprudencia/visor/:id" element={<JurisprudenciaVisorModal />} />
                 <Route path="/codigos" element={<Codigos />} />
                 <Route path="/codigos/:id" element={<CodigoDetalle />} />
-                <Route path="/noticias" element={<Noticias />} />
-                {/* LitisBot: vista integrada */}
+                <Route path="/noticias" element={<NoticiasHome />} />
                 <Route path="/litisbot" element={<LitisBotPageIntegrada />} />
                 <Route path="/nosotros" element={<Nosotros />} />
                 <Route path="/login" element={<Login />} />
@@ -238,24 +233,34 @@ function AppContent() {
                 <Route path="/admin/publicar-articulo" element={<RutaPrivada>{<PublicarArticulo />}</RutaPrivada>} />
                 <Route path="/oficinaVirtual/personalizacion" element={<PersonalizacionView />} />
                 <Route path="/seed-branding" element={<SeedBrandingPage />} />
+                <Route path="/legal/politica-de-privacidad" element={<PoliticaPrivacidad />} />
+                <Route path="/legal/terminos-y-condiciones" element={<TerminosCondiciones />} />
+                <Route path="/legal/aviso-cookies" element={<AvisoCookies />} />
+                <Route path="/planes" element={<PricingPage />} />
+                {/* ⚠️ Evitar duplicar /planes: muevo LandingSaaS a otra ruta */}
+                <Route path="/saas" element={<LandingSaaS />} />
                 <Route path="*" element={<Error404 />} />
               </Routes>
             </main>
+
             {!hideNavbar && (
               <>
                 <aside className="hidden lg:flex flex-col w-80 h-[calc(100vh-80px)] fixed top-20 right-0 z-40">
                   <NoticiasSlider />
                 </aside>
-                <NoticiasBotonFlotante />
-                {/* <InstalarApp />  <-- OCULTADO EL BOTÓN */}
+                {mostrarBotonNoticias && <NoticiasBotonFlotante />}
+                {/* <InstalarApp /> */}
               </>
             )}
           </div>
+
           {!hideNavbar && <Footer />}
+          <CookiesBanner />
           <ModalLogin />
         </>
       )}
 
+      {/* ——— Oficina Virtual ——— */}
       {enOficinaVirtual && (
         <OficinaVirtualLayout>
           <Routes>
@@ -269,35 +274,34 @@ function AppContent() {
             <Route path="/oficinaVirtual/litisbot" element={<LitisBotAudienciaPage />} />
             <Route path="/oficinaVirtual/firmar-escrito" element={<FirmarEscrito />} />
             <Route path="/oficinaVirtual/notificaciones" element={<Notificaciones />} />
-            <Route path="/oficinaVirtual/noticias" element={<Noticias />} />
+            <Route path="/oficinaVirtual/noticias" element={<NoticiasOficina />} />
             <Route path="/oficinaVirtual/perfil" element={<Perfil />} />
             <Route path="/oficinaVirtual/hazte-conocido" element={<HazteConocido />} />
             <Route path="/oficinaVirtual/calculadora-laboral" element={<CalculadoraLaboral />} />
+            <Route path="/oficinaVirtual/*" element={<OficinaVirtualRoutes />} />
             <Route path="*" element={<Oficina />} />
           </Routes>
         </OficinaVirtualLayout>
       )}
-      
-      <NoticiasBotonFlotante />
-
     </div>
   );
 }
 
 export default function App() {
-   
   return (
-    <LitisBotChatProvider>
-      <NoticiasProvider>
-        <AuthProvider>
-          <LitisBotProvider>
-            <Router>
-              <AppContent />
-            </Router>
-            <LitisBotBubbleChat/>
-          </LitisBotProvider>
-        </AuthProvider>
-      </NoticiasProvider>
-    </LitisBotChatProvider>
+    <GoogleAuthRootProvider>
+      <LitisBotChatProvider>
+        <NoticiasProvider>
+          <AuthProvider>
+            <LitisBotProvider>
+              <Router>
+                <LitisBotBubbleChat />
+                <AppContent />
+              </Router>
+            </LitisBotProvider>
+          </AuthProvider>
+        </NoticiasProvider>
+      </LitisBotChatProvider>
+    </GoogleAuthRootProvider>
   );
 }

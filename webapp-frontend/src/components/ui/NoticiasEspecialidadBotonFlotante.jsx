@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Megaphone } from "lucide-react";
 
-const PROXY = "https://buholex-news-proxy-production.up.railway.app/api/noticias-juridicas"; // O usa /api/noticias-juridicas en producción
-const NOTICIAS_POR_PAGINA = 8;
+const PROXY = "https://buholex-news-proxy-production.up.railway.app/api/noticias-juridicas"; // Cambia a tu endpoint cloud si está desplegado
 
-export default function NoticiasBotonFlotante() {
+export default function NoticiasEspecialidadBotonFlotante({ especialidad = "penal" }) {
   const [open, setOpen] = useState(false);
   const [noticias, setNoticias] = useState([]);
   const [page, setPage] = useState(1);
@@ -13,12 +12,16 @@ export default function NoticiasBotonFlotante() {
   const [hayNuevas, setHayNuevas] = useState(false);
   const sidebarRef = useRef();
 
+  // Construye la query según especialidad
+  const QUERY = encodeURIComponent(`${especialidad}+derecho+site:.pe`);
+
   const fetchNoticias = async (nextPage = 1) => {
     setLoading(true);
     try {
-      const response = await fetch(PROXY);
+      const response = await fetch('https://buholex-news-proxy-production.up.railway.app/api/noticias-juridicas?q=penal+derecho+site:.pe');
       const items = await response.json();
-      const nuevas = items.slice(0, nextPage * NOTICIAS_POR_PAGINA);
+      console.log(items);
+      const nuevas = items.slice(0, nextPage * 8);
       setNoticias(nuevas);
       setHasMore(items.length > nuevas.length);
     } catch (err) {
@@ -31,9 +34,9 @@ export default function NoticiasBotonFlotante() {
   useEffect(() => {
     fetchNoticias(1);
     setHayNuevas(true);
-  }, []);
+    // eslint-disable-next-line
+  }, [especialidad]);
 
-  // Scroll infinito en sidebar
   useEffect(() => {
     if (!open) return;
     const el = sidebarRef.current;
@@ -77,16 +80,16 @@ export default function NoticiasBotonFlotante() {
           aria-label="Abrir noticias"
         >
           <Megaphone size={22} className={`text-white ${hayNuevas ? "animate-bell" : ""}`} />
-          <span className="hidden sm:inline">Noticias</span>
+          <span className="hidden sm:inline">Noticias {especialidad}</span>
           {hayNuevas && <span className="absolute top-1 right-1 h-3 w-3 rounded-full bg-yellow-400 animate-ping"></span>}
         </button>
       </div>
-      {/* Sidebar mejorado */}
+      {/* Sidebar premium */}
       {open && (
         <div className="fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl border-l-4 border-[#b03a1a] z-[100] flex flex-col animate-slide-in"
           style={{ maxWidth: "340px" }}>
           <div className="flex items-center justify-between px-4 py-3 border-b bg-[#b03a1a]/10">
-            <h2 className="font-bold text-[#b03a1a] text-lg">Noticias jurídicas</h2>
+            <h2 className="font-bold text-[#b03a1a] text-lg">Noticias {especialidad}</h2>
             <button onClick={() => setOpen(false)} className="text-2xl font-bold hover:text-[#b03a1a]">&times;</button>
           </div>
           <div className="p-3 overflow-y-auto flex-1" ref={sidebarRef}
@@ -94,7 +97,7 @@ export default function NoticiasBotonFlotante() {
             {noticias?.length > 0 ? (
               noticias.map((n, idx) => (
                 <div key={idx} className="mb-3">
-                  <div className="bg-[#fff6f3] rounded-xl p-3 shadow-md border border-[#e8d3c3] hover:shadow-lg transition">
+                  <div className="bg-[#f7f4ef] rounded-xl p-3 shadow-md border border-[#e8d3c3] hover:shadow-lg transition">
                     <div className="flex items-center mb-2">
                       <span className="text-xs bg-[#b03a1a]/80 text-white px-2 py-0.5 rounded-full font-medium mr-2">
                         {n.fuente}
@@ -150,7 +153,6 @@ export default function NoticiasBotonFlotante() {
           75% { transform: rotate(-5deg);}
           85% { transform: rotate(5deg);}
         }
-        /* Custom scroll para el sidebar */
         .overflow-y-auto::-webkit-scrollbar {
           width: 7px;
         }

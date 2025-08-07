@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import { updateEmail, updatePassword } from "firebase/auth";
 import Toast from "../components/ui/Toast";
 import buholexLogo from "../assets/buho-institucional.png";
-import PagoStripeButton from "../components/PagoStripeButton";
 
 export default function MiCuenta() {
   const { user, isPremium, reloadUsuario } = useAuth();

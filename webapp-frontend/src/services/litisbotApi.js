@@ -36,17 +36,7 @@ export async function upgradeToPro(usuarioId) {
 }
 
 // --- NUEVO: pagos SaaS ---
-export async function pagarProStripe(usuarioId) {
-  // Llama a tu backend para iniciar pago Stripe y obtener checkout URL
-  const res = await fetch("/api/pagar-stripe", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ usuarioId }),
-  });
-  const data = await res.json();
-  if (data.checkoutUrl) window.location.href = data.checkoutUrl;
-  return !!data.checkoutUrl;
-}
+
 export async function pagarProPaypal(usuarioId) {
   const res = await fetch("/api/pagar-paypal", {
     method: "POST",

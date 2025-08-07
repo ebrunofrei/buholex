@@ -12,6 +12,7 @@ import EditarLibroModal from "@/components/Biblioteca/EditarLibroModal";
 import VisorLibroModal from "@/components/Biblioteca/VisorLibroModal";
 import { useUserAdminStatus } from "@/hooks/useUserAdminStatus";
 import toast, { Toaster } from "react-hot-toast";
+import PageContainer from "@/components/PageContainer";
 
 export default function Biblioteca() {
   // Hook admin completo
@@ -121,15 +122,21 @@ export default function Biblioteca() {
 
   // ---- CONTROL DE ACCESO Y LOADERS ----
   if (checking) {
-    return (
+  return (
+    <PageContainer>
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <span className="loader-admin"></span>
-        <div className="mt-4 font-bold text-[#7a2518] text-xl">Verificando acceso...</div>
+        <div className="mt-4 font-bold text-[#7a2518] text-xl">
+          Verificando acceso...
+        </div>
       </div>
-    );
-  }
-  if (!user) {
-    return (
+    </PageContainer>
+  );
+}
+
+if (!user) {
+  return (
+    <PageContainer>
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <div className="mt-4 font-bold text-[#7a2518] text-lg mb-4">
           Inicia sesión para acceder a la Biblioteca Jurídica.
@@ -140,157 +147,206 @@ export default function Biblioteca() {
         >
           Iniciar sesión
         </button>
-        <a href="/recuperar" className="mt-2 text-[#7a2518] underline text-sm">¿Olvidaste tu contraseña?</a>
+        <a
+          href="/recuperar"
+          className="mt-2 text-[#7a2518] underline text-sm"
+        >
+          ¿Olvidaste tu contraseña?
+        </a>
       </div>
-    );
-  }
-
+    </PageContainer>
+  );
+}
   // ---- RENDERIZADO NORMAL (user logueado, acceso OK) ----
   return (
-    <div className="max-w-3xl mx-auto px-2 py-6">
-      <Toaster position="top-center" />
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-2">
-        <h1 className="text-2xl font-bold text-[#7a2518]">Biblioteca Jurídica</h1>
-        <form onSubmit={buscarAvanzado} className="flex flex-wrap gap-2 mb-2">
-          <input
-            type="text"
-            name="materia"
-            placeholder="Materia"
-            value={filtros.materia}
-            onChange={handleFiltroChange}
-            className="rounded px-2 py-1 border border-[#3e2723] text-[#3e2723]"
-          />
-          <input
-            type="text"
-            name="autor"
-            placeholder="Autor"
-            value={filtros.autor}
-            onChange={handleFiltroChange}
-            className="rounded px-2 py-1 border border-[#3e2723] text-[#3e2723]"
-          />
-          <input
-            type="number"
-            name="año"
-            placeholder="Año"
-            min={1900} max={2100}
-            value={filtros.año}
-            onChange={handleFiltroChange}
-            className="rounded px-2 py-1 border border-[#3e2723] text-[#3e2723] w-24"
-          />
-          <button type="submit" className="px-3 py-1 rounded bg-[#7a2518] text-white font-semibold" disabled={buscando}>
-            {buscando ? "Buscando..." : "Buscar"}
-          </button>
-          <button
-            type="button"
-            className="px-3 py-1 rounded bg-gray-200 text-[#3e2723]"
-            onClick={() => { setFiltros({ materia: "", autor: "", año: "" }); cargarLibros(); }}
-          >
-            Limpiar
-          </button>
-        </form>
-        {isAdmin && (
-          <button
-            className="px-4 py-2 rounded-xl bg-[#7a2518] hover:bg-[#3e2723] text-white font-bold"
-            onClick={() => setModalOpen(true)}
-          >
-            Subir Libro
-          </button>
-        )}
-      </div>
+  <PageContainer>
+  <Toaster position="top-center" />
 
-      {modalOpen && (
-        <SubirLibroModal
-          onSave={handleGuardarLibro}
-          onClose={() => setModalOpen(false)}
-          cargando={subiendo}
-        />
+  <div className="flex flex-col items-center mb-6 gap-4">
+    <h1 className="text-2xl font-bold text-[#7a2518] text-center">
+      Biblioteca Jurídica
+    </h1>
+    <form
+      onSubmit={buscarAvanzado}
+      className="flex flex-wrap gap-2 items-center justify-center"
+    >
+      <input
+        type="text"
+        name="materia"
+        placeholder="Materia"
+        value={filtros.materia}
+        onChange={handleFiltroChange}
+        className="rounded px-2 py-1 border border-[#3e2723] text-[#3e2723]"
+      />
+      <input
+        type="text"
+        name="autor"
+        placeholder="Autor"
+        value={filtros.autor}
+        onChange={handleFiltroChange}
+        className="rounded px-2 py-1 border border-[#3e2723] text-[#3e2723]"
+      />
+      <input
+        type="number"
+        name="año"
+        placeholder="Año"
+        min={1900}
+        max={2100}
+        value={filtros.año}
+        onChange={handleFiltroChange}
+        className="rounded px-2 py-1 border border-[#3e2723] text-[#3e2723] w-24"
+      />
+      <button
+        type="submit"
+        className="px-3 py-1 rounded bg-[#7a2518] text-white font-semibold"
+        disabled={buscando}
+      >
+        {buscando ? "Buscando..." : "Buscar"}
+      </button>
+      <button
+        type="button"
+        className="px-3 py-1 rounded bg-gray-200 text-[#3e2723]"
+        onClick={() => {
+          setFiltros({ materia: "", autor: "", año: "" });
+          cargarLibros();
+        }}
+      >
+        Limpiar
+      </button>
+    </form>
+    {isAdmin && (
+      <button
+        className="px-4 py-2 rounded-xl bg-[#7a2518] hover:bg-[#3e2723] text-white font-bold self-center"
+        onClick={() => setModalOpen(true)}
+      >
+        Subir Libro
+      </button>
+    )}
+  </div>
+
+  {modalOpen && (
+    <SubirLibroModal
+      onSave={handleGuardarLibro}
+      onClose={() => setModalOpen(false)}
+      cargando={subiendo}
+    />
+  )}
+
+  {editarModal && libroActual && (
+    <EditarLibroModal
+      libro={libroActual}
+      onSave={handleEditarLibro}
+      onClose={() => {
+        setEditarModal(false);
+        setLibroActual(null);
+      }}
+      cargando={subiendo}
+    />
+  )}
+
+  {visorLibro && (
+    <VisorLibroModal
+      libro={visorLibro}
+      onClose={() => setVisorLibro(null)}
+    />
+  )}
+
+  <div className="flex justify-center w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+      {libros.length === 0 && (
+        <div className="text-center text-[#3e2723] col-span-full">
+          No hay libros registrados.
+        </div>
       )}
-
-      {editarModal && libroActual && (
-        <EditarLibroModal
-          libro={libroActual}
-          onSave={handleEditarLibro}
-          onClose={() => { setEditarModal(false); setLibroActual(null); }}
-          cargando={subiendo}
-        />
-      )}
-
-      {visorLibro && (
-        <VisorLibroModal
-          libro={visorLibro}
-          onClose={() => setVisorLibro(null)}
-        />
-      )}
-
-      <div className="grid md:grid-cols-2 gap-4">
-        {libros.length === 0 && <div className="text-center text-[#3e2723]">No hay libros registrados.</div>}
-        {libros.map(libro => (
-          <div key={libro.id} className="rounded-xl border border-[#7a2518] bg-white p-4 shadow flex flex-col">
-            {libro.urlPortada &&
-              <img src={libro.urlPortada} alt="portada" className="mb-2 h-36 object-cover rounded" />
-            }
-            <h3 className="text-lg font-bold text-[#7a2518]">{libro.titulo}</h3>
-            <div className="text-[#3e2723] text-sm mb-1">{libro.autor}</div>
-            <div className="text-xs text-[#7a2518] mb-2">{libro.materia} {libro.anio && `- ${libro.anio}`}</div>
-            <div className="text-gray-800 text-sm mb-2">{libro.descripcion}</div>
-            <div className="flex flex-col gap-2 mt-auto">
+      {libros.map(libro => (
+        <div
+          key={libro.id}
+          className="rounded-xl border border-[#7a2518] bg-white p-4 shadow flex flex-col"
+        >
+          {libro.urlPortada && (
+            <img
+              src={libro.urlPortada}
+              alt="portada"
+              className="mb-2 h-36 object-cover rounded"
+            />
+          )}
+          <h3 className="text-lg font-bold text-[#7a2518]">
+            {libro.titulo}
+          </h3>
+          <div className="text-[#3e2723] text-sm mb-1">
+            {libro.autor}
+          </div>
+          <div className="text-xs text-[#7a2518] mb-2">
+            {libro.materia} {libro.anio && `- ${libro.anio}`}
+          </div>
+          <div className="text-gray-800 text-sm mb-2">
+            {libro.descripcion}
+          </div>
+          <div className="flex flex-col gap-2 mt-auto">
+            <a
+              href="#"
+              className="px-4 py-1 rounded bg-[#7a2518] text-white text-sm text-center hover:bg-[#3e2723] font-bold"
+              onClick={e => {
+                e.preventDefault();
+                setVisorLibro(libro);
+              }}
+            >
+              Ver Online
+            </a>
+            {libro.urlDrive && (
               <a
-                href="#"
-                className="px-4 py-1 rounded bg-[#7a2518] text-white text-sm text-center hover:bg-[#3e2723] font-bold"
-                onClick={e => { e.preventDefault(); setVisorLibro(libro); }}
+                href={libro.urlDrive}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-1 rounded bg-[#3e2723] text-white text-xs text-center font-bold"
               >
-                Ver Online
+                Ver en Google Drive
               </a>
-              {libro.urlDrive && (
-                <a
-                  href={libro.urlDrive}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-1 rounded bg-[#3e2723] text-white text-xs text-center font-bold"
-                >
-                  Ver en Google Drive
-                </a>
-              )}
-            </div>
-            {isAdmin && (
-              <div className="flex gap-2 mt-3 flex-wrap">
-                <button
-                  className="px-3 py-1 rounded bg-[#3e2723] text-white font-semibold"
-                  onClick={() => { setLibroActual(libro); setEditarModal(true); }}
-                >
-                  Editar
-                </button>
-                {confirmando === libro.id ? (
-                  <>
-                    <span className="text-red-700 font-semibold text-xs px-2 py-1 rounded">
-                      ¿Eliminar? <b>Esta acción no se puede deshacer</b>
-                    </span>
-                    <button
-                      className="px-3 py-1 rounded bg-red-700 text-white font-bold"
-                      onClick={() => handleEliminarLibro(libro)}
-                    >
-                      Confirmar
-                    </button>
-                    <button
-                      className="px-2 py-1 rounded bg-gray-200 text-[#3e2723] font-semibold"
-                      onClick={() => setConfirmando(null)}
-                    >
-                      Cancelar
-                    </button>
-                  </>
-                ) : (
+            )}
+          </div>
+          {isAdmin && (
+            <div className="flex gap-2 mt-3 flex-wrap">
+              <button
+                className="px-3 py-1 rounded bg-[#3e2723] text-white font-semibold"
+                onClick={() => {
+                  setLibroActual(libro);
+                  setEditarModal(true);
+                }}
+              >
+                Editar
+              </button>
+              {confirmando === libro.id ? (
+                <>
+                  <span className="text-red-700 font-semibold text-xs px-2 py-1 rounded">
+                    ¿Eliminar? <b>Esta acción no se puede deshacer</b>
+                  </span>
                   <button
                     className="px-3 py-1 rounded bg-red-700 text-white font-bold"
                     onClick={() => handleEliminarLibro(libro)}
                   >
-                    Eliminar
+                    Confirmar
                   </button>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+                  <button
+                    className="px-2 py-1 rounded bg-gray-200 text-[#3e2723] font-semibold"
+                    onClick={() => setConfirmando(null)}
+                  >
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="px-3 py-1 rounded bg-red-700 text-white font-bold"
+                  onClick={() => handleEliminarLibro(libro)}
+                >
+                  Eliminar
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
-  );
+  </div>
+</PageContainer>
+);
 }

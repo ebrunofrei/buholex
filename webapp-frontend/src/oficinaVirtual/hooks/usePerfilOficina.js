@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
-import { db } from "../../firebase"; // Ajusta a tu import real
+import { db } from "../../firebase"; // Ajusta la ruta según tu estructura real
 import { useAuth } from "../../context/AuthContext"; // Ajusta a tu auth real
 
 export function usePerfilOficina() {

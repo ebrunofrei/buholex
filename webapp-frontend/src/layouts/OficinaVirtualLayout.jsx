@@ -1,46 +1,30 @@
 import React from "react";
-import { useNoticias } from "../../context/NoticiasContext";
-import { useLitisBotChat } from "../../context/LitisBotChatContext";
-import { Megaphone } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import Sidebar from "@/components/Sidebar";
+import LitisBotBubbleChat from "@/components/ui/LitisBotBubbleChat";
 
-export default function NoticiasBotonFlotante() {
-  const { showNoticias, setShowNoticias } = useNoticias();
-  const { showChat } = useLitisBotChat();
+export default function OficinaVirtualLayout({ children }) {
+  const location = useLocation();
 
-  if (showChat || showNoticias) return null;
+  // Rutas donde NO debe aparecer el bubble (porque ya hay chat “grande”)
+  const ocultarBubble = [
+    "/litisbot",                   // chat principal público
+    "/oficinaVirtual/litisbot",    // chat principal en oficina
+  ];
 
-  const handleOpenNoticias = () => {
-    setShowNoticias(true);
-  };
+  const hideBubble = ocultarBubble.some(path =>
+    path.endsWith("*")
+      ? location.pathname.startsWith(path.replace("*", ""))
+      : location.pathname === path
+  );
 
   return (
-    <button
-      onClick={handleOpenNoticias}
-      style={{
-        width: "auto",
-        height: "auto",
-        minWidth: "unset",
-        minHeight: "unset",
-        maxWidth: "none",
-        maxHeight: "none",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        boxSizing: "border-box",
-      }}
-      className="
-        flex items-center gap-2 px-5 py-3
-        rounded-full shadow-2xl
-        bg-[#b03a1a] text-white font-bold text-lg
-        hover:bg-[#a87247] transition
-        active:scale-95
-        pointer-events-auto
-      "
-      aria-label="Abrir noticias"
-    >
-      <Megaphone size={22} className="text-white" />
-      <span className="hidden sm:inline">Noticias</span>
-    </button>
+    <div className="min-h-screen flex">
+      <Sidebar />
+      <main className="flex-1 bg-gray-50 p-4">{children}</main>
+
+      {/* Bubble flotante SOLO si no estamos en páginas con chat principal */}
+      {!hideBubble && <LitisBotBubbleChat />}
+    </div>
   );
 }

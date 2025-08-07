@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/services/firebaseConfig"; // Ajusta la ruta
+import PageContainer from "@/components/PageContainer";
 
 export default function JurisprudenciaVisor() {
   const { id } = useParams();
@@ -51,36 +52,25 @@ export default function JurisprudenciaVisor() {
   const goNext = () => idx < jurisprudencias.length - 1 && navigate(`/jurisprudencia/${jurisprudencias[idx + 1].id}`);
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-12">
-      <div className="mb-5 flex justify-between items-center">
-        <button onClick={() => navigate("/jurisprudencia")} className="text-blue-700 underline">← Volver a listado</button>
-        <div className="flex gap-4">
-          <button disabled={idx === 0} onClick={goPrev} className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">Anterior</button>
-          <button disabled={idx === jurisprudencias.length - 1} onClick={goNext} className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">Siguiente</button>
+    <PageContainer>
+      <h1 className="text-2xl font-bold mb-6 text-center text-buholex-brown">
+        Jurisprudencia
+      </h1>
+      <div className="space-y-6">
+        <div className="p-5 bg-white rounded-2xl shadow-md">
+          <h2 className="text-lg font-semibold mb-1">Casación N° 1234-2022</h2>
+          <p className="text-buholex-brown">
+            La Corte Suprema determinó que la posesión continua, pacífica y pública es indispensable para la prescripción adquisitiva de dominio.
+          </p>
         </div>
-      </div>
-      <div className="mb-4">
-        <div className="font-bold text-lg">{actual.materia} / {actual.submateria}</div>
-        <div className="text-gray-600 mb-2">Recurso: {actual.titulo}</div>
-      </div>
-      <div className="w-full h-[70vh] mb-4 border rounded overflow-hidden">
-        {actual.pdf_url ? (
-          <iframe
-            src={actual.pdf_url + "#toolbar=1"}
-            title={actual.titulo}
-            className="w-full h-full"
-            allowFullScreen
-          />
-        ) : (
-          <div className="text-center text-red-500 py-16">No se encontró el PDF.</div>
-        )}
-      </div>
-      {actual.pdf_url && (
-        <div className="flex gap-4">
-          <a href={actual.pdf_url} target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Abrir en pestaña</a>
-          <a href={actual.pdf_url} download className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Descargar PDF</a>
+        <div className="p-5 bg-white rounded-2xl shadow-md">
+          <h2 className="text-lg font-semibold mb-1">Casación N° 5678-2024</h2>
+          <p className="text-buholex-brown">
+            El Tribunal Constitucional precisó los alcances del debido proceso en los procedimientos administrativos sancionadores.
+          </p>
         </div>
-      )}
-    </section>
+        {/* Agrega aquí más bloques, tablas o tarjetas según tu base de datos */}
+      </div>
+    </PageContainer>
   );
 }

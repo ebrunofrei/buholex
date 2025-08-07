@@ -81,3 +81,17 @@ docker-compose.override.yml
 # SI USAS CYPRESS
 cypress/videos/
 cypress/screenshots/
+
+# Evitar subir metadatos locales de Vercel
+.vercel/
+
+# No ignores el ejemplo de entorno (útil para onboarding)
+!.env.example
+
+# Evitar accidentalmente subir archivos de análisis/bundlers
+.turbo/
+.parcel-cache/
+
+# Evitar llaves de GCloud/AWS/Azure por si acaso
+*.json.key
+*.aws

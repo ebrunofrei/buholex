@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import buholexLogo from "../assets/buho-institucional.png";
 
 const testimonios = [
@@ -28,23 +27,23 @@ const features = [
 
 export default function LandingSaaS() {
   return (
-    <div className="bg-gradient-to-r from-[#b03a1a]/40 via-white to-[#b03a1a]/40 min-h-screen w-full">
+    <div className="bg-gradient-to-r from-[#b03a1a]/40 via-white to-[#b03a1a]/40 min-h-screen w-full flex flex-col">
       {/* HERO */}
       <header className="py-10 px-4 flex flex-col items-center text-center">
         <img src={buholexLogo} alt="BúhoLex" className="w-24 sm:w-32 mb-4 rounded-2xl shadow bg-white" />
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#b03a1a] drop-shadow mb-2">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#b03a1a] drop-shadow mb-2 leading-snug">
           El SaaS legal <span className="text-[#4b2e19]">que acompaña y potencia tu estudio</span>
         </h1>
         <p className="text-[#4b2e19] text-lg md:text-xl font-medium mb-6 max-w-2xl mx-auto">
-          LitisBot integra inteligencia artificial jurídica, buscador multifuente, generación automática de documentos y tu propia agenda legal en la nube.  
+          LitisBot integra inteligencia artificial jurídica, buscador multifuente, generación automática de documentos y tu propia agenda legal en la nube.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-center">
-          <Link to="/registro" className="bg-[#b03a1a] text-white px-8 py-3 rounded-full font-bold text-lg shadow hover:bg-[#a52e00] transition">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-center w-full max-w-2xl">
+          <a href="/registro" className="bg-[#b03a1a] text-white px-8 py-3 rounded-full font-bold text-lg shadow hover:bg-[#a52e00] transition w-full sm:w-auto">
             Probar gratis
-          </Link>
-          <Link to="/upgrade" className="bg-white text-[#b03a1a] border-2 border-[#b03a1a] px-8 py-3 rounded-full font-bold text-lg shadow hover:bg-[#fde7e7] transition">
+          </a>
+          <a href="/upgrade" className="bg-white text-[#b03a1a] border-2 border-[#b03a1a] px-8 py-3 rounded-full font-bold text-lg shadow hover:bg-[#fde7e7] transition w-full sm:w-auto">
             Hazte PRO
-          </Link>
+          </a>
         </div>
         <div className="text-xs text-gray-500 mt-2">
           Sin tarjeta de crédito para la prueba. Cancelas cuando quieras.
@@ -55,12 +54,12 @@ export default function LandingSaaS() {
       <section className="py-8 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-2xl font-extrabold text-[#b03a1a] text-center mb-6">¿Por qué elegir LitisBot PRO?</h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {features.map((f, i) => (
               <div key={i} className="bg-[#fff7ee] rounded-2xl shadow p-5 flex flex-col items-center">
                 <span className="text-4xl mb-2">{f.icon}</span>
-                <span className="font-bold text-[#4b2e19] text-lg mb-1">{f.title}</span>
-                <span className="text-[#75412e] text-sm">{f.desc}</span>
+                <span className="font-bold text-[#4b2e19] text-lg mb-1 text-center">{f.title}</span>
+                <span className="text-[#75412e] text-sm text-center">{f.desc}</span>
               </div>
             ))}
           </div>
@@ -116,17 +115,16 @@ export default function LandingSaaS() {
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <footer className="py-8 text-center bg-white">
-        <h3 className="text-2xl font-extrabold text-[#b03a1a] mb-2">¿Listo para transformar tu estudio?</h3>
-        <Link
-          to="/registro"
+      {/* CTA FINAL SOLO COMO SECCIÓN */}
+      <section className="py-10 bg-white flex flex-col items-center">
+        <h3 className="text-2xl font-extrabold text-[#b03a1a] mb-4 text-center">¿Listo para transformar tu estudio?</h3>
+        <a
+          href="/registro"
           className="inline-block bg-[#b03a1a] text-white px-10 py-4 rounded-full font-bold text-xl shadow hover:bg-[#a52e00] transition"
         >
           Comenzar ahora
-        </Link>
-        <div className="text-xs text-gray-400 mt-2">© {new Date().getFullYear()} BúhoLex / LitisBot. Todos los derechos reservados.</div>
-      </footer>
+        </a>
+      </section>
     </div>
   );
 }

@@ -54,9 +54,6 @@ export default function Escritorio() {
           </Link>
         </div>
       </motion.div>
-      <footer className="w-full mt-10 p-4 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} BúhoLex. Todos los derechos reservados.
-      </footer>
     </div>
   );
 }

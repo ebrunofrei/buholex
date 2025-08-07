@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function Landing() {
@@ -16,9 +15,9 @@ export default function Landing() {
       />
       {/* Overlay blanco translúcido como efecto de brillo */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        <svg width="100%" height="100%" className="absolute opacity-30" style={{mixBlendMode:'screen'}}>
-          <ellipse cx="60%" cy="40%" rx="380" ry="160" fill="white"/>
-          <ellipse cx="80%" cy="70%" rx="200" ry="70" fill="white"/>
+        <svg width="100%" height="100%" className="absolute opacity-30" style={{ mixBlendMode: 'screen' }}>
+          <ellipse cx="60%" cy="40%" rx="380" ry="160" fill="white" />
+          <ellipse cx="80%" cy="70%" rx="200" ry="70" fill="white" />
         </svg>
       </div>
 
@@ -38,34 +37,34 @@ export default function Landing() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          “Porque la justicia no debe ser un privilegio: Litigator te defiende”
+          “Porque la justicia no debe ser un privilegio: Litisbot te defiende”
         </motion.p>
 
         <div className="flex flex-col md:flex-row gap-4 justify-center">
-          <Link
-            to="/servicios"
+          <a
+            href="/servicios"
             className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
           >
             Ver Servicios
-          </Link>
-          <Link
-            to="/blog?categoria=Actualidad Legal"
+          </a>
+          <a
+            href="/blog?categoria=Actualidad Legal"
             className="bg-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
           >
             Actualidad Legal
-          </Link>
-          <Link
-            to="/oficina-virtual"
+          </a>
+          <a
+            href="/oficina-virtual"
             className="bg-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-500 transition"
           >
             Oficina Virtual
-          </Link>
-          <Link
-            to="/contacto"
+          </a>
+          <a
+            href="/contacto"
             className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-black transition"
           >
             Contáctanos
-          </Link>
+          </a>
         </div>
 
         <div className="mt-10 flex justify-center">

@@ -7,6 +7,8 @@ import { MdSend } from "react-icons/md";
 import HerramientaTercioPena from "./Herramientas/HerramientaTercioPena";
 import HerramientaLiquidacionLaboral from "./Herramientas/HerramientaLiquidacionLaboral";
 import { buscarNormas } from "@/services/firebaseNormasService"; // Asegúrate de la ruta
+import LitisBotChatBaseMemoria from './LitisBotChatBaseMemoria';
+import LitisBotChatBasePro from "@/components/LitisBotChatBasePro";
 
 // ---------- HERRAMIENTAS FUNCIONALES -----------
 // Puedes separar cada una en su archivo después
@@ -428,30 +430,50 @@ const textareaRef = useRef(null);
 
   // ---- Lógica PRINCIPAL de consulta legal ----
   async function handleConsultaLegal(mensaje) {
-  setCargando(true);
-  let respuesta = "";
-  try {
-    const historial = mensajes
-      .filter(m => m.role === "user" || m.role === "assistant")
-      .map(m => ({ role: m.role, content: m.content }));
+    setCargando(true);
+    let respuesta = "";
 
-    const res = await fetch("/api/ia-litisbotchat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      const historial = mensajes
+        .filter(m => m.role === "user" || m.role === "assistant")
+        .map(m => ({ role: m.role, content: m.content }));
+
+      const url = `${import.meta.env.VITE_API_URL}/api/ia-litisbotchat`;
+
+      console.log("📤 Enviando a LitisBot:", {
         prompt: mensaje,
         historial,
-        userId: user?.uid, // asegúrate que el usuario esté autenticado
-      }),
-    });
-    const data = await res.json();
-    respuesta = data.respuesta || "Error al obtener respuesta del asistente legal.";
-  } catch (err) {
-    respuesta = "Error consultando el asistente legal. Intenta nuevamente.";
+        userId: user?.uid || "invitado"
+      });
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: mensaje,
+          historial,
+          userId: user?.uid || "invitado"
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Error desconocido del servidor");
+      }
+
+      respuesta = data.respuesta || "⚠️ No se recibió una respuesta del asistente legal.";
+    } catch (error) {
+      console.error("❌ Error al consultar LitisBot:", error.message);
+      respuesta = "❌ Hubo un error consultando al asistente legal. Intenta nuevamente más tarde.";
+    }
+
+    setMensajes(msgs => [...msgs, { role: "assistant", content: respuesta }]);
+    setCargando(false);
   }
-  setMensajes(msgs => [...msgs, { role: "assistant", content: respuesta }]);
-  setCargando(false);
-}
+
 
   // ---- ENVÍO ----
   async function handleSend(e) {

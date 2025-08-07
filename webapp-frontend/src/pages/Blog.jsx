@@ -4,12 +4,15 @@ import { obtenerArticulosBlog, eliminarArticuloBlog } from "@/services/firebaseB
 import BlogPublicarCard from "@/components/BlogPublicarCard";
 import { useUserAdminStatus } from "@/hooks/useUserAdminStatus";
 import toast, { Toaster } from "react-hot-toast";
+import PageContainer from "@/components/PageContainer";
+import BlogLectorModal from "@/components/BlogLectorModal";
 import BlogPublicarEditarModal from "@/components/BlogPublicarEditarModal";
 
 export default function Blog() {
   const { isAdmin, checking } = useUserAdminStatus();
   const [articulos, setArticulos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [lectorModal, setLectorModal] = useState(null);
 
   // Cargar artículos al inicio y tras publicar
   const cargarArticulos = async () => {
@@ -30,42 +33,75 @@ export default function Blog() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-2 py-6">
+    <PageContainer className="max-w-4xl">
       <Toaster position="top-center" />
-      <h1 className="text-3xl font-extrabold text-[#3e2723] text-center mb-4">Blog Jurídico de BúhoLex</h1>
+      <h1 className="text-3xl font-extrabold text-[#3e2723] text-center mb-4">
+        Blog Jurídico de BúhoLex
+      </h1>
 
       {/* Solo para admin */}
       {!checking && isAdmin && (
         <BlogPublicarCard onPublicado={cargarArticulos} />
       )}
 
-      <div className="mt-8 flex flex-col gap-6 items-center">
-        {cargando && <div className="text-[#7a2518] text-lg">Cargando artículos...</div>}
+      <div className="mt-8 flex flex-col gap-8 items-center">
+        {cargando && (
+          <div className="text-[#7a2518] text-lg">Cargando artículos...</div>
+        )}
         {!cargando && articulos.length === 0 && (
           <div className="text-[#3e2723] text-lg">No hay artículos publicados aún.</div>
         )}
-        {!cargando && articulos.map(art => (
-          <div key={art.id} className="w-full max-w-xl bg-white border-2 border-[#7a2518] rounded-xl shadow p-6 flex flex-col gap-2 relative">
+        {!cargando && articulos.map((art) => (
+          <div
+            key={art.id}
+            className="w-full bg-white border-2 border-[#7a2518] rounded-2xl shadow p-8 flex flex-col gap-2 relative transition hover:shadow-lg"
+            style={{ wordBreak: "break-word" }}
+          >
             {art.urlPortada && (
-              <img src={art.urlPortada} alt="portada" className="w-full max-h-52 object-cover rounded mb-2" />
+              <img
+                src={art.urlPortada}
+                alt="portada"
+                className="w-full max-h-72 object-cover rounded mb-4"
+              />
             )}
-            <h2 className="text-xl font-bold text-[#7a2518]">{art.titulo}</h2>
-            <div className="text-[#3e2723] font-semibold mb-1">{art.autor} · <span className="text-xs">{art.categoria}</span></div>
+            <h2 className="text-xl md:text-2xl font-bold text-[#7a2518] mb-2">
+              {art.titulo}
+            </h2>
+            <div className="text-[#3e2723] font-semibold mb-1">
+              {art.autor} · <span className="text-xs">{art.categoria}</span>
+            </div>
             <div className="text-gray-800 mb-2 italic">{art.resumen}</div>
-            <div className="text-[#222] whitespace-pre-line mb-2" style={{ fontSize: "1.06em" }}>{art.contenido.slice(0, 300)}{art.contenido.length > 300 ? "..." : ""}</div>
+            <div
+              className="text-[#222] whitespace-pre-line mb-2"
+              style={{ fontSize: "1.08em", lineHeight: "1.65" }}
+            >
+              {art.contenido.length > 350
+                ? art.contenido.slice(0, 350) + "..."
+                : art.contenido}
+            </div>
             {art.tags && art.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-1">
+              <div className="flex flex-wrap gap-2 mt-2">
                 {art.tags.map((tag, i) => (
-                  <span key={i} className="px-2 py-1 rounded bg-[#7a2518] text-white text-xs">{tag}</span>
+                  <span
+                    key={i}
+                    className="px-3 py-1 rounded bg-[#7a2518] text-white text-xs"
+                  >
+                    {tag}
+                  </span>
                 ))}
               </div>
             )}
-            <div className="flex items-center justify-between mt-3">
-              <span className="text-xs text-[#3e2723]">{new Date(art.fecha).toLocaleDateString()}</span>
+            <div className="flex items-center justify-between mt-4">
+              <button
+                onClick={() => setLectorModal(art)}
+                className="px-4 py-1 rounded bg-[#3e2723] text-white text-xs font-bold hover:bg-[#7a2518] transition"
+              >
+                Ver más
+              </button>
               {isAdmin && (
                 <button
                   onClick={() => handleEliminar(art.id)}
-                  className="px-3 py-1 rounded bg-red-700 text-white text-xs font-bold hover:bg-red-900 transition"
+                  className="px-4 py-1 rounded bg-red-700 text-white text-xs font-bold hover:bg-red-900 transition"
                 >
                   Eliminar
                 </button>
@@ -74,6 +110,14 @@ export default function Blog() {
           </div>
         ))}
       </div>
-    </div>
+
+      {/* Modal lector */}
+      {lectorModal && (
+        <BlogLectorModal
+          articulo={lectorModal}
+          onClose={() => setLectorModal(null)}
+        />
+      )}
+    </PageContainer>
   );
 }

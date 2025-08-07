@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const noticiasEjemplo = [
-  {
-    titulo: "LitisBot se integra a la web de BúhoLex",
-    resumen: "¡Ahora puedes consultar en tiempo real tus dudas legales!",
-  },
-  {
-    titulo: "Nuevo convenio institucional",
-    resumen: "BúhoLex firma convenio con Corte Suprema para agilizar procesos.",
-  },
-];
+const PROXY = "/api/noticias-juridicas"; // Vite proxy al backend, cambia a la cloud si lo subes
 
-export default function NoticiaSliderFloat({ noticias = noticiasEjemplo }) {
+export default function NoticiaSliderFloat() {
   const [open, setOpen] = useState(false);
+  const [noticias, setNoticias] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [noticiaActual, setNoticiaActual] = useState(null); // Modal lector
+
+  // Fetch automatizado
+  useEffect(() => {
+    setLoading(true);
+    fetch(PROXY)
+      .then(res => res.json())
+      .then(data => setNoticias(data || []))
+      .catch(() => setNoticias([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       {/* Botón flotante */}
@@ -26,17 +31,46 @@ export default function NoticiaSliderFloat({ noticias = noticiasEjemplo }) {
       </button>
       {/* Sidebar */}
       {open && (
-        <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl border-l-4 border-[#b03a1a] z-50 flex flex-col animate-slide-in">
-          <div className="flex items-center justify-between px-4 py-3 border-b">
-            <h2 className="font-bold text-[#b03a1a] text-lg">Noticias</h2>
+        <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl border-l-4 border-[#b03a1a] z-50 flex flex-col animate-slide-in"
+          style={{ maxWidth: 340 }}>
+          <div className="flex items-center justify-between px-4 py-3 border-b bg-[#fff7f5]">
+            <h2 className="font-bold text-[#b03a1a] text-lg">Noticias jurídicas</h2>
             <button onClick={() => setOpen(false)} className="text-2xl font-bold hover:text-[#b03a1a]">&times;</button>
           </div>
           <div className="p-4 overflow-y-auto flex-1">
-            {noticias?.length > 0 ? (
+            {loading ? (
+              <div className="text-center text-[#b03a1a]">Cargando...</div>
+            ) : noticias?.length > 0 ? (
               noticias.map((n, idx) => (
-                <div key={idx} className="mb-4 pb-2 border-b">
-                  <span className="font-semibold">{n.titulo}</span>
+                <div key={idx} className="mb-4 pb-2 border-b last:border-0">
+                  {/* Titular: abre modal o es enlace externo */}
+                  {n.enlace ? (
+                    <a
+                      href={n.enlace}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-[#b03a1a] hover:underline"
+                    >
+                      {n.titulo}
+                    </a>
+                  ) : n.contenido ? (
+                    <button
+                      onClick={() => setNoticiaActual(n)}
+                      className="font-semibold text-left text-[#b03a1a] hover:underline focus:outline-none"
+                    >
+                      {n.titulo}
+                    </button>
+                  ) : (
+                    <span className="font-semibold text-[#b03a1a]">{n.titulo}</span>
+                  )}
                   <p className="text-sm text-gray-700">{n.resumen}</p>
+                  <div className="text-xs text-[#b03a1a] mt-1 opacity-70">
+                    {n.fecha && (
+                      typeof n.fecha === "string"
+                        ? n.fecha
+                        : new Date(n.fecha).toLocaleDateString()
+                    )}
+                  </div>
                 </div>
               ))
             ) : (
@@ -45,7 +79,35 @@ export default function NoticiaSliderFloat({ noticias = noticiasEjemplo }) {
           </div>
         </div>
       )}
-      {/* Animación simple con Tailwind (puedes agregarla a tu index.css) */}
+      {/* Modal lector de noticia */}
+      {noticiaActual && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg mx-2 max-h-[90vh] flex flex-col">
+            <button
+              className="absolute top-2 right-3 text-2xl text-[#b03a1a] font-bold z-10"
+              onClick={() => setNoticiaActual(null)}
+              aria-label="Cerrar"
+            >×</button>
+            <div className="overflow-y-auto p-6 pt-10">
+              <h2 className="text-lg md:text-xl font-bold text-[#b03a1a] mb-2">
+                {noticiaActual.titulo}
+              </h2>
+              <div className="text-gray-800 mb-3">{noticiaActual.resumen}</div>
+              <div className="text-[#222] whitespace-pre-line mb-2" style={{ fontSize: "1.09em", lineHeight: "1.7" }}>
+                {noticiaActual.contenido}
+              </div>
+              {noticiaActual.fecha && (
+                <div className="text-xs text-[#b03a1a] mt-4">
+                  {typeof noticiaActual.fecha === "string"
+                    ? noticiaActual.fecha
+                    : new Date(noticiaActual.fecha).toLocaleDateString()}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Animación simple con Tailwind */}
       <style>
         {`
         .animate-slide-in {

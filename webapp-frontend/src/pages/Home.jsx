@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import logoBuho from "../assets/buho-institucional.png";
 import NoticiasSlidebar from "../components/NoticiasSlidebar";
 import { Link } from "react-router-dom";
 import { useNoticias } from "../context/NoticiasContext";
-
-const noticiasEjemplo = [
-  { titulo: "LitisBot se integra a la web de BúhoLex", resumen: "Ahora puedes consultar con IA jurídica gratis." },
-  { titulo: "Nueva oficina virtual para abogados", resumen: "Organiza tus expedientes online con BúhoLex." },
-];
+import { obtenerNoticias } from "../services/firebaseNoticiasService";
+import PageContainer from "@/components/PageContainer";
 
 export default function Home() {
   const { showNoticias, setShowNoticias } = useNoticias();
+  const [noticias, setNoticias] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Traer noticias públicas desde Firestore al cargar la página
+  useEffect(() => {
+    obtenerNoticias({ max: 10, soloLibres: true })
+      .then(setNoticias)
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleOficina = () => {
     if (window.location.pathname === "/oficina") return;
@@ -66,7 +72,14 @@ export default function Home() {
         </div>
       </motion.div>
       {/* Slidebar de Noticias */}
-      <NoticiasSlidebar open={showNoticias} onClose={() => setShowNoticias(false)} noticias={noticiasEjemplo} />
+      <NoticiasSlidebar
+        open={showNoticias}
+        onClose={() => setShowNoticias(false)}
+        noticias={loading ? [] : (noticias.length ? noticias : [
+          { titulo: "LitisBot se integra a la web de BúhoLex", resumen: "Ahora puedes consultar con IA jurídica gratis." },
+          { titulo: "Nueva oficina virtual para abogados", resumen: "Organiza tus expedientes online con BúhoLex." },
+        ])}
+      />
     </div>
   );
 }

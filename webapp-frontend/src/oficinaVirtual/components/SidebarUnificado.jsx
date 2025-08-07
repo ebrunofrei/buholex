@@ -1,24 +1,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  Briefcase,
-  Calendar,
-  FileText,
-  Bell,
-  Book,
-  Settings,
-  User,
-  Bot,
-  Newspaper,
-  Star,
-  LogOut,
-  Home,
+  Briefcase, Calendar, FileText, Bell, Book, Settings, User, Bot, Newspaper, Star, LogOut, Home
 } from "lucide-react";
-import buhoLogo from "@/assets/buho-institucional.png";
 import { Calculator } from "lucide-react";
+import buhoLogo from "@/assets/buho-institucional.png";
+// Importa tu contexto de autenticación si lo tienes:
+// import { useAuth } from "@/context/AuthContext";
 
 export default function SidebarUnificado() {
   const location = useLocation();
+  // const { logout } = useAuth(); // <-- descomenta si tienes lógica de logout
+
   const isVirtual = location.pathname.startsWith("/oficinaVirtual");
 
   const menu = isVirtual
@@ -27,9 +20,8 @@ export default function SidebarUnificado() {
         { label: "Biblioteca", icon: <Book size={18} />, to: "/oficinaVirtual/biblioteca" },
         { label: "Agenda", icon: <Calendar size={18} />, to: "/oficinaVirtual/agenda" },
         { label: "LitisBot", icon: <Bot size={18} />, to: "/oficinaVirtual/litisbot" },
-        { label: "Noticias", icon: <Newspaper size={18} />, to: "/oficinaVirtual/noticias" },
         { label: "Hazte conocido", icon: <Star size={18} />, to: "/oficinaVirtual/hazte-conocido" },
-        { label: "Calculadora Laboral", icon: <Calculator size={18} />, to: "/oficinaVirtual/calculadora-laboral" }, // <-- AGREGA AQUÍ
+        { label: "Calculadora Laboral", icon: <Calculator size={18} />, to: "/oficinaVirtual/calculadora-laboral" },
         { label: "Mi Perfil", icon: <User size={18} />, to: "/oficinaVirtual/perfil" },
       ]
     : [
@@ -43,7 +35,7 @@ export default function SidebarUnificado() {
 
   return (
     <aside className="w-64 min-h-screen bg-[#fef6f2] border-r px-5 py-6 flex flex-col items-center">
-      <img src={buhoLogo} alt="Logo" className="w-16 h-16 mb-2 rounded-xl" />
+      <img src={buhoLogo} alt="Logo BúhoLex" className="w-16 h-16 mb-2 rounded-xl" />
       <div className="font-bold text-[#b03a1a] text-lg mb-1">BúhoLex</div>
       <div className="text-xs text-gray-400 mb-8">
         {isVirtual ? "Oficina Virtual" : "Oficina Profesional"}
@@ -58,6 +50,7 @@ export default function SidebarUnificado() {
                 ? "bg-[#ffe5dc] text-[#b03a1a] shadow"
                 : "text-gray-700 hover:bg-[#fff7f3] hover:text-[#b03a1a]"
             }`}
+            aria-current={location.pathname === to ? "page" : undefined}
           >
             <span>{icon}</span>
             <span>{label}</span>
@@ -74,7 +67,8 @@ export default function SidebarUnificado() {
         <button
           className="w-full text-sm bg-[#b03a1a] text-white px-4 py-2 rounded-lg hover:bg-[#a87247]"
           onClick={() => {
-            // lógica de logout
+            // logout(); // <-- Si tienes función de logout, descomenta esta línea
+            window.location.href = "/login"; // Opcional: redirigir a login
           }}
         >
           <LogOut size={16} className="inline mr-2" /> Cerrar sesión

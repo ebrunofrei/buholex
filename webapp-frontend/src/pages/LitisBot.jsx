@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import SidebarChats from "@/components/SidebarChats";
-import LitisBotChatBase from "@/components/LitisBotChatBase";
+import LitisBotChatBasePro from "@/components/LitisBotChatBasePro"; // Usamos el clon PRO
 
-export default function LitisBot() {
+export default function LitisBot({ user: userProp }) {
   // Responsive: abierto por defecto en desktop, cerrado en mobile
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
   const [showModal, setShowModal] = useState(false);
@@ -12,7 +12,8 @@ export default function LitisBot() {
   const [casoActivo, setCasoActivo] = useState(null);
 
   // Usuario demo (ajusta según contexto de auth real)
-  const user = { nombre: "Eduardo", pro: true };
+  // Usa el prop si viene de arriba, si no crea uno temporal
+  const user = userProp || { nombre: "Eduardo", pro: true, uid: "invitado" };
 
   // Abre Herramientas (modal), cierra sidebar en mobile
   function handleOpenHerramientas() {
@@ -46,7 +47,7 @@ export default function LitisBot() {
       />
       {/* Chat central, ocupa todo el espacio restante */}
       <div className="flex-1 flex flex-col">
-        <LitisBotChatBase
+        <LitisBotChatBasePro
           user={user}
           pro={user.pro}
           showModal={showModal}

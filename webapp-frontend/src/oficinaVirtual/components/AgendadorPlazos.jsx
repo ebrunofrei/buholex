@@ -1,88 +1,87 @@
-import React, { useState, useEffect } from "react";
-import { CalendarDays, Clock } from "lucide-react";
-import { useLitisBot } from "@/context/LitisBotContext.jsx";
-import { db } from "@/firebase";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import dayjs from "dayjs";
+import React, { useState } from "react";
+import {
+  agregarEvento,
+  agregarAGoogleCalendar,
+  enviarNotificacion,
+} from "@/services/agendadorService";
+import { useLitisBot } from "@/context/LitisBotContext";
 
-export default function AgendadorPlazos({ expedienteId }) {
-  const [plazos, setPlazos] = useState([]);
+export default function AgendadorPlazos({ user, expedienteId, googleAccessToken, userDeviceToken }) {
+  const [titulo, setTitulo] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [recurrencia, setRecurrencia] = useState(""); // Ej: "FREQ=WEEKLY;COUNT=5"
+  const [googleSync, setGoogleSync] = useState(false);
   const [cargando, setCargando] = useState(false);
-  const { archivoAnalizado } = useLitisBot();
+  const { analizarResolucion } = useLitisBot();
 
-  useEffect(() => {
-    if (expedienteId) cargarPlazos();
-  }, [expedienteId]);
-
-  const cargarPlazos = async () => {
+  const handleAgregar = async (e) => {
+    e.preventDefault();
     setCargando(true);
-    const q = query(
-      collection(db, "plazos"),
-      where("expedienteId", "==", expedienteId)
-    );
-    const snap = await getDocs(q);
-    const lista = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setPlazos(lista);
+    try {
+      // 1. Google Calendar
+      let googleEventId = null;
+      if (googleSync && googleAccessToken) {
+        googleEventId = await agregarAGoogleCalendar(
+          {
+            title: titulo,
+            description: descripcion,
+            start: fecha,
+            end: fecha,
+            recurrent: recurrencia,
+          },
+          googleAccessToken
+        );
+      }
+      // 2. Guardar en Firebase
+      await agregarEvento({
+        userId: user.id,
+        expedienteId,
+        title: titulo,
+        start: fecha,
+        end: fecha,
+        description: descripcion,
+        recurrent: recurrencia,
+        googleEventId,
+      });
+      // 3. Notificación
+      if (userDeviceToken) {
+        await enviarNotificacion({
+          titulo: "Nuevo evento en tu agenda",
+          cuerpo: `Recuerda: ${titulo} - ${descripcion}`,
+          token: userDeviceToken,
+        });
+      }
+      setTitulo("");
+      setFecha("");
+      setDescripcion("");
+      setRecurrencia("");
+      alert("¡Evento agendado con éxito!");
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
     setCargando(false);
   };
 
-  const registrarPlazo = async (descripcion, fechaLimite) => {
-    await addDoc(collection(db, "plazos"), {
-      expedienteId,
-      descripcion,
-      fechaLimite,
-      creado: Date.now(),
-      estado: "pendiente",
-    });
-    cargarPlazos();
-  };
-
-  const analizarYAgregar = () => {
-    if (!archivoAnalizado?.contenido) return;
-    const texto = archivoAnalizado.contenido;
-    const regexFecha = /(?:hasta el|dentro del plazo de|en el plazo de)\s+(\d+)\s+(días?|meses?)\s*(?:\w+)?\s*(?:a partir del)?\s*(\d{1,2}\/\d{1,2}\/\d{4})?/gi;
-
-    let match;
-    while ((match = regexFecha.exec(texto)) !== null) {
-      const cantidad = parseInt(match[1]);
-      const unidad = match[2].startsWith("mes") ? "month" : "day";
-      const desde = match[3] ? dayjs(match[3], "DD/MM/YYYY") : dayjs();
-      const fechaLimite = desde.add(cantidad, unidad);
-
-      registrarPlazo(match[0], fechaLimite.toISOString());
-    }
+  // (Opcional) IA
+  const handleAnalizarResolucion = async () => {
+    const sugerencias = await analizarResolucion({ expedienteId });
+    // Lógica para sugerir eventos...
   };
 
   return (
-    <div className="mt-4 bg-white p-4 rounded-xl shadow-md">
-      <h3 className="font-bold text-lg flex items-center gap-2 text-[#b03a1a]">
-        <CalendarDays size={20} /> Plazos detectados
-      </h3>
-
-      <button
-        onClick={analizarYAgregar}
-        className="mt-2 text-sm bg-[#b03a1a] text-white px-3 py-1 rounded hover:bg-[#912f15]"
-      >
-        Analizar documento actual con LitisBot
-      </button>
-
-      {cargando ? (
-        <p className="text-sm mt-4 text-gray-500">Cargando plazos...</p>
-      ) : (
-        <ul className="mt-3 space-y-2 text-sm">
-          {plazos.map((p, i) => (
-            <li key={i} className="border p-2 rounded bg-gray-50">
-              <div className="font-semibold text-[#b03a1a]">
-                {p.descripcion}
-              </div>
-              <div className="text-xs text-gray-600 flex items-center gap-1 mt-1">
-                <Clock size={14} />{" "}
-                {dayjs(p.fechaLimite).format("DD MMM YYYY")}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <form className="bg-white rounded-xl shadow-lg p-5 flex flex-col gap-4" onSubmit={handleAgregar}>
+      <h2 className="font-bold text-lg text-[#a52a2a]">Agendar evento / audiencia</h2>
+      <input type="text" className="input input-bordered" placeholder="Título" value={titulo} onChange={e => setTitulo(e.target.value)} required />
+      <input type="date" className="input input-bordered" value={fecha} onChange={e => setFecha(e.target.value)} required />
+      <textarea className="textarea textarea-bordered" placeholder="Descripción" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
+      <input type="text" className="input input-bordered" placeholder='Recurrencia RRULE (ej: "FREQ=WEEKLY;COUNT=5")' value={recurrencia} onChange={e => setRecurrencia(e.target.value)} />
+      <label className="flex items-center gap-2 mt-2">
+        <input type="checkbox" checked={googleSync} onChange={e => setGoogleSync(e.target.checked)} />
+        Sincronizar con Google Calendar
+      </label>
+      <button type="submit" className="btn btn-primary" disabled={cargando}>{cargando ? "Guardando..." : "Agregar"}</button>
+      <button type="button" className="btn btn-outline mt-2" onClick={handleAnalizarResolucion}>Analizar resolución con IA</button>
+    </form>
   );
 }
