@@ -90,3 +90,4 @@ firebase-service-account.json
 .env.local
 .env.*.local
 >>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
+node_modules/ 
