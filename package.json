@@ -1,6 +1,7 @@
 {
   "name": "buholex-backend-nuevo",
   "version": "1.0.0",
+<<<<<<< HEAD
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",
   "scripts": {
@@ -31,6 +32,34 @@
     "react-router-dom": "^7.6.2",
     "tesseract.js": "^6.0.1"
 >>>>>>> 8690df2 (Actualiza Landing con fondo gradiente rojo-blanco y Navbar con Biblioteca (beta))
+=======
+  "description": "Backend renovado para BúhoLex (Node.js + ESM)",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [
+    "backend",
+    "buholex",
+    "legaltech",
+    "ESM",
+    "nodejs"
+  ],
+  "dependencies": {
+    "axios": "^1.11.0",
+    "body-parser": "^1.20.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^13.4.0",
+    "openai": "^4.52.0",
+    "puppeteer": "^22.0.0",
+    "rss-parser": "^3.13.0",
+    "twilio": "^5.8.0"
+>>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
   },
 <<<<<<< HEAD
   "keywords": [],
@@ -43,22 +72,7 @@
   "homepage": "https://github.com/ebrunofrei/buholex#readme"
 =======
   "devDependencies": {
-    "@eslint/js": "^9.25.0",
-    "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/postcss": "^4.1.10",
-    "@tailwindcss/typography": "^0.5.16",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^9.25.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
-    "postcss": "^8.4.38",
-    "rimraf": "^6.0.1",
-    "tailwindcss": "^3.4.3",
-    "vite": "^6.3.5"
+    "nodemon": "^3.0.3"
   }
 >>>>>>> 1a89ebc (feat: mejoras en home, navbar, tailwind y barra de noticias flotante)
 }

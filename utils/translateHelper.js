@@ -1,5 +1,9 @@
 // utils/translateHelper.js
+<<<<<<< HEAD
 import {  Translate  } from "@google-cloud/translate";.v2;
+=======
+const { Translate } = require('@google-cloud/translate').v2;
+>>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
 
 const translate = new Translate({ key: process.env.GOOGLE_TRANSLATE_API_KEY });
 
@@ -35,4 +39,8 @@ function getCodigoGoogleIdioma(idiomaApp) {
   }
 }
 
+<<<<<<< HEAD
 export default { traducirTextoGoogle, getCodigoGoogleIdioma };
+=======
+module.exports = { traducirTextoGoogle, getCodigoGoogleIdioma };
+>>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))

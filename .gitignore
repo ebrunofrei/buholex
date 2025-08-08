@@ -20,6 +20,7 @@ Desktop.ini
 *.njsproj
 *.sln
 *.sw?
+<<<<<<< HEAD
 *.bak
 *.tmp
 
@@ -81,3 +82,11 @@ docker-compose.override.yml
 # SI USAS CYPRESS
 cypress/videos/
 cypress/screenshots/
+=======
+.vercel
+# credenciales y envs locales
+firebase-service-account.json
+.env
+.env.local
+.env.*.local
+>>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))

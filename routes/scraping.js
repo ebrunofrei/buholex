@@ -1,9 +1,15 @@
 import express from "express";
 const router = express.Router();
 import axios from "axios";
+<<<<<<< HEAD
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import {  MongoClient  } from "mongodb";
+=======
+import cheerio from "cheerio";
+import puppeteer from "puppeteer";
+const { MongoClient } = require("mongodb");
+>>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
 
 // ============ MongoDB CACHE =============
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";

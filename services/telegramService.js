@@ -9,4 +9,8 @@ async function enviarTelegram(chatId, mensaje) {
     parse_mode: "HTML"
   });
 }
+<<<<<<< HEAD
 export { enviarTelegram };
+=======
+module.exports = { enviarTelegram };
+>>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
