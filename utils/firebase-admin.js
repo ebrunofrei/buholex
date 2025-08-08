@@ -1,26 +1,19 @@
-<<<<<<< HEAD
-import admin from "firebase-admin";
-import fs from "fs/promises";
+// services/firebaseAdmin.js (ESM, Node 20)
+import { getApps, initializeApp, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
+import { getMessaging } from "firebase-admin/messaging";
 
-// Lee el JSON de credenciales usando fs/promises y JSON.parse
-const serviceAccount = JSON.parse(
-  await fs.readFile(
-    new URL("../firebase-service-account.json", import.meta.url)
-  )
-);
-=======
-import { createRequire } from "module";
-import admin from "firebase-admin";
-const require = createRequire(import.meta.url);
-import serviceAccount from "../firebase-service-account.json";
->>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
-
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+if (!getApps().length) {
+  const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+  initializeApp({
+    credential: cert(sa),
+    ...(process.env.FIREBASE_STORAGE_BUCKET
+      ? { storageBucket: process.env.FIREBASE_STORAGE_BUCKET }
+      : {}),
   });
 }
 
-const db = admin.firestore();
-
-export { db };
+export const db = getFirestore();
+export const storage = getStorage();
+export const messaging = getMessaging();
