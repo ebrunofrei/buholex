@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { callOpenAI } from "../../buholex-backend-nuevo/services/openaiService.js";
-import axios from "axios";
+import { callOpenAI } from "../services/openaiService.js";
+import { obtenerHistorialUsuario, guardarHistorial } from "../services/memoryService.js";
+import { buscarFuentesLegales } from "../services/fuenteLegalService.js";
 
 const router = Router();
 
@@ -10,20 +11,20 @@ router.post("/", async (req, res) => {
   // --- 1. Memoria: trae historial de usuario ---
   let historial = [];
   try {
-    const resp = await axios.get("http://localhost:3001/api/litisbot-memory", {
-      params: { usuarioId, expedienteId }
-    });
-    historial = resp.data.historial || [];
-  } catch {}
+    historial = await obtenerHistorialUsuario(usuarioId, expedienteId);
+  } catch (error) {
+    console.warn("No se pudo obtener historial:", error.message);
+  }
 
   // --- 2. Fuentes legales ---
   let fuentes = fuentesEncontradas;
   if (!fuentes || !fuentes.length) {
-    // Busca si no te enviaron fuentes
-    const resp = await axios.post("http://localhost:3001/api/buscar-fuente-legal", {
-      consulta
-    });
-    fuentes = resp.data.resultado;
+    try {
+      fuentes = await buscarFuentesLegales(consulta);
+    } catch (error) {
+      console.warn("No se pudieron buscar fuentes legales:", error.message);
+      fuentes = [];
+    }
   }
 
   // --- 3. Construye prompt para IA ---
@@ -58,9 +59,11 @@ router.post("/", async (req, res) => {
   const respuesta = await callOpenAI(messages);
 
   // --- 5. Guarda en memoria/historial ---
-  await axios.post("http://localhost:3001/api/litisbot-memory", {
-    usuarioId, expedienteId, pregunta: consulta, respuesta
-  });
+  try {
+    await guardarHistorial(usuarioId, expedienteId, consulta, respuesta);
+  } catch (error) {
+    console.warn("No se pudo guardar historial:", error.message);
+  }
 
   res.json({ respuesta });
 });
