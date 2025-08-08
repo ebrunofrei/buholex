@@ -1,17 +1,17 @@
 {
   "name": "buholex-backend-nuevo",
   "version": "1.0.0",
-<<<<<<< HEAD
+
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-<<<<<<< HEAD
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ebrunofrei/buholex.git"
-=======
+
   "dependencies": {
     "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
@@ -31,8 +31,7 @@
     "react-pdf": "^9.2.1",
     "react-router-dom": "^7.6.2",
     "tesseract.js": "^6.0.1"
->>>>>>> 8690df2 (Actualiza Landing con fondo gradiente rojo-blanco y Navbar con Biblioteca (beta))
-=======
+
   "description": "Backend renovado para BúhoLex (Node.js + ESM)",
   "type": "module",
   "main": "index.js",
@@ -59,9 +58,9 @@
     "puppeteer": "^22.0.0",
     "rss-parser": "^3.13.0",
     "twilio": "^5.8.0"
->>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
+
   },
-<<<<<<< HEAD
+
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -70,9 +69,8 @@
     "url": "https://github.com/ebrunofrei/buholex/issues"
   },
   "homepage": "https://github.com/ebrunofrei/buholex#readme"
-=======
+
   "devDependencies": {
     "nodemon": "^3.0.3"
   }
->>>>>>> 1a89ebc (feat: mejoras en home, navbar, tailwind y barra de noticias flotante)
 }
