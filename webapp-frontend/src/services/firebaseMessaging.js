@@ -1,43 +1,42 @@
-// /src/services/firebaseMessaging.js
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { app } from "./firebaseConfig";
+// src/services/firebaseMessaging.js
+import app from "@/firebase";
+import { isSupported, getMessaging, getToken, onMessage } from "firebase/messaging";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAlxd5_JKB7Fw5b9XES4bxECXQwvZjEu64",
-  authDomain: "buholex-ab588.firebaseapp.com",
-  projectId: "buholex-ab588",
-  storageBucket: "buholex-ab588.firebasestorage.app",
-  messagingSenderId: "608453552779",
-  appId: "1:608453552779:web:8ca82b34b76bf7de5b428e",
-  measurementId: "G-NQQZ7P48YX"
-};
+const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY || "";
 
-const messaging = getMessaging(app);
+let messagingInstance = null;
 
-// Pega aquí tu VAPID_KEY pública web push de Firebase Cloud Messaging → Configuración → Claves Web Push
-const VAPID_KEY = "BK_FdBKoZZeavWPaEvAjEY5GZDI7gs-Kpt05ctgk4aUfp_mdT-aqDdnaefwu8pMAUvNDTaghKrhDnpI0Ej9PgUU"; // <-- Pega aquí tu clave pública
-
-export async function solicitarPermisoYToken() {
+export async function setupMessaging() {
   try {
-    const currentToken = await getToken(messaging, {
-      vapidKey: VAPID_KEY
-    });
-    if (currentToken) {
-      console.log("TOKEN FCM:", currentToken);
-      alert("Tu token FCM para notificaciones legales:\n" + currentToken);
-      return currentToken;
-    } else {
-      alert("Permite las notificaciones para recibir alertas legales.");
-      return null;
-    }
-  } catch (err) {
-    alert("No se pudo obtener el token FCM: " + err.message);
+    if (!(await isSupported())) return null;
+    messagingInstance = getMessaging(app);
+    return messagingInstance;
+  } catch (e) {
+    console.warn("FCM no soportado o error al inicializar:", e);
     return null;
   }
 }
 
-export function listenToForegroundMessages() {
-  onMessage(messaging, (payload) => {
-    alert(`¡Notificación recibida!\n\n${payload.notification?.title}\n${payload.notification?.body}`);
-  });
+export async function getFcmToken() {
+  if (!messagingInstance) await setupMessaging();
+  if (!messagingInstance) return null;
+  try {
+    const token = await getToken(
+      messagingInstance,
+      VAPID_KEY ? { vapidKey: VAPID_KEY } : undefined
+    );
+    return token || null;
+  } catch (e) {
+    console.warn("No se pudo obtener token FCM:", e);
+    return null;
+  }
+}
+
+export async function solicitarPermisoYToken() {
+  return getFcmToken();
+}
+
+export function onForegroundMessage(cb) {
+  if (!messagingInstance) return () => {};
+  return onMessage(messagingInstance, cb);
 }
