@@ -82,12 +82,21 @@ docker-compose.override.yml
 # SI USAS CYPRESS
 cypress/videos/
 cypress/screenshots/
-=======
+
 .vercel
+
 # credenciales y envs locales
 firebase-service-account.json
 .env
 .env.local
 .env.*.local
->>>>>>> 7223835 (chore: initial backend deploy (api + vercel.json))
+(chore: initial backend deploy (api + vercel.json))
 node_modules/ 
+
+/src/
+/dist/"webapp-frontend/" 
+.env
+.env.local
+.env.*.local
+firebase-service-account.json
+.vercel
