@@ -1,102 +1,64 @@
-# LOGS 
+# LOGS
 logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# NODE MODULES Y DIST
+# DEPENDENCIAS Y BUILDS
 node_modules/
 dist/
 dist-ssr/
 build/
 out/
 coverage/
+.cache/
+.eslintcache
 
-# ARCHIVOS DE SISTEMA Y BACKUPS
+# ARCHIVOS DE SISTEMA / EDITOR
 .DS_Store
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-<<<<<<< HEAD
-*.bak
-*.tmp
-
-# CONFIGURACIONES DE EDITOR
 .vscode/
-.idea/
 .vscode/*
+.idea/
 *.code-workspace
 
-# ARCHIVOS DE ENTORNO Y CLAVES SENSIBLES
+# TEMPORALES
+tmp/
+temp/
+*.tmp
+*.sw?
+
+# ARCHIVOS DE ENTORNO Y CREDENCIALES
 .env
-.env.*
+.env.local
+.env.*           # .env.production, etc.
+.env.*.local
 *.env
 *.key
 *.pem
 *.crt
 *.p12
 *.secret
+firebase-service-account.json
+importar_normas/firebase-service-account.json
 
-# CONFIGURACIÓN SENSIBLE DE FIREBASE/OTROS
+# CONFIG SENSIBLE (si existiera en tu repo)
 firebaseConfig.js
 src/firebase.js
 src/firebaseConfig.js
 src/config/*.js
 src/config/**/firebase*.js
-firebase-service-account.json
-importar_normas/firebase-service-account.json
 
-# CONFIGURACIONES PERSONALES DE USUARIO
-*.local
-*.history
-
-# OUTPUTS DE TEST/TOOLS
-*.test.*
-*.spec.*
-*.coverage.*
-*.log
-
-# ARTIFACTOS DE BUNDLERS Y BUILDS
-.eslintcache
-.cache/
-.yarn/
-.pnpm-debug.log
-
-# ARCHIVOS TEMPORALES
-tmp/
-temp/
-*.tmp
-
-# ARCHIVOS GENERADOS POR EL PROYECTO O IDE
-*.tsbuildinfo
-
-# SI USAS DOCKER
-docker-compose.override.yml
-
-# SI USAS STORYBOOK
-.storybook-out/
-
-# SI USAS CYPRESS
-cypress/videos/
-cypress/screenshots/
-
+# METADATOS LOCALES DE VERCEL
 .vercel
 
-# credenciales y envs locales
-firebase-service-account.json
-.env
-.env.local
-.env.*.local
-(chore: initial backend deploy (api + vercel.json))
-node_modules/ 
+# SI TUVIESEN EL FRONTEND EN ESTE REPO
+webapp-frontend/**
+dist/webapp-frontend/**
 
-/src/
-/dist/"webapp-frontend/" 
-.env
-.env.local
-.env.*.local
-firebase-service-account.json
-.vercel
+# NO IGNORAR ARCHIVOS DE PROYECTO IMPORTANTES
+!vercel.json
+!package-lock.json
